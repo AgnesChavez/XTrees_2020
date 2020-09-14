@@ -82,7 +82,7 @@ void guiTypeVideo::render(){
 				float dx = pButtonX + 5;
 				float dy = pButtonY + 3;
 				
-				ofTriangle( dx, dy, dx + 7, dy + 5, dx, dy + 10); 
+				ofDrawTriangle( dx, dy, dx + 7, dy + 5, dx, dy + 10); 
 			}
 
 			glColor4fv( outlineColor.getColorF() );

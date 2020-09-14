@@ -13,45 +13,48 @@
  * in all copies or substantial portions of the Sotware.
  */
 
-#include "LinesLayer.h"
+
+#include "FlowersLayer.h"
 #include "TreesManager.h"
 #include "KepleroUtils.h"
 #include "Settings.h"
-#include "InteractiveAudio.h"
 
 namespace  {
-  inline bool isDead(LinesLayer::XtreeLine& line) {
+  inline bool isDead(FlowersLayer::FlowersOrb& line) {
     return line.currentLife < 0.F;
   }
 }
 
 
 
-LinesLayer::LinesLayer(std::shared_ptr<TreesManager> trees) :
+FlowersLayer::FlowersLayer(TreesManager* trees) :
   m_trees(trees),
-  m_active(false),
-  m_running(false) {
+  m_active(false) {
   
 }
 
-LinesLayer::~LinesLayer() {
-  m_lines.clear();
+FlowersLayer::~FlowersLayer() {
+  
 }
 
-void LinesLayer::start() {
+void FlowersLayer::start() {
   m_active = true;
-  m_running = true;
   m_timer.set();
-  m_timer.setAlarm(ofRandom(g_linesMin, g_linesMax));
+  m_timer.setAlarm(ofRandom(g_flowersMin, g_flowersMax));
 }
 
-void LinesLayer::stop() {
-  //m_lines.clear();
+void FlowersLayer::stop() {
+  m_lines.erase(std::remove_if(m_lines.begin(), m_lines.end(), isDead), m_lines.end());
+  m_lines.clear();
+  stopGrowing();
+}
+
+void FlowersLayer::stopGrowing() {
   m_active = false;
   m_timer.stop();
 }
 
-void LinesLayer::update() {
+void FlowersLayer::update() {
   if (m_active) {
     if (m_timer.alarm() && m_trees->m_trees.size() > 0) {
       // search the trees for available branches
@@ -63,8 +66,7 @@ void LinesLayer::update() {
           if (branch != NULL && branch->canBeEvolved()) {
             if (branch->children.size() > 0) {
               branch = branch->children[kplToss(branch->children.size())];
-						}
-						else{
+            } else {
               break;
             }
           }
@@ -84,57 +86,60 @@ void LinesLayer::update() {
             if (first != branch && branch != NULL && branch->canBeEvolved()) {
               if (branch->children.size() > 0) {
                 branch = branch->children[kplToss(branch->children.size())];
-							}
-							else{
+              } else {
                 break;
               }
             }
           }
           ofPoint end(branch->m_currentEnd.x, branch->m_currentEnd.y);
           addLine(start,end);
-          InteractiveAudio::instance()->sendBang(kNewLine);
         }
         
       }
       m_timer.set();
-      m_timer.setAlarm(ofRandom(g_linesMin, g_linesMax));
-    }    
+      m_timer.setAlarm(ofRandom(g_flowersMin, g_flowersMax));
+    }
+    
   }
   m_it = m_lines.begin();
-	while(m_it != m_lines.end()){
+  while (m_it != m_lines.end())
     (*m_it++).update();
-	}
-  m_lines.erase(std::remove_if(m_lines.begin(), m_lines.end(), isDead), m_lines.end());
+  // garbage collection every from time to time
+  if (g_globalCounterSec % 3 == 0) {    
+    m_lines.erase(std::remove_if(m_lines.begin(), m_lines.end(), isDead), m_lines.end());
+  }
 }
 
-void LinesLayer::draw() {
-  if (m_active) {
+void FlowersLayer::draw() {
+  if (m_lines.size()) {
     m_it = m_lines.begin();
     ofSetLineWidth(g_crazyLineWidth);
     ofFill();
     while (m_it != m_lines.end()) {
       ofSetColor(g_flowersColor, m_it->opacity);
       ofPushMatrix();
-      ofSetColor(g_flowersLineColor, m_it->opacity);
-		ofDrawLine(m_it->start.x, m_it->start.y, m_it->end.x, m_it->end.y);
+      g_flowerImage.draw(m_it->start.x - m_it->circleWidth/2, m_it->start.y-m_it->circleWidth/2, m_it->circleWidth, m_it->circleWidth);
+      g_flowerImage.draw(m_it->end.x - m_it->circleWidth/2, m_it->end.y-m_it->circleWidth/2, m_it->circleWidth, m_it->circleWidth);
       ofPopMatrix();
       ++m_it;
     }
   }
 }
 
-void LinesLayer::addLine(ofPoint start_, ofPoint end_) {
-  m_lines.push_back(XtreeLine());
+void FlowersLayer::addLine(ofPoint start_, ofPoint end_) {
+  m_lines.push_back(FlowersOrb());
   m_lines[m_lines.size() - 1].opacity = ofRandom(50,255);
   m_lines[m_lines.size() - 1].start = start_;
   m_lines[m_lines.size() - 1].end = end_;
   m_lines[m_lines.size() - 1].life = ofRandom(200,410);
   m_lines[m_lines.size() - 1].currentLife = m_lines[m_lines.size() - 1].life;
+  m_lines[m_lines.size() - 1].circleWidth = g_crazyCircleWidth;
 }
 
-void LinesLayer::XtreeLine::update() {
+void FlowersLayer::FlowersOrb::update() {
   currentLife -= 1.F;
   opacity = (currentLife / life) * 155.F;
+  circleWidth = (1.F - (currentLife / life)) * 360.F;
 }
 
 

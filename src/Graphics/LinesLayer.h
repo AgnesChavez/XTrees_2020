@@ -21,7 +21,7 @@
 #include <vector>
 #include "TreesManager.h"
 #include "ofxTimer.h"
-#include <tr1/memory>
+#include <memory>
 
 class LinesLayer {
 public:
@@ -32,7 +32,7 @@ public:
     float currentLife;
     void update();
   };
-  LinesLayer(std::tr1::shared_ptr<TreesManager> trees);  
+  LinesLayer(std::shared_ptr<TreesManager> trees);  
   ~LinesLayer();
   
   void update();
@@ -44,7 +44,7 @@ public:
   void preActivate() {}
   
 private:
-  std::tr1::shared_ptr<TreesManager> m_trees;
+  std::shared_ptr<TreesManager> m_trees;
   std::vector	<XtreeLine> m_lines; 
   std::vector	<XtreeLine>::iterator m_it;  
   

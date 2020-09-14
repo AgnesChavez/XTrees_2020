@@ -13,11 +13,6 @@
  * in all copies or substantial portions of the Sotware.
  */
 
-/*
- 
-sid: ACd2556e85c2696728f2ccf330cd868b6a
- Auth: 6385192050e8fe3a809312fb8c3deaf6
-*/
 
 #ifndef __TWILIOTRIGGER_H__
 #define __TWILIOTRIGGER_H__
@@ -27,7 +22,7 @@ sid: ACd2556e85c2696728f2ccf330cd868b6a
 #include <sstream>
 #include <list>
 
-#include "KplHttpRequest.h"
+//#include "KplHttpRequest.h"
 #include "tinyxml.h"
 
 class TwilioTrigger :
@@ -42,16 +37,12 @@ public:
     return 0;
   }
 
-  void setKeyword(std::string key_) {
-	MessageTrigger::setKeyword(key_);
-    m_requestUrl = "http://www.xtreeproject.com/sms/selectTwilio.php?q=" + m_keyword;
-  }
 private: 
 
   void retrieveMessages();
 
-  
-  string m_requestUrl;
+//  KplHttpRequest m_http; 
+	  string m_requestUrl = "http://www.xtreeproject.com/sms/selectTwilio.php?q=";
   unsigned long long m_lastId;
   static int s_instances;
   unsigned int counter;

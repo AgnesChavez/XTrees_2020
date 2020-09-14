@@ -13,35 +13,47 @@
  * in all copies or substantial portions of the Sotware.
  */
 
- 
-#ifndef TWITTERLAYER_H_
-#define TWITTERLAYER_H_
+#ifndef FLOWERSLAYER_H_
+#define FLOWERSLAYER_H_
 
+#include "ofMain.h"
+#include <vector>
+#include "TreesManager.h"
+#include "ofxTimer.h"
 
-#include "TwitterBaloon.h"
-#include <memory>
-
-#ifndef XTREES_IOS
-#include "ofxFTGLFont.h"
-#endif
-#include "MessageTrigger.h"
-class XTree;
-
-class TwitterLayer {
+class FlowersLayer {
 public:
-  TwitterLayer();
-  ~TwitterLayer();
+  struct FlowersOrb {
+    ofPoint start, end;
+    float circleWidth;
+    float opacity;
+    float life;
+    float maxRadius;
+    float currentLife;
+    void update();
+  };
+  FlowersLayer(TreesManager* trees);  
+  ~FlowersLayer();
+  
   void update();
   void draw();
-  void addBaloon(XTree* tree_, std::shared_ptr<MessageEvent> args, ofVec2f* position_, float rotation_);
+  void start();
+  void stopGrowing();
   void stop();
-  inline int numberOfBaloons() {
-    return m_boxes.size();
-  }
+  void addLine(ofPoint start_, ofPoint end_);
+  void reset();
+
+  
 private:
-  std::vector	<TwitterBaloon*> m_boxes;
+  TreesManager* m_trees;
+  std::vector	<FlowersOrb> m_lines; 
+  std::vector	<FlowersOrb>::iterator m_it;  
+  
+  bool m_active;
+  ofxTimer m_timer;
+  
 };
 
 
 
-#endif
+#endif 

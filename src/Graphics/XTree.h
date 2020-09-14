@@ -17,7 +17,7 @@
 #pragma once
 
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
 #include "textInput.h"
 #include "XTreeBranch.h"
@@ -40,7 +40,7 @@ class XTree {
   friend class FlowersLayer;
   friend class LinesLayer;
 public:
-  XTree(int x, int y, std::string key_ , std::tr1::shared_ptr<TwitterLayer> twitterLayer_, float direction_ = -M_PI/2.F);
+  XTree(int x, int y, std::string key_ , std::shared_ptr<TwitterLayer> twitterLayer_, float direction_ = -M_PI/2.F);
   
   ~XTree();
   
@@ -71,8 +71,8 @@ public:
     return m_currentLevel;
   }
   
-  int currentBaloonsAlive;
-
+  int currentBaloonsAlive;  
+  
   bool m_isReadyToChangeColor;
   ofColor getTreeColor() {
 	
@@ -91,7 +91,7 @@ public:
   }
   
   static void clearFbo() {
-	  ofEnableAlphaBlending();
+    ofEnableAlphaBlending();
 	  beginGhostFbo(true);
 	  endGhostFbo();
   }
@@ -105,7 +105,7 @@ public:
 	}
 
   static void endGhostFbo() {
-		s_fbo.end();
+    s_fbo.end();
   }
   
   static void drawGhostFbo() {
@@ -133,13 +133,13 @@ public:
   }
   
 private:
-  void evolve(std::tr1::shared_ptr<MessageEvent>& args);
+  void evolve(std::shared_ptr<MessageEvent>& args);
   
   inline float getColonizationLevel() {
     // consider also stuck the branches... FIXME kludge
     return (((float)m_numberOfBranches + ((float)m_numberOfBranchesStuck / 2.F)) / (float)g_maxBranches) * 100.F;
   }
-
+  
 
   int m_originalX;
   int m_originalY;
@@ -148,16 +148,16 @@ private:
   std::string m_keyword;
   float m_direction;
   float m_originalDirection;
-	
+  
   ofColor m_treeColor;
   void setTreeColor(ofColor newColor);
 	
   XTreeSeed* m_seed;
   XTreeBranch* m_trunk;
-  MessageTrigger* m_twitterTrigger;
-  MessageTrigger* m_twilioTrigger;
-  MessageTrigger* m_databaseTrigger;
-  std::tr1::shared_ptr<TwitterLayer> m_twitterLayer;
+  std::unique_ptr<TwitterTrigger> m_twitterTrigger = nullptr;
+  std::unique_ptr<TwilioTrigger> m_twilioTrigger = nullptr;
+  std::unique_ptr<DatabaseTrigger> m_databaseTrigger = nullptr;
+  std::shared_ptr<TwitterLayer> m_twitterLayer;
   bool m_isSelected;
   bool m_regenerating;
   int m_numberOfBranches;
@@ -175,11 +175,11 @@ private:
   
   bool m_scheduledForRegrowth;
   bool m_isFadingImagesQuickly;
-
+  
   bool m_drawMe;
   
 	// Ghost Fbo
-	static ofFbo s_fbo;
+  static ofFbo s_fbo;
 	static ofColor treesColor;
   
   ofxTimer m_flowerTimer;
@@ -188,7 +188,6 @@ private:
   
   bool m_treeIsStarvingOfRealtimeMessages;
   bool m_isStopped;
-
 
 };
 

@@ -26,7 +26,7 @@ class guiCustomGradientPreview : public guiCustomImpl {
 			int idx = 0;
 			for(float t = 0; t < 1.0f; t += inc){
 				ofSetColor(lerp(colorA, colorB, t));
-				ofRect(x + rw * idx, y, rw, h);
+				ofDrawRectangle(x + rw * idx, y, rw, h);
 				idx++;
 			}
 			ofDisableAlphaBlending();

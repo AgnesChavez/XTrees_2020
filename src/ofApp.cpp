@@ -81,7 +81,11 @@ void ofApp::setup(){
 	m_backgroundFadeTime = 1;
 	
 	// Twilio is enabled by default, disable it for now
-	g_useTwilio = true;
+	g_useTwilio = false;
+	
+	//disable twitter
+	g_useTwitter = false;
+	
 	
 	// Archive is enabled if the file achive.txt is present
 	if(ofFile::doesFileExist(ofToDataPath("archive.txt"))) {
@@ -89,7 +93,7 @@ void ofApp::setup(){
 	} else{
 		g_useArchive = false;
 	}
-
+	cout << "g_useArchive "<< boolalpha << g_useArchive<< endl;
 
 	m_leavesLayer = make_shared<LeavesLayer>();
 	  g_leavesLayer = m_leavesLayer.get();

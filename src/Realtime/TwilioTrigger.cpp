@@ -24,9 +24,6 @@
 TwilioTrigger::TwilioTrigger(XTree* tree, std::string keyword_, int capacity) :
   MessageTrigger(tree, keyword_, capacity),
   m_lastId(0) {
-  m_keyword = keyword_;
-  setKeyword(m_keyword);
-  m_msgBuffer.clear();
 }
 
 TwilioTrigger::~TwilioTrigger() {
@@ -45,21 +42,21 @@ void TwilioTrigger::fetch() {
   if (!(counter++ % 30)) {
     return;
   }
-
-  char *data;
-  int nBytes;
-  KplHttpRequest m_http;
-  bool isok = m_http.getUrlSync(m_requestUrl, &data, nBytes);
-	  	
-  if (!isok) {
-	  ofLog() << "Could not fetch Twillio data..";
-    return;
-  }
-  	
-  //ofLog() << "Twillio Trigger: " << m_requestUrl;
+//  char *data;
+//  int nBytes;
+//  if (!m_http.getUrlSync(m_requestUrl, &data, nBytes)) {
+//    return;
+//  }
+	
+	auto response = ofLoadURL(m_requestUrl + m_keyword);
+	if(response.status != 200){
+			ofLog() << "Could not fetch Twillio data..";
+		return;
+	}
+	
+	
   TiXmlDocument xmlDoc;
-  xmlDoc.Parse(data);
-  delete data;
+  xmlDoc.Parse(response.data.getData());
   if (xmlDoc.Error()) {
     ofLogError("Error in reading the xml file " + m_keyword);
     return;
@@ -69,6 +66,7 @@ void TwilioTrigger::fetch() {
   TiXmlNode * feedNode = xmlDoc.FirstChild("messages");
   if (feedNode == NULL) {
     ofLogError("Error in reading the xml node feed " + m_keyword);
+	  std::cout << response.data.getText() << "\n";
     return;
   }
   unsigned long long id;
@@ -78,10 +76,9 @@ void TwilioTrigger::fetch() {
 			 entryNode = entryNode->NextSibling("message"))
   {
     loadedOk = true;
-    std::tr1::shared_ptr<MessageEvent> theEvent;
+    std::shared_ptr<MessageEvent> theEvent;
     try {
-	  
-      theEvent.reset(new MessageEvent());
+      theEvent = make_shared<MessageEvent>();
       theEvent->message = entryNode->FirstChildElement("msg_data")->GetText();
       theEvent->user = "SMS";
       //theEvent->time = extractTime(entryNode->FirstChildElement("published")->GetText());
@@ -96,7 +93,6 @@ void TwilioTrigger::fetch() {
       loadedOk = false;
 
     }
-	  
     
     if (loadedOk) {
       // INSERT AT THE FRONT OF THE QUEUE         

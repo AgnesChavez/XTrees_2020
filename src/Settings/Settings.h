@@ -189,6 +189,8 @@ extern ofColor g_flowersColor;
 extern ofColor g_flowersLineColor;
 
 extern bool g_useTwilio;
+extern bool g_useTwitter;
+
 
 extern int g_leavesRows;
 extern int g_leavesColumns;
@@ -201,8 +203,8 @@ extern int g_backgroundTransitionTime;
 
 extern bool g_useArchive;
 
-extern volatile int g_activeThreads;
-extern ofMutex g_activeThreadsMutex;
+extern std::atomic<int> g_activeThreads;
+//extern ofMutex g_activeThreadsMutex;
 
 extern float g_waitSeedTime; // wait in seed mode
 extern float g_waitLinesTime; // tree full, wait to start lines

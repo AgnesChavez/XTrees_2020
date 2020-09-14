@@ -38,7 +38,7 @@ public:
     std::string& key_,
     std::string& user_,
     std::string& time_,
-    std::tr1::shared_ptr<ofPixels> image_,
+    std::shared_ptr<ofPixels> image_,
     ofVec2f* position_,
     float branchRotation_,
     MessageSource src_);

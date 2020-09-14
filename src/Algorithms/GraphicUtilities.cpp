@@ -16,20 +16,6 @@
 #include "GraphicUtilities.hpp"
 
 
-#include "ofMain.h"
-#ifdef TARGET_WIN32
-	#define GLUT_BUILDING_LIB
- #include "glut.h"
-#endif
-#ifdef TARGET_OSX
- #ifndef XTREES_SCREENSAVER
-  #include "../../../libs/glut/lib/osx/GLUT.framework/Versions/A/Headers/glut.h"
- #endif
- #include <Carbon/Carbon.h>
-#endif
-#ifdef TARGET_LINUX
- #include <GL/glut.h>
-#endif
 
 
 // TODO : a better way that preserves brightness

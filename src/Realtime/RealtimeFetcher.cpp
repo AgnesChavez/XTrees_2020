@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2012-2013 Agnes Chavez and Alessandro Saccoia
  * Written by Alessandro Saccoia, <alessandro.saccoia@gmail.com>
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -17,74 +17,74 @@
 #include "RealtimeFetcher.h"
 
 RealtimeFetcher::RealtimeFetcher() :
-	m_running(false),
-	m_paused(false){
+  m_running(false),
+  m_paused(false) {
 }
 
-void RealtimeFetcher::start(){
-	ofThread::startThread(false, false);
-	m_paused = false;
-	m_running = true;
+void RealtimeFetcher::start() {
+//  ofThread::startThread(false, false);
+	ofThread::startThread();
+  m_paused = false;
+  m_running = true;
 }
 
-void RealtimeFetcher::reset(){
-	triggers.clear();
+void RealtimeFetcher::reset() {  
+  triggers.clear();
 }
 
-void RealtimeFetcher::stop(){
-	m_running = false;
-	ofThread::waitForThread(true);
-	for(int i = 0; i < triggers.size(); ++i){
-		triggers[i]->clearMessages();
-	}
+void RealtimeFetcher::stop() {
+  m_running = false;
+  ofThread::waitForThread(true);
+  for (int i = 0; i < triggers.size(); ++i ) {
+    triggers[i]->clearMessages();
+  }
 }
 
-void RealtimeFetcher::pause(){
-	m_paused = true;
+void RealtimeFetcher::pause() {
+  m_paused = true;
 }
 
-void RealtimeFetcher::restart(){
-	m_paused = false;
+void RealtimeFetcher::restart() {
+  m_paused = false;
 }
 
-void RealtimeFetcher::threadedFunction(){
-	while(isThreadRunning()){
-		if(!m_paused){
-			for(int i = 0; i < triggers.size(); ++i){
-				
-				//if(triggers[i]->getNumQueued() == 0) {
-					triggers[i]->fetch();
-					triggers[i]->cleanup();
-				//}
-				
-				if(!m_running){
-					goto exitNow;
-				}
-			}
-		}
-		ofSleepMillis(200);
-	}
+void RealtimeFetcher::threadedFunction() {
+  while(isThreadRunning()){
+    if (!m_paused) {
+      for (int i = 0; i < triggers.size(); ++i ) {
+        triggers[i]->fetch();
+        triggers[i]->cleanup();
+        if (!m_running) {
+          goto exitNow;
+        }
+      }
+    }
+    ofSleepMillis(200);
+  }
 exitNow:
-	return;
+  return;
 }
 
-
-void RealtimeFetcher::update(){
-	if(!m_paused){
-		for(int i = 0; i < triggers.size(); ++i){
-			triggers[i]->update();
-		}
-	}
+void RealtimeFetcher::update() {
+  if (!m_paused) {
+    for (int i = 0; i < triggers.size(); ++i ) {
+      triggers[i]->update();
+    }
+  }
 }
 
-void RealtimeFetcher::removeTrigger(MessageTrigger * trigger){
-	vector <MessageTrigger *>::iterator it = triggers.begin();
-	while(it != triggers.end()){
-		if(*it == trigger){
-			it = triggers.erase(it);
-		}
-		else{
-			++it;
-		}
-	}
+void RealtimeFetcher::removeTrigger(BaseTrigger * trigger){
+	
+	ofRemove(triggers,[trigger](BaseTrigger * t){return trigger == t;});
+	
+	
+//	auto it = triggers.begin();
+//	while(it != triggers.end()){
+//		if(*it == trigger){
+//			it = triggers.erase(it);
+//		}
+//		else{
+//			++it;
+//		}
+//	}
 }

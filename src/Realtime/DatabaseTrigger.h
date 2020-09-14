@@ -27,13 +27,13 @@ public:
   DatabaseTrigger(XTree* tree, std::string keyword_, int capacity = 100);
   ~DatabaseTrigger();
 
-  void fetch();
+  void fetch() override;
   
-  float timeBetweenQueries() {
+  float timeBetweenQueries() override{
     return 0;
   }
 
-  void setKeyword(std::string key_);
+  virtual void setKeyword(std::string key_) override;
   
 private: 
 

@@ -32,13 +32,13 @@ public:
   void restart();
   void update();
   void reset();
-  void removeTrigger(MessageTrigger *trigger);
+  void removeTrigger(BaseTrigger *trigger);
   void threadedFunction();
   
   volatile bool m_running;
   bool m_paused;
 
-  std::vector<MessageTrigger*> triggers;
+  std::vector<BaseTrigger*> triggers;
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2012-2013 Agnes Chavez and Alessandro Saccoia
  * Written by Alessandro Saccoia, <alessandro.saccoia@gmail.com>
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -15,7 +15,7 @@
 
 #include "TreesManager.h"
 #ifndef XTREES_SCREENSAVER
- #include "InteractiveAudio.h"
+#include "InteractiveAudio.h"
 #endif
 #include "Settings.h"
 #include "GraphicUtilities.hpp"
@@ -26,9 +26,9 @@
 #define SEED_DISTANCE_SQUARED 121
 #define TIMETOFADE 5.0f
 
-TreesManager::TreesManager(std::tr1::shared_ptr <TwitterLayer> twitterLayer_) :
-	m_simulationRunning(false),
-	m_twitterLayer(twitterLayer_){
+TreesManager::TreesManager(std::shared_ptr<TwitterLayer> twitterLayer_) :
+  m_simulationRunning(false),
+  m_twitterLayer(twitterLayer_) {
 	m_bRemoveTree = false;
 //  CopyPixels((PixelType *)image.getPixels(), (const PixelType *)ms_tempPixels.getPixels(), xmin, xmax + 1, ymin, ymax, TEXTURE_WIDTH, TEXTURE_HEIGHT);
 //  image.update();
@@ -41,18 +41,18 @@ TreesManager::TreesManager(std::tr1::shared_ptr <TwitterLayer> twitterLayer_) :
 
 }
 
-TreesManager::~TreesManager(){
-	reset();
+TreesManager::~TreesManager() {
+  reset();
 }
 
 
 
 // TODO: this becomes private and gets called just once the used has decided which kind of tree he wants
-bool TreesManager::addTree(int x_, int y_, std::string keyword_, float direction_){
-	XTree * tree = new XTree(x_, y_, keyword_, m_twitterLayer, direction_);
+bool TreesManager::addTree(int x_, int y_, std::string keyword_, float direction_) {
+  XTree* tree = new XTree(x_, y_, keyword_, m_twitterLayer, direction_);
 
-	m_trees.push_back(tree);
-	return true;
+  m_trees.push_back(tree);
+  return true;
 }
 
 void TreesManager::setDelTree(int id){
@@ -94,10 +94,10 @@ void TreesManager::shuffleTreesColor() {
 	*/
 }
 
-void TreesManager::update(){
-	for(int i = 0; i < m_trees.size(); ++i){
-		m_trees[i]->update();
-	}
+void TreesManager::update() {    
+  for (int i = 0; i < m_trees.size(); ++i) {
+    m_trees[i]->update();
+  }
 	
 	// update colors
 	if(m_trees.size()){
@@ -115,7 +115,7 @@ void TreesManager::update(){
 	}
 }
 
-void TreesManager::draw(){
+void TreesManager::draw() {  
 	
 	ofEnableAlphaBlending();
 	ofEnableBlendMode(OF_BLENDMODE_ADD);
@@ -135,186 +135,186 @@ void TreesManager::draw(){
 	}
 	XTree::drawGhostFbo();
 	
-	for(int i = 0; i < m_trees.size(); ++i){
-		m_trees[i]->draw();
-	}
+  for (int i = 0; i < m_trees.size(); ++i) {
+    m_trees[i]->draw();
+  }
 }
 
-void TreesManager::stopGrowing(){
+void TreesManager::stopGrowing() {
 
 	for(int i = 0; i < m_trees.size(); ++i){
-		m_trees[i]->stopGrowing();
-	}
+    m_trees[i]->stopGrowing();
 }
-
-
-void TreesManager::restartGrowing(){
-	for(int i = 0; i < m_trees.size(); ++i){
-		m_trees[i]->restartGrowing();
-	}
-}
-
-void TreesManager::stop(){
-	for(int i = 0; i < m_trees.size(); ++i){
-		m_trees[i]->reset();
-	}
 }
 
 
+void TreesManager::restartGrowing() {
+	for(int i = 0; i < m_trees.size(); ++i){
+    m_trees[i]->restartGrowing();
+}
+}
 
-bool TreesManager::start(){
+void TreesManager::stop() {
+  for (int i = 0; i < m_trees.size(); ++i) {
+    m_trees[i]->reset();
+  }
+}
+
+
+
+bool TreesManager::start() {
 
 	shuffleTreesColor();
 	
-	if(m_trees.size()){
-		for(int i = 0; i < m_trees.size(); ++i){
-			m_trees[i]->start();
-		}
-		return true;
-	}
-	return false;
+  if (m_trees.size()) {
+    for (int i = 0; i < m_trees.size(); ++i) {
+      m_trees[i]->start();
+    }
+    return true;
+  }
+  return false;
 }
 
-void TreesManager::reset(){
+void TreesManager::reset() {
 	
-	std::vector <XTree *>::iterator it = m_trees.begin();
+  std::vector<XTree*>::iterator it = m_trees.begin();
 	while(it != m_trees.end()){
-		delete *it++;
+    delete *it++;
 	}
-	m_trees.clear();
+  m_trees.clear();
 }
 
-Leaf * TreesManager::addLeaf(){
-	return m_trees[kplToss(m_trees.size())]->addLeaf();
+Leaf* TreesManager::addLeaf() {
+  return m_trees[kplToss(m_trees.size())]->addLeaf();
 }
 
-void TreesManager::regenerate(){
+void TreesManager::regenerate() {
 	shuffleTreesColor();
 	
-	for(int i = 0; i < m_trees.size(); ++i){
-		m_trees[i]->regenerate();
-	}
+  for (int i = 0; i < m_trees.size(); ++i) {
+    m_trees[i]->regenerate();
+  }
 
 }
 
 #ifndef XTREES_SCREENSAVER
 
 //--------------------------------------------------------------
-	void TreesManager::mouseMoved(ofMouseEventArgs & args){
+void TreesManager::mouseMoved(ofMouseEventArgs& args){
 		for(int i = 0; i < m_trees.size(); ++i){
-			m_trees[i]->mouseMoved(args.x, args.y);
-		}
+    m_trees[i]->mouseMoved(args.x, args.y);
+}
 	}
 
 //--------------------------------------------------------------
-	void TreesManager::mouseDragged(ofMouseEventArgs & args){
+void TreesManager::mouseDragged(ofMouseEventArgs& args){
 		for(int i = 0; i < m_trees.size(); ++i){
-			m_trees[i]->mouseDragged(args.x, args.y);
+    m_trees[i]->mouseDragged(args.x, args.y);
 		}
 
-	}
+}
 
 //--------------------------------------------------------------
 void TreesManager::mousePressed(ofMouseEventArgs& args){
-	if (!g_sceneBounded.inside(args.x, args.y)) {
-		return;
-	}
-	int sel = -1;
-	for (int i = 0; i < m_trees.size(); ++i)
-		if (m_trees[i]->mousePressed(args.x, args.y)) {
-			sel = i;
-			break;
-		}
-	
-	if (sel != -1) {
+  if (!g_sceneBounded.inside(args.x, args.y)) {
+    return;
+  }
+  int sel = -1;
+  for (int i = 0; i < m_trees.size(); ++i)
+    if (m_trees[i]->mousePressed(args.x, args.y)) {
+      sel = i;
+      break;
+    }
+  
+  if (sel != -1) {
 		
 		if(args.button == 2) {
 			delTree(sel);
 			sel = -1;
 		}
 		
-		for (int i = 0; i < m_trees.size(); ++i)
-			if (i != sel)
-				m_trees[i]->deselect();
-	} else {
-		for (int i = 0; i < m_trees.size(); ++i)
-			m_trees[i]->deselect();
-		addTree(args.x, args.y);
-		std::vector<float> msg;
-		msg.push_back(4000);    // time
-		msg.push_back(0);
-		InteractiveAudio::instance()->sendFloatList(kPlaceSeed, msg);
-	}
+    for (int i = 0; i < m_trees.size(); ++i)
+      if (i != sel)
+        m_trees[i]->deselect();
+  } else {
+    for (int i = 0; i < m_trees.size(); ++i)
+        m_trees[i]->deselect();
+    addTree(args.x, args.y);
+    std::vector<float> msg;
+    msg.push_back(4000);    // time
+    msg.push_back(0);
+    InteractiveAudio::instance()->sendFloatList(kPlaceSeed, msg);
+  }
 }
 
 //--------------------------------------------------------------
 // TODO: a nice fade out
-	void TreesManager::keyPressed(ofKeyEventArgs & args){
+void TreesManager::keyPressed(ofKeyEventArgs& args){
 		for(int i = 0; i < m_trees.size(); ++i){
-			m_trees[i]->keyIn(args.key);
-		}
+    m_trees[i]->keyIn(args.key);
+}
 	}
 
-	void TreesManager::saveSeeds(){
-		TiXmlDocument xmlDocument;
-		TiXmlDeclaration * decl = new TiXmlDeclaration("1.0", "", "");
-		TiXmlElement * treesNode = new TiXmlElement("trees");
-		xmlDocument.LinkEndChild(decl);
-		for(int i = 0; i < m_trees.size(); ++i){
-			TiXmlElement * tree;
-			tree = new TiXmlElement("tree");
-			tree->SetAttribute("name", m_trees[i]->m_keyword);
-			tree->SetAttribute("x", m_trees[i]->m_x);
-			tree->SetAttribute("y", m_trees[i]->m_y);
-			tree->SetDoubleAttribute("dir", (double)m_trees[i]->m_originalDirection);
-			treesNode->LinkEndChild(tree);
-		}
+void TreesManager::saveSeeds() {
+  TiXmlDocument xmlDocument;
+	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
+	TiXmlElement * treesNode = new TiXmlElement( "trees" );
+  xmlDocument.LinkEndChild(decl );
+  for (int i = 0; i < m_trees.size(); ++i) {
+    TiXmlElement * tree;
+    tree = new TiXmlElement( "tree" );
+    tree->SetAttribute("name", m_trees[i]->m_keyword);
+    tree->SetAttribute("x", m_trees[i]->m_x);
+    tree->SetAttribute("y", m_trees[i]->m_y);
+    tree->SetDoubleAttribute("dir", (double)m_trees[i]->m_originalDirection);
+    treesNode->LinkEndChild(tree);
+  }
+  
+  xmlDocument.LinkEndChild(treesNode);
+  std::string filename("../../../data/init.xml");
+  xmlDocument.SaveFile(filename);
 
-		xmlDocument.LinkEndChild(treesNode);
-		std::string filename("../../../data/init.xml");
-		xmlDocument.SaveFile(filename);
+}
 
-	}
-
-	void TreesManager::loadSeeds(){
-		ofxXmlSettings xml;
-		std::string filename("../../../data/init.xml");
+void TreesManager::loadSeeds() {
+	ofxXmlSettings xml;
+  std::string filename("../../../data/init.xml");
 		if(!xml.loadFile(filename)){
-			return;
+      return;
 		}
-		xml.pushTag("trees");
-		int entries = xml.getNumTags("tree");
-		if(entries > 0){
-			for(int i = 0; i < entries; ++i){
-				std::string name = xml.getAttribute("tree", "name", "", i);
-				int x = xml.getAttribute("tree", "x", ofGetWidth() / 2, i);
-				int y = xml.getAttribute("tree", "y", ofGetHeight() / 2, i);
-				float direction = xml.getAttribute("tree", "dir", 270.f, i);
-				addTree(x, y, name, direction);
-			}
-		}
+  xml.pushTag("trees");
+  int entries = xml.getNumTags("tree");
+  if (entries > 0) {    
+    for (int i = 0; i < entries; ++i) {    
+      std::string name = xml.getAttribute("tree", "name", "", i);
+      int x = xml.getAttribute("tree", "x", ofGetWidth()/2, i);
+      int y = xml.getAttribute("tree" , "y", ofGetHeight()/2, i);
+      float direction = xml.getAttribute("tree", "dir", 270.f, i);
+      addTree(x, y, name, direction);
+    }
+  }
 
-	}
+}
 
-	bool TreesManager::areTreesInFullMaturation(){
+bool TreesManager::areTreesInFullMaturation() {
+  for (int i = 0; i < m_trees.size(); ++i) {
+    if (m_trees[i]->getColonizationLevel() < g_minColonization) {
+      return false;
+    } 
+  }
+  return true;
+}
+
+float TreesManager::averageMaturationLevel() {
+  float runningSum = .0f;
 		for(int i = 0; i < m_trees.size(); ++i){
-			if(m_trees[i]->getColonizationLevel() < g_minColonization){
-				return false;
-			}
+    runningSum += m_trees[i]->getColonizationLevel();
 		}
-		return true;
-	}
-
-	float TreesManager::averageMaturationLevel(){
-		float runningSum = .0f;
-		for(int i = 0; i < m_trees.size(); ++i){
-			runningSum += m_trees[i]->getColonizationLevel();
-		}
-		if(!m_trees.size() || runningSum == 0.F){
-			return -1;
-		}
-		return runningSum / (float)m_trees.size();
-	}
+  if (!m_trees.size() || runningSum == 0.F) {
+    return -1;
+  }
+  return runningSum / (float)m_trees.size();
+}
 
 	void TreesManager::showGhostFbo() {
 		m_GhostLifespan = g_treesFadeTime * g_fps * 60;
@@ -331,7 +331,7 @@ void TreesManager::mousePressed(ofMouseEventArgs& args){
 		m_GhostCurrentAlpha = 255.0f;
 		
 		m_GhostCurrentFadingSpeed = (m_GhostTimeToLive / g_fps) / TIMETOFADE;
-	}
+}
 
 
 #endif

@@ -63,6 +63,8 @@ private:
 #endif
   bool m_active;
   std::map<AudioDestination, std::string> m_destinations;
+	
+	bool _bIsInited = false;
 };
 
 

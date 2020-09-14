@@ -29,7 +29,7 @@
 
 #include <string>
 #include <list>
-#include <tr1/memory>
+#include <memory>
 
 #include "ofMain.h"
 #include "ofxTimer.h"
@@ -44,66 +44,133 @@ enum MessageSource {
 };
 
 struct MessageEvent {
-  std::tr1::shared_ptr<ofPixels> image;
+	MessageEvent(){}
+	MessageEvent(const std::string& _message,
+				 const std::string& _user,
+				 const std::string& _time,
+				 MessageSource _src
+				 )
+	: message(_message)
+	, user(_user)
+	, time(_time)
+	, src(_src)
+	{}
+	
+	bool isValid()
+	{
+		return (message.length() > 0) &&
+		(user.length() > 0) &&
+		(time.length() > 0);
+	}
+	
+  std::shared_ptr<ofPixels> image;
   std::string user;
   std::string message;
   std::string date; //unused
   std::string time;
-  bool consumed;
+  bool consumed = false;
   MessageSource src;
 };
 
 class XTree;
 
-class MessageTrigger :
-  public ofThread {
+
+class BaseTrigger
+{
 public:
-  MessageTrigger() {}
-  MessageTrigger(XTree* tree, std::string keyword_, int  capacity = 100);
+	BaseTrigger(XTree* tree, std::string keyword_, size_t  capacity = 100);
+	virtual ~BaseTrigger(){}
+	
+	
+	virtual void start();
+	virtual void stop();
+	virtual void pause();
+	virtual void restart();
+	
+	
+	virtual void cleanup();
+	virtual void clearMessages();
+	
+	virtual void update();
+	virtual void fetch() = 0;
+	virtual float timeBetweenQueries() = 0;
+	virtual void setKeyword(std::string key_);
+	std::string getKeyword() const {
+	  return m_keyword;
+	}
+	
+	bool providesImages = false;
+	  
+	static vector<std::string> tokenize(const std::string & str, const std::string & delim);
+	
+	
+	ofEvent<std::shared_ptr<MessageEvent> > newMessageEvent;
+	
+protected:
+	///this gets called from the main thread
+	void notifyMessages();
+	
+	std::string m_keyword;
+	std::atomic<bool> m_running = {true};
+	std::atomic<bool> m_paused = {false};
+	std::atomic<bool> m_needsReset = {false};
+	size_t m_capacity;
+	
+	std::list<std::shared_ptr<MessageEvent> > m_msgBuffer;
+	std::list<std::shared_ptr<MessageEvent> >::iterator m_current;
+	
+	ofxTimer m_timer;
+	XTree* m_tree = nullptr;
+
+};
+
+
+class MessageTrigger :
+public ofThread,
+public BaseTrigger
+{
+public:
+  MessageTrigger(XTree* tree, std::string keyword_, size_t  capacity = 100);
   
   virtual ~MessageTrigger();
   
-  virtual void start();  
-  virtual void stop();  
-  virtual void pause(); 
-  virtual void restart();
+	virtual void start() override;
+	virtual void stop() override;
+//	virtual void pause() override;
+//	virtual void restart() override;
   
   // done from the external thread
-  void cleanup();
-  void clearMessages();
+//  void cleanup();
+//  void clearMessages();
   
-  virtual void update();
-  virtual void fetch() = 0;
-  virtual float timeBetweenQueries() = 0;
-
-	  virtual int getNumQueued() {
+//  virtual void update()override;
+	
+	int getNumQueued() {
 		  return m_msgBuffer.size();
 	  }
   
-  virtual void setKeyword(std::string key_);
   
-  std::string getKeyword() const {
-    return m_keyword;
-  }
+  
+//  std::string getKeyword() const {
+//    return m_keyword;
+//  }
 
-  ofEvent<std::tr1::shared_ptr<MessageEvent> > newMessageEvent;
-  void threadedFunction();
   
-  bool providesImages;  
+  void threadedFunction() override;
   
+
+	  
 protected:
-  std::string m_keyword;
-  bool m_running;
-  bool m_paused;
-  bool m_needsReset;
-  int m_capacity;
-public:
-  std::list<std::tr1::shared_ptr<MessageEvent> > m_msgBuffer;
-protected:
-  std::list<std::tr1::shared_ptr<MessageEvent> >::iterator m_current;
-  ofxTimer m_timer;
-  XTree* m_tree;
-  static std::vector<std::string> m_profanityFilter;
+//  std::string m_keyword;
+//  bool m_running;
+//  bool m_paused;
+//  bool m_needsReset;
+
+//public:
+//  std::list<std::shared_ptr<MessageEvent> > m_msgBuffer;
+//protected:
+//  std::list<std::shared_ptr<MessageEvent> >::iterator m_current;
+
 };
 
 #endif // MESSAGETRIGGER_HPP_

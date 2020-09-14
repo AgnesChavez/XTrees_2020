@@ -166,6 +166,8 @@ ofColor g_flowersLineColor;
 
 bool g_useTwilio;
 
+bool g_useTwitter;
+
 int g_leavesRows;
 int g_leavesColumns;
 
@@ -179,8 +181,8 @@ int g_treesFadeTime;
 int g_backgroundTransitionTime;
 bool g_useArchive;
 
-volatile int g_activeThreads;
-ofMutex g_activeThreadsMutex;
+std::atomic<int> g_activeThreads;
+//ofMutex g_activeThreadsMutex;
 
 
 float g_waitSeedTime; // wait in seed mode

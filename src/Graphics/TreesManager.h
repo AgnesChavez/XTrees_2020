@@ -18,7 +18,7 @@
 
 #include <string>
 #include <vector>
-#include <tr1/memory>
+#include <memory>
 
 #include "ofMain.h"
 
@@ -34,7 +34,7 @@ class TreesManager {
   friend class FlowersLayer;
   friend class LinesLayer;
 public:
-  TreesManager(std::tr1::shared_ptr<TwitterLayer> twitterLayer_);
+  TreesManager(std::shared_ptr<TwitterLayer> twitterLayer_);
   ~TreesManager();
   
   void update();
@@ -82,13 +82,13 @@ public:
   void setDelTree(int id);
   bool visible;
 private:
-	
+
   bool m_bRemoveTree;
   int m_treeIdToRemove;
 
   std::vector<XTree*> m_trees;
   bool m_simulationRunning;
-  std::tr1::shared_ptr<TwitterLayer> m_twitterLayer;
+  std::shared_ptr<TwitterLayer> m_twitterLayer;
 };
 
 

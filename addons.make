@@ -1,6 +1,13 @@
+ofxGeo
+ofxHTTP
+ofxIO
+ofxMediaType
+ofxNetworkUtils
 ofxOsc
 ofxPd
 ofxPoco
+ofxSSLManager
+ofxTwitter
 ./local_addons/ofxXmlSettings
 ./local_addons/MSACore
 ./local_addons/MSAFluid

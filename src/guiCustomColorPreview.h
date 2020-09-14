@@ -20,7 +20,7 @@ class guiCustomColorPreview : public guiCustomImpl {
 			ofEnableAlphaBlending();
 			ofFill();
 			ofSetColor(color);
-			ofRect(x, y, w, h);
+			ofDrawRectangle(x, y, w, h);
 			ofDisableAlphaBlending();
 		}
 

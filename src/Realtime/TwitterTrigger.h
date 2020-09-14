@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2012-2013 Agnes Chavez and Alessandro Saccoia
  * Written by Alessandro Saccoia, <alessandro.saccoia@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -28,7 +28,7 @@
  *
  *  With the technique skipIfFull some messages will be removed to try to show the messages always within the specified time limits
  *  With the technique neverSkip we risk out of memory but every message will be displayed
- *  With the technique overrideMinimum we go much faster when there are many messages, otherwise we stay at a normal rate 
+ *  With the technique overrideMinimum we go much faster when there are many messages, otherwise we stay at a normal rate
  */
 
 
@@ -40,54 +40,61 @@
 #include <sstream>
 #include <list>
 
-#include "KplHttpRequest.h"
+//#include "KplHttpRequest.h"
 #include "tinyxml.h"
 #include "Settings.h"
-#include "TwitterOAuth.h"
-#include "ofxJSONElement.h"
+
+#include "ofxTwitter.h"
 
 class TwitterTrigger :
-  public MessageTrigger {  
+public BaseTrigger {
 public:
-  TwitterTrigger(XTree* tree, std::string keyword_, int capacity = 100);
-  ~TwitterTrigger();
-
-  void fetch();
-  
-  float timeBetweenQueries() {
-    if(g_timedExhibit) {
-      return ofClamp(1, g_showDuration, 60) * 60.F * 1000.F * s_instances / 150.F;
-    } else {
-      return 60.F * 60.F * 1000.F * s_instances / 150.F;
-    }
-  }
-  void setKeyword(std::string key_) {
-	  m_keyword = key_;
-	  m_msgBuffer.clear();
-  }
-	  
+	TwitterTrigger(XTree* tree, std::string keyword_, int capacity = 100);
+	virtual ~TwitterTrigger();
+	
+	virtual void start() override;
+	virtual void stop() override;
+	
+	virtual void fetch()override;
+	virtual float timeBetweenQueries()override
+	{
+		if(g_timedExhibit) {
+			return ofClamp(1, g_showDuration, 60) * 60.F * 1000.F * s_instances / 150.F;
+		} else {
+			return 60.F * 60.F * 1000.F * s_instances / 150.F;
+		}
+	}
+	virtual void setKeyword(std::string key_) override{
+		m_keyword = key_;
+		m_msgBuffer.clear();
+	}
+	
+	
+	void onStatus(const ofxTwitter::Status& status);
+	void onError(const ofxTwitter::Error& error);
+	void onException(const std::exception& exception);
+	void onMessage(const ofJson& json);
+	
+	ofxTwitter::SearchClient client;
+	
 	
 private: 
-
+	
 	void retrieveMessages();
-
-	void stop();
-
+	
 	// <id>tag:search.twitter.com,2005:159700307838894080</id>
 	unsigned long long extractId(std::string fieldValue_);
 	std::string extractTime(std::string fieldValue_);
-
-	KplHttpRequest m_http;
+	
+	//  KplHttpRequest m_http;
 	string m_requestUrl;
-
+	
 	static int s_instances;
-	  
-	TwitterOAuth auth;
-	  
-	 unsigned long long int m_lastId;
+	
+	unsigned long long int m_lastId;
 	// ofxFTGL crashing with emoji
-	  string killEmoji(string s);
-	  
+	string killEmoji(string s);
+	
 };
 
 

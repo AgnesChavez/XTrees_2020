@@ -75,6 +75,10 @@ InteractiveAudio::InteractiveAudio() :
 InteractiveAudio::~InteractiveAudio() {
   m_pd->closePatch(m_patch);
   delete m_pd;
+	if(_bIsInited)
+	{
+		ofSoundStreamClose();
+	}
 }
 
 void InteractiveAudio::init(ofBaseApp* app_) {
@@ -111,6 +115,9 @@ void InteractiveAudio::init(ofBaseApp* app_) {
   cout << m_patch << endl;
 #endif
 	m_pd->start(); // DSP ON
+	
+	_bIsInited = true;
+	
 }
 
 void InteractiveAudio::start() {
