@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2012-2013 Agnes Chavez and Alessandro Saccoia
  * Written by Alessandro Saccoia, <alessandro.saccoia@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -22,30 +22,30 @@
 #include <sstream>
 #include <list>
 
-//#include "KplHttpRequest.h"
+
 #include "tinyxml.h"
 
 class TwilioTrigger :
-  public MessageTrigger {  
+public MessageTrigger {
 public:
-  TwilioTrigger(XTree* tree, std::string keyword_, int capacity = 100);
-  ~TwilioTrigger();
-
-  void fetch();
-  
-  float timeBetweenQueries() {
-    return 0;
-  }
-
+	TwilioTrigger(XTree* tree, std::string keyword_, int capacity = 100);
+	~TwilioTrigger();
+	
+	void fetch();
+	
+	float timeBetweenQueries() {
+		return 0;
+	}
+	
 private: 
-
-  void retrieveMessages();
-
-//  KplHttpRequest m_http; 
-	  string m_requestUrl = "http://www.xtreeproject.com/sms/selectTwilio.php?q=";
-  unsigned long long m_lastId;
-  static int s_instances;
-  unsigned int counter;
+	
+	void retrieveMessages();
+	
+	
+	string m_requestUrl = "http://www.xtreeproject.com/sms/selectTwilio.php?q=";
+	unsigned long long m_lastId;
+	static int s_instances;
+	unsigned int counter;
 };
 
 

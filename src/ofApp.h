@@ -8,11 +8,10 @@
 #include "XTreeButton.h"
 #include "AlphaRect.h"
 
+#include "TwitterLayer.h"
+#include "LeavesLayer.h"
+#include "LinesLayer.h"
 
-
-class TwitterLayer;
-class LeavesLayer;
-class LinesLayer;
 
 class ofApp : public ofxApp{
 	public:
@@ -113,6 +112,41 @@ private:
   float m_splashOpacity;
   unsigned int m_splashEnd;
 	bool m_clearFBO;
+
+	
+	
+	string toString(GuiState s)  {
+		switch(s){
+			case STATE_SETUP : return "STATE_SETUP";
+			case STATE_GUI : return "STATE_GUI";
+			case STATE_SIMULATION : return "STATE_SIMULATION";
+		}
+		return "";
+	}
+	
+	string toString(TimelineStates s) {
+		switch(s)
+		{
+			case TIME_GROWING: return "TIME_GROWING";
+			case TIME_LEAVES: return "TIME_LEAVES";
+			case TIME_LINES_TRANS: return "TIME_LINES_TRANS";
+			case TIME_LINES: return "TIME_LINES";
+			case TIME_LEAVESFALLING_TRANS: return "TIME_LEAVESFALLING_TRANS";
+			case TIME_LEAVESFALLING: return "TIME_LEAVESFALLING";
+			case TIME_LINES_FAST: return "TIME_LINES_FAST";
+			case TIME_STOP_LINES: return "TIME_STOP_LINES";
+			case TIME_REGENERATE: return "TIME_REGENERATE";
+			case TIME_GROWING_TRANS: return "TIME_GROWING_TRANS";
+		}
+		return "";
+	}
+	
+	
+	bool bDrawStatesInfo = true;
+	
+
+
+
 
   
 };

@@ -98,14 +98,14 @@ void XTreeSeed::draw() {
     ofFill();
     ofDrawEllipse(0, 0, blink_radius, blink_radius);
   }
-  ofSetColor(g_jointC, m_starting ? m_timer.getDiffN() * 255.F : 255);
-  if (!g_jointsAreCircles) {
-    ofSetLineWidth(g_jointThickness);
-    ofDrawLine(-g_jointLength, -g_jointLength, g_jointLength, g_jointLength);
-    ofDrawLine(-g_jointLength, g_jointLength, g_jointLength, -g_jointLength);    
+  ofSetColor(globalSettings::g_jointC, m_starting ? m_timer.getDiffN() * 255.F : 255);
+  if (!globalSettings::g_jointsAreCircles) {
+    ofSetLineWidth(globalSettings::g_jointThickness);
+    ofDrawLine(-globalSettings::g_jointLength, -globalSettings::g_jointLength, globalSettings::g_jointLength, globalSettings::g_jointLength);
+    ofDrawLine(-globalSettings::g_jointLength, globalSettings::g_jointLength, globalSettings::g_jointLength, -globalSettings::g_jointLength);
   } else {
     ofFill();
-    ofDrawCircle(0,0, g_jointLength);
+    ofDrawCircle(0,0, globalSettings::g_jointLength);
   }
   //ofDrawLine(-HALF_RADIUS_BACK, -HALF_RADIUS_BACK, HALF_RADIUS_BACK, HALF_RADIUS_BACK);
   //ofDrawLine(HALF_RADIUS_BACK, -HALF_RADIUS_BACK, -HALF_RADIUS_BACK, HALF_RADIUS_BACK);

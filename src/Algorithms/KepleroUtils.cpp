@@ -14,7 +14,7 @@
  */
 
 #include "KepleroUtils.h"
-//#include "KplHttpRequest.h"
+
 
 void utf8toWStr(std::wstring& dest, const std::string& src){
 	dest.clear();
@@ -90,21 +90,8 @@ int kplToss(int number) {
 }
 
 bool CheckInternetConnection() {
-//  char* data;
-//  int nbytes;
-//  KplHttpRequest req;
-  // hope they have 99.9% uptime
-//  bool isok = req.getUrlSync("http://www.agneschavez.com", &data, nbytes);
-	
-	auto response = ofLoadURL("http://www.agneschavez.com");
-	
-	
+	auto response = ofLoadURL("http://www.agneschavez.com");	
 	return (response.status == 200 && response.data.size());
-//  {
-////    delete [] data;
-//    return true;
-//  }
-//  return false;
 }
 
 #ifdef __APPLE__

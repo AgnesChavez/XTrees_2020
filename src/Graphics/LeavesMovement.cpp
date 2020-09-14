@@ -27,23 +27,23 @@ Scattering::~Scattering() {
 
 void Scattering::start() {
   duration = 30 * 10;
-  int totalLeaves = g_leavesRows * g_leavesColumns;
-  int incrementV = (ofGetHeight() - (BORDERYB + BORDERYT)) / (g_leavesRows - 1);
-  int incrementH = (ofGetWidth() - 2 * BORDERX) / (g_leavesColumns - 1);
+  int totalLeaves = globalSettings::g_leavesRows * globalSettings::g_leavesColumns;
+  int incrementV = (ofGetHeight() - (BORDERYB + BORDERYT)) / (globalSettings::g_leavesRows - 1);
+  int incrementH = (ofGetWidth() - 2 * BORDERX) / (globalSettings::g_leavesColumns - 1);
   m_joints.resize(totalLeaves * 2);
   m_springs.resize(totalLeaves * 2);
-  for (int i = 0, x = BORDERX, y = BORDERYT; i < g_leavesRows; ++i, x = BORDERX) {
-    for (int j = 0; j < g_leavesColumns; ++j) {
-      m_joints[i * g_leavesColumns + j] = new Joint(ofVec3f(x-5,y,0), 0);
-      m_joints[i * g_leavesColumns + j] = new Joint(ofVec3f(x+5,y,0), 0);
+  for (int i = 0, x = BORDERX, y = BORDERYT; i < globalSettings::g_leavesRows; ++i, x = BORDERX) {
+    for (int j = 0; j < globalSettings::g_leavesColumns; ++j) {
+      m_joints[i * globalSettings::g_leavesColumns + j] = new Joint(ofVec3f(x-5,y,0), 0);
+      m_joints[i * globalSettings::g_leavesColumns + j] = new Joint(ofVec3f(x+5,y,0), 0);
       //std::cout << i << ":" << j << "=" << x << " " << y << std::endl;
       x += incrementH;
     }
     y += incrementV;
   }
   layer->start();
-  g_leavesActive = true;
-  if (layer->numberOfLeaves() < g_leavesRows * g_leavesColumns) {
+  globalSettings::g_leavesActive = true;
+  if (layer->numberOfLeaves() < globalSettings::g_leavesRows * globalSettings::g_leavesColumns) {
     return;
   }
 
@@ -85,23 +85,23 @@ RowColumns::~RowColumns() {
 
 void RowColumns::start() {
   duration = 30 * 10;
-  int totalLeaves = g_leavesRows * g_leavesColumns;
-  int incrementV = (ofGetHeight() - (BORDERYB + BORDERYT)) / (g_leavesRows - 1);
-  int incrementH = (ofGetWidth() - 2 * BORDERX) / (g_leavesColumns - 1);
+  int totalLeaves = globalSettings::g_leavesRows * globalSettings::g_leavesColumns;
+  int incrementV = (ofGetHeight() - (BORDERYB + BORDERYT)) / (globalSettings::g_leavesRows - 1);
+  int incrementH = (ofGetWidth() - 2 * BORDERX) / (globalSettings::g_leavesColumns - 1);
   m_joints.resize(totalLeaves * 2);
   m_springs.resize(totalLeaves * 2);
-  for (int i = 0, x = BORDERX, y = BORDERYT; i < g_leavesRows; ++i, x = BORDERX) {
-    for (int j = 0; j < g_leavesColumns; ++j) {
-      m_joints[i * g_leavesColumns + j] = new Joint(ofVec3f(x-5,y,0), 0);
-      m_joints[i * g_leavesColumns + j] = new Joint(ofVec3f(x+5,y,0), 0);
+  for (int i = 0, x = BORDERX, y = BORDERYT; i < globalSettings::g_leavesRows; ++i, x = BORDERX) {
+    for (int j = 0; j < globalSettings::g_leavesColumns; ++j) {
+      m_joints[i * globalSettings::g_leavesColumns + j] = new Joint(ofVec3f(x-5,y,0), 0);
+      m_joints[i * globalSettings::g_leavesColumns + j] = new Joint(ofVec3f(x+5,y,0), 0);
       //std::cout << i << ":" << j << "=" << x << " " << y << std::endl;
       x += incrementH;
     }
     y += incrementV;
   }
   layer->start();
-  g_leavesActive = true;
-  if (layer->numberOfLeaves() < g_leavesRows * g_leavesColumns) {
+  globalSettings::g_leavesActive = true;
+  if (layer->numberOfLeaves() < globalSettings::g_leavesRows * globalSettings::g_leavesColumns) {
     return;
   }
 

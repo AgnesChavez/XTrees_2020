@@ -64,7 +64,12 @@ private:
   bool m_active;
   std::map<AudioDestination, std::string> m_destinations;
 	
-	bool _bIsInited = false;
+	bool _bIsSoundStreamInited = false;
+	
+	ofEventListener exitListener;
+	
+	void closeSoundStream();
+	
 };
 
 

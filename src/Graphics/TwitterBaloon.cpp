@@ -55,24 +55,24 @@ TwitterBaloon::TwitterBaloon(XTree* tree_,
 		
   switch (src_) {
     case SRC_TWITTER:
-      m_layout = g_twitterLayout;
-      m_font = g_twitterFont;
-      m_msgColor = g_tweetMsgC;
-      m_userColor = g_tweetUsrC;
+      m_layout =globalSettings::g_twitterLayout;
+      m_font =globalSettings::g_twitterFont;
+      m_msgColor =globalSettings::g_tweetMsgC;
+      m_userColor =globalSettings::g_tweetUsrC;
       break;
 
     case SRC_TWILIO:
-      m_layout = g_twilioLayout;
-      m_font = g_twilioFont;
-      m_msgColor = g_twilioMsgC;
-      m_userColor = g_twilioUsrC;
+      m_layout =globalSettings::g_twilioLayout;
+      m_font =globalSettings::g_twilioFont;
+      m_msgColor =globalSettings::g_twilioMsgC;
+      m_userColor =globalSettings::g_twilioUsrC;
       break;
 
     case SRC_DATABASE:
-      m_layout = g_databaseLayout;
-      m_font = g_databaseFont;
-      m_msgColor = g_databaseMsgC;
-      m_userColor = g_databaseUsrC;
+      m_layout =globalSettings::g_databaseLayout;
+      m_font =globalSettings::g_databaseFont;
+      m_msgColor =globalSettings::g_databaseMsgC;
+      m_userColor =globalSettings::g_databaseUsrC;
       m_userColor.a = 0;
       break;
 
@@ -126,7 +126,7 @@ TwitterBaloon::TwitterBaloon(XTree* tree_,
   utf8toWStr(m_user, user_);
   utf8toWStr(m_time, time_);
   
-  m_life = ofRandom(g_tweetMinLife, g_tweetMaxLife);
+  m_life = ofRandom(globalSettings::g_tweetMinLife,globalSettings::g_tweetMaxLife);
 		
   FTBBox boxMsg = m_layout->BBox(m_key.c_str());
   FTBBox boxUser = m_layout->BBox(m_user.c_str());
@@ -145,7 +145,7 @@ TwitterBaloon::TwitterBaloon(XTree* tree_,
   if (m_image != NULL) {
     m_width += m_pictureMargin + m_image->getWidth();
   } 
-  m_height = std::max((int)abs(boxMsg.Upper().Y() - boxMsg.Lower().Y()) + 2 + m_userRowHeight, g_showThumbs ? (int)m_image->getWidth(): 0);
+  m_height = std::max((int)abs(boxMsg.Upper().Y() - boxMsg.Lower().Y()) + 2 + m_userRowHeight,globalSettings::g_showThumbs ? (int)m_image->getWidth(): 0);
     
   if (m_attachSide == kRightSide) {
     m_dx -= m_width;
@@ -162,7 +162,7 @@ TwitterBaloon::TwitterBaloon(XTree* tree_,
   s_fbo.begin();   // draw the line into the texture
   
   ofEnableBlendMode(OF_BLENDMODE_ADD);
-  ofClear(g_backgroundC.r,g_backgroundC.g,g_backgroundC.b,g_msgOpacity);
+  ofClear(globalSettings::g_backgroundC.r,globalSettings::g_backgroundC.g,globalSettings::g_backgroundC.b,globalSettings::g_msgOpacity);
   ofSetColor(255);
   // DRAW
   int currentX = 0;
@@ -209,7 +209,7 @@ void TwitterBaloon::update() {
   
   
   if (m_currentLife > 100) {
-    m_vy -= g_floatingSpeed;
+    m_vy -=globalSettings::g_floatingSpeed;
   }
   
   m_dy += m_vy;
@@ -218,14 +218,14 @@ void TwitterBaloon::update() {
 TwitterBaloon::~TwitterBaloon() {
   s_busy[m_slot] = false;
   --m_tree->currentBaloonsAlive;
-  if (g_showThumbs) {
+  if (globalSettings::g_showThumbs) {
     delete m_image;
   }
 }
 
 void TwitterBaloon::draw() {
 
-  int alphaLevel = g_twitterLayerOpacity - g_twitterLayerOpacity * (float)m_currentLife / (float)m_life;
+  int alphaLevel =globalSettings::g_twitterLayerOpacity -globalSettings::g_twitterLayerOpacity * (float)m_currentLife / (float)m_life;
 
   glPushMatrix();
   
@@ -237,8 +237,8 @@ void TwitterBaloon::draw() {
   glPopMatrix();
 
 	
-  ofSetLineWidth(g_tLineWidth);
-  ofSetColor(g_tLineC, std::min((float)alphaLevel, 255.f * (float)m_y/initialY));
+  ofSetLineWidth(globalSettings::g_tLineWidth);
+  ofSetColor(globalSettings::g_tLineC, std::min((float)alphaLevel, 255.f * (float)m_y/initialY));
 	
   if (m_attachSide == kLeftSide) {
 		ofDrawLine(m_x - LINE_MARGIN, m_y + m_height / 2, m_lastAttach.x, m_lastAttach.y);

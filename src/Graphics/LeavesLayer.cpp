@@ -26,11 +26,11 @@ LeavesLayer::LeavesLayer() :
   m_running(false) {
   
   
-  s_solver = new FluidSolver();
-  s_windowSize = Vec2f(ofGetWidth(),ofGetHeight());
-	s_invWindowSize = Vec2f( 1.0f / s_windowSize.x, 1.0f / s_windowSize.y );
-  s_solver->setup(100, 100);
-  s_solver->enableRGB(true).setFadeSpeed(0.01).setDeltaT(0.4).setVisc(0.0001).setColorDiffusion(0);
+  globalSettings::s_solver = new FluidSolver();
+  globalSettings::s_windowSize = Vec2f(ofGetWidth(),ofGetHeight());
+	  globalSettings::s_invWindowSize = Vec2f( 1.0f / globalSettings::s_windowSize.x, 1.0f / globalSettings::s_windowSize.y );
+  globalSettings::s_solver->setup(100, 100);
+  globalSettings::s_solver->enableRGB(true).setFadeSpeed(0.01).setDeltaT(0.4).setVisc(0.0001).setColorDiffusion(0);
   
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
@@ -69,10 +69,10 @@ void LeavesLayer::reset() {
 void LeavesLayer::update() {
 
   //always: gravity + wind
-  s_solver->addConstantForce(Vec2f(0.f,0.000004f)); 
-  s_solver->update();
+  globalSettings::s_solver->addConstantForce(Vec2f(0.f,0.000004f));
+  globalSettings::s_solver->update();
   
-  if (g_globalCounterSec % 3 == 0) {  
+  if (globalSettings::g_globalCounterSec % 3 == 0) {  
     m_it = m_leaves.begin();
     while (m_it != m_leaves.end()) {
       if ((*m_it)->age >= 1.f) {

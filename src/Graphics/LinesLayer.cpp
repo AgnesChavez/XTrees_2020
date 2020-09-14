@@ -42,7 +42,7 @@ void LinesLayer::start() {
   m_active = true;
   m_running = true;
   m_timer.set();
-  m_timer.setAlarm(ofRandom(g_linesMin, g_linesMax));
+  m_timer.setAlarm(ofRandom(globalSettings::g_linesMin, globalSettings::g_linesMax));
 }
 
 void LinesLayer::stop() {
@@ -97,7 +97,7 @@ void LinesLayer::update() {
         
       }
       m_timer.set();
-      m_timer.setAlarm(ofRandom(g_linesMin, g_linesMax));
+      m_timer.setAlarm(ofRandom(globalSettings::g_linesMin, globalSettings::g_linesMax));
     }    
   }
   m_it = m_lines.begin();
@@ -110,12 +110,12 @@ void LinesLayer::update() {
 void LinesLayer::draw() {
   if (m_active) {
     m_it = m_lines.begin();
-    ofSetLineWidth(g_crazyLineWidth);
+    ofSetLineWidth(globalSettings::g_crazyLineWidth);
     ofFill();
     while (m_it != m_lines.end()) {
-      ofSetColor(g_flowersColor, m_it->opacity);
+      ofSetColor(globalSettings::g_flowersColor, m_it->opacity);
       ofPushMatrix();
-      ofSetColor(g_flowersLineColor, m_it->opacity);
+      ofSetColor(globalSettings::g_flowersLineColor, m_it->opacity);
 		ofDrawLine(m_it->start.x, m_it->start.y, m_it->end.x, m_it->end.y);
       ofPopMatrix();
       ++m_it;

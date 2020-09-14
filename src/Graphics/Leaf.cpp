@@ -65,9 +65,9 @@ Leaf::Leaf(ofVec3f attach, ofVec3f direction, ofVec3f normal) :
   isJustBorn(true),
   ageBorn(0.f) {
   leftRight = ofRandomuf() < .5f ? -1 : 1;
-  lifespan = ofRandom(std::min(0.f,(g_leavesLife - 10) * g_fps), g_leavesLife * g_fps);
-  width = ofRandom(g_leavesMinWidth, g_leavesMaxWidth);
-  m_image = g_leafImages[(size_t)ofRandom(g_leafImages.size())];
+  lifespan = ofRandom(std::min(0.f,(globalSettings::g_leavesLife - 10) * globalSettings::g_fps), globalSettings::g_leavesLife * globalSettings::g_fps);
+  width = ofRandom(globalSettings::g_leavesMinWidth, globalSettings::g_leavesMaxWidth);
+  m_image = &globalSettings::g_leafImages[(size_t)ofRandom(globalSettings::g_leafImages.size())];
   init(attach, direction, normal);
 }
 
@@ -143,17 +143,17 @@ void Leaf::update() {
   Vec2f absSpeed(0.f,0.f);
   for (int i=0; i<joints.size(); i++) {
     Vec2f positionIn2d(joints[i].pos.x, joints[i].pos.y);
-    Vec2f solverVel = s_solver->getVelocityAtPos(positionIn2d * s_invWindowSize );
+	  Vec2f solverVel = globalSettings::s_solver->getVelocityAtPos(positionIn2d * globalSettings::s_invWindowSize );
     // bounce of edges
-    if( positionIn2d.x < 0 || positionIn2d.x > s_windowSize.x) {
+    if( positionIn2d.x < 0 || positionIn2d.x > globalSettings::s_windowSize.x) {
       solverVel.x *= -10;
     }
     if( positionIn2d.y < 0) {
       solverVel.y *= -10;
     }
-    if (positionIn2d.y > s_windowSize.y) {
+    if (positionIn2d.y > globalSettings::s_windowSize.y) {
       solverVel.y *= -10;
-      joints[i].pos.y = s_windowSize.y;
+      joints[i].pos.y = globalSettings::s_windowSize.y;
     }
 
     joints[i].addForce(ofVec3f(solverVel.x * 100,solverVel.y * 100,0));
@@ -199,19 +199,19 @@ void Leaf::draw() {
 //  }
 //  ofDrawLine(joints[3].pos.x, joints[3].pos.y, joints[0].pos.x, joints[0].pos.y); 
   
-  float alpha = g_leavesOpacity;
+  float alpha = globalSettings::g_leavesOpacity;
   if (isAttached) {
     if (isJustBorn) {
-      alpha = g_leavesOpacity * (ageBorn / FADE_IN_LIFE);
+      alpha = globalSettings::g_leavesOpacity * (ageBorn / FADE_IN_LIFE);
     }
 	}
 	else{
-    alpha = g_leavesOpacity * (1.f - age);
+    alpha = globalSettings::g_leavesOpacity * (1.f - age);
   }
 
   
 //  ofSetColor(kplToColor(g_leavesEndColor, age), 255.f * m_timer.getDiffN());
-  ofSetColor(g_leavesEndColor, alpha);
+  ofSetColor(globalSettings::g_leavesEndColor, alpha);
   float halfStemAge = stemAge * .3f;
   
   glEnable(GL_DEPTH_TEST);  

@@ -40,7 +40,6 @@
 #include <sstream>
 #include <list>
 
-//#include "KplHttpRequest.h"
 #include "tinyxml.h"
 #include "Settings.h"
 
@@ -58,8 +57,8 @@ public:
 	virtual void fetch()override;
 	virtual float timeBetweenQueries()override
 	{
-		if(g_timedExhibit) {
-			return ofClamp(1, g_showDuration, 60) * 60.F * 1000.F * s_instances / 150.F;
+		if(globalSettings::g_timedExhibit) {
+			return ofClamp(1, globalSettings::g_showDuration, 60) * 60.F * 1000.F * s_instances / 150.F;
 		} else {
 			return 60.F * 60.F * 1000.F * s_instances / 150.F;
 		}
@@ -86,7 +85,7 @@ private:
 	unsigned long long extractId(std::string fieldValue_);
 	std::string extractTime(std::string fieldValue_);
 	
-	//  KplHttpRequest m_http;
+	
 	string m_requestUrl;
 	
 	static int s_instances;

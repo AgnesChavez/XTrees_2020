@@ -40,7 +40,7 @@ FlowersLayer::~FlowersLayer() {
 void FlowersLayer::start() {
   m_active = true;
   m_timer.set();
-  m_timer.setAlarm(ofRandom(g_flowersMin, g_flowersMax));
+  m_timer.setAlarm(ofRandom(globalSettings::g_flowersMin, globalSettings::g_flowersMax));
 }
 
 void FlowersLayer::stop() {
@@ -97,7 +97,7 @@ void FlowersLayer::update() {
         
       }
       m_timer.set();
-      m_timer.setAlarm(ofRandom(g_flowersMin, g_flowersMax));
+      m_timer.setAlarm(ofRandom(globalSettings::g_flowersMin, globalSettings::g_flowersMax));
     }
     
   }
@@ -105,7 +105,7 @@ void FlowersLayer::update() {
   while (m_it != m_lines.end())
     (*m_it++).update();
   // garbage collection every from time to time
-  if (g_globalCounterSec % 3 == 0) {    
+  if (globalSettings::g_globalCounterSec % 3 == 0) {
     m_lines.erase(std::remove_if(m_lines.begin(), m_lines.end(), isDead), m_lines.end());
   }
 }
@@ -113,13 +113,13 @@ void FlowersLayer::update() {
 void FlowersLayer::draw() {
   if (m_lines.size()) {
     m_it = m_lines.begin();
-    ofSetLineWidth(g_crazyLineWidth);
+    ofSetLineWidth(globalSettings::g_crazyLineWidth);
     ofFill();
     while (m_it != m_lines.end()) {
-      ofSetColor(g_flowersColor, m_it->opacity);
+      ofSetColor(globalSettings::g_flowersColor, m_it->opacity);
       ofPushMatrix();
-      g_flowerImage.draw(m_it->start.x - m_it->circleWidth/2, m_it->start.y-m_it->circleWidth/2, m_it->circleWidth, m_it->circleWidth);
-      g_flowerImage.draw(m_it->end.x - m_it->circleWidth/2, m_it->end.y-m_it->circleWidth/2, m_it->circleWidth, m_it->circleWidth);
+      globalSettings::g_flowerImage.draw(m_it->start.x - m_it->circleWidth/2, m_it->start.y-m_it->circleWidth/2, m_it->circleWidth, m_it->circleWidth);
+      globalSettings::g_flowerImage.draw(m_it->end.x - m_it->circleWidth/2, m_it->end.y-m_it->circleWidth/2, m_it->circleWidth, m_it->circleWidth);
       ofPopMatrix();
       ++m_it;
     }
@@ -133,7 +133,7 @@ void FlowersLayer::addLine(ofPoint start_, ofPoint end_) {
   m_lines[m_lines.size() - 1].end = end_;
   m_lines[m_lines.size() - 1].life = ofRandom(200,410);
   m_lines[m_lines.size() - 1].currentLife = m_lines[m_lines.size() - 1].life;
-  m_lines[m_lines.size() - 1].circleWidth = g_crazyCircleWidth;
+  m_lines[m_lines.size() - 1].circleWidth = globalSettings::g_crazyCircleWidth;
 }
 
 void FlowersLayer::FlowersOrb::update() {

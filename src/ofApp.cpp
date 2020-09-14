@@ -21,9 +21,10 @@
 #include "XTree.h"
 #include "XTreeBranch.h"
 #include "TwitterTrigger.h"
-#include "LinesLayer.h"
-#include "TwitterLayer.h"
-#include "LeavesLayer.h"
+
+#include "guiCustomColorPreview.h"
+#include "guiCustomGradientPreview.h"
+#include "guiTypeConfigFileList.h"
 
 #include "RealtimeFetcher.h"
 
@@ -42,9 +43,9 @@ ofApp::ofApp() :
 
 void ofApp::setup(){
 	m_screenshot = false;
-	g_activeThreads = 0;
-	g_app = this;
-	g_fps = 30;
+	globalSettings::g_activeThreads = 0;
+	globalSettings::g_app = this;
+	globalSettings::g_fps = 30;
 	m_simulationState = TIME_GROWING;
 	m_simulationTimer = 0;
 	m_numberOfIterations = 0;
@@ -52,7 +53,7 @@ void ofApp::setup(){
 
 	//ofSetLogLevel(OF_LOG_VERBOSE);
 	ofEnableSmoothing();
-	ofSetFrameRate(g_fps);
+	ofSetFrameRate(globalSettings::g_fps);
 	ofSetRectMode(OF_RECTMODE_CORNER);
 	ofSetCircleResolution(100);
 	glEnable(GL_LINE_SMOOTH);
@@ -72,31 +73,31 @@ void ofApp::setup(){
 	}
 
 	// needs to be called after the settings have been loaded!
-	g_initializeBranchImages();
-	g_initializeFonts();
-	g_initializeLeafImages();
-	g_initializeBackgroundImages();
+	globalSettings::g_initializeBranchImages();
+	globalSettings::g_initializeFonts();
+	globalSettings::g_initializeLeafImages();
+	globalSettings::g_initializeBackgroundImages();
 	TwitterBaloon::initFbo();
 
 	m_backgroundFadeTime = 1;
 	
 	// Twilio is enabled by default, disable it for now
-	g_useTwilio = false;
+	globalSettings::g_useTwilio = false;
 	
 	//disable twitter
-	g_useTwitter = false;
+	globalSettings::g_useTwitter = false;
 	
 	
 	// Archive is enabled if the file achive.txt is present
 	if(ofFile::doesFileExist(ofToDataPath("archive.txt"))) {
-		g_useArchive = true;
+		globalSettings::g_useArchive = true;
 	} else{
-		g_useArchive = false;
+		globalSettings::g_useArchive = false;
 	}
-	cout << "g_useArchive "<< boolalpha << g_useArchive<< endl;
+	cout << "globalSettings::g_useArchive "<< boolalpha << globalSettings::g_useArchive<< endl;
 
 	m_leavesLayer = make_shared<LeavesLayer>();
-	  g_leavesLayer = m_leavesLayer.get();
+	  globalSettings::g_leavesLayer = m_leavesLayer.get();
 	  m_twitterLayer = make_shared<TwitterLayer>();
 	  m_treesLayer = make_shared<TreesManager>(m_twitterLayer);
 	//  m_flowersLayer = new FlowersLayer(m_treesLayer);
@@ -107,9 +108,9 @@ void ofApp::setup(){
 	
 
 
-	g_useInteractiveAudio = true;
+	globalSettings::g_useInteractiveAudio = true;
 
-	if(g_useInteractiveAudio){
+	if(globalSettings::g_useInteractiveAudio){
 		InteractiveAudio::instance()->init(this);
 		InteractiveAudio::instance()->start();
 	}
@@ -123,13 +124,13 @@ void ofApp::setup(){
 	XTree::initGhostFbo();
 
 	if(use_background){
-		int size = g_backgroundImages.size();
+		int size = globalSettings::g_backgroundImages.size();
 		if(size == 0){
 			use_background = false;
 		}
 		else{
-			m_back1 = kplToss(g_backgroundImages.size());
-			m_back2 = kplToss(g_backgroundImages.size());
+			m_back1 = kplToss(globalSettings::g_backgroundImages.size());
+			m_back2 = kplToss(globalSettings::g_backgroundImages.size());
 		}
 
 	}
@@ -144,9 +145,9 @@ void ofApp::setup(){
 
 	/* signal the soundsystem how many branches will grow at the same time
 	// to avoid clipping and decide the mix parameters
-	if (g_useInteractiveAudio) {
+	if (globalSettings::g_useInteractiveAudio) {
 	  InteractiveAudio::instance()->sendFloat(kBranchPolyphony,
-	    ofClamp(ceil((float)g_growthMax / (float)g_growthMin), 1, 4));
+	    ofClamp(ceil((float)globalSettings::g_growthMax / (float)globalSettings::g_growthMin), 1, 4));
 	  InteractiveAudio::instance()->sendFloat(kActivateBirds, 0);
 	  InteractiveAudio::instance()->sendFloat(kActivateVinyl, 0);
 	  InteractiveAudio::instance()->sendFloat(kActivateRand1, 0);
@@ -157,10 +158,10 @@ void ofApp::setup(){
 
 	m_fadeRectangle.init(ofGetWidth(), ofGetHeight() / 7);
 	// to set the color of the fading rectangle
-	g_updateBackground();
+	globalSettings::g_updateBackground();
 
-	g_scene = ofRectangle(0, 0, ofGetWidth(), ofGetHeight());
-	g_sceneBounded = ofRectangle(20, 0, ofGetWidth() - 20, ofGetHeight());
+	globalSettings::g_scene = ofRectangle(0, 0, ofGetWidth(), ofGetHeight());
+	globalSettings::g_sceneBounded = ofRectangle(20, 0, ofGetWidth() - 20, ofGetHeight());
 	m_layerObfuscationColor = ofColor(0);
 
 	m_splash.loadImage(ofToDataPath("splash/splash.png"));
@@ -178,6 +179,10 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 ofApp::~ofApp(){
+	
+	
+	
+	
 	if(!m_internetOk){
 		return;
 	}
@@ -192,7 +197,7 @@ ofApp::~ofApp(){
 		RealtimeFetcher::instance()->stop();
 	}
 	
-	g_releaseBranchImages();
+	
 
 }
 
@@ -204,7 +209,7 @@ void ofApp::start(){
 	if(!m_treesLayer->start()){
 		return;
 	}
-	g_globalCounterSec = 1;
+	globalSettings::g_globalCounterSec = 1;
 
 	ofHideCursor();
 
@@ -221,16 +226,16 @@ void ofApp::start(){
 	//ofHideCursor();
 	m_goBtn->hide();
 	m_resetBtn->hide();
-	if(g_showFlowers){
+	if(globalSettings::g_showFlowers){
 		//m_flowersLayer->start();
 		//m_linesLayer->start();
 	}
-	//if (g_leavesActive)
+	//if (globalSettings::g_leavesActive)
 	//m_leavesLayer->start();
 	//        m_twitterLayer->prestart();
 	m_state = STATE_SIMULATION;
 
-	if(!g_useInteractiveAudio){
+	if(!globalSettings::g_useInteractiveAudio){
 		//soundtrack.play();
 	}
 }
@@ -259,7 +264,7 @@ void ofApp::stop(){
 	m_resetBtn->show();
 	
 	m_state = STATE_SETUP;
-	if(!g_useInteractiveAudio){
+	if(!globalSettings::g_useInteractiveAudio){
 		soundtrack.stop();
 	}
 	m_splashActive = false;
@@ -267,11 +272,23 @@ void ofApp::stop(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(ofKeyEventArgs & args){
+	
+
+	
+	
 	if(args.key == '/'){
 		ofToggleFullscreen();
 	}
-
-	if(STATE_SETUP && g_activeThreads > 0){
+	else
+	if(args.key == 'i'){
+		bDrawStatesInfo ^= true;
+	}
+	else
+	if(args.key == 'c'){
+		m_clearFBO = true;
+	}
+	
+	if(STATE_SETUP && globalSettings::g_activeThreads > 0){
 		return;
 	}
 	if(!m_internetOk){
@@ -312,7 +329,7 @@ void ofApp::keyPressed(ofKeyEventArgs & args){
 
 	 case STATE_SIMULATION:
 		 if(args.key == ' '){
-			 m_maxThreads = g_activeThreads;
+			 m_maxThreads = globalSettings::g_activeThreads;
 			 stop();
 		 }
 		 else if(args.key == 's'){
@@ -332,7 +349,7 @@ void ofApp::update(){
 	if(!m_internetOk){
 		return;
 	}
-	if(STATE_SETUP && g_activeThreads > 0){
+	if(STATE_SETUP && globalSettings::g_activeThreads > 0){
 		return;
 	}
 
@@ -345,21 +362,21 @@ void ofApp::update(){
 	m_leavesLayer->update();
 	if(use_background){
 		++m_backgroundFadeTime;
-		if(m_backgroundFadeTime > g_backgroundTransitionTime * g_fps){
+		if(m_backgroundFadeTime > globalSettings::g_backgroundTransitionTime * globalSettings::g_fps){
 			m_backgroundFadeTime = 1;
 			m_back1 = m_back2;
-			m_back2 = kplToss(g_backgroundImages.size());
+			m_back2 = kplToss(globalSettings::g_backgroundImages.size());
 		}
 	}
 
 	// reduce sampling rate for other operations: every 3 seconds
-	if(m_state == STATE_SIMULATION && g_globalCounter % (int)g_fps == 0){
-		g_globalCounterSec++;
-		g_globalCounter = 0;
+	if(m_state == STATE_SIMULATION && globalSettings::g_globalCounter % (int)globalSettings::g_fps == 0){
+		globalSettings::g_globalCounterSec++;
+		globalSettings::g_globalCounter = 0;
 		updateSimulationState();
 	}
 
-	++g_globalCounter;
+	++globalSettings::g_globalCounter;
 }
 
 /*!
@@ -370,7 +387,7 @@ void ofApp::update(){
 
 void ofApp::updateSimulationState(){
 	
-	if(m_treesLayer->averageMaturationLevel() > g_minColonization){
+	if(m_treesLayer->averageMaturationLevel() > globalSettings::g_minColonization){
 		RealtimeFetcher::instance()->pause();
 		InteractiveAudio::instance()->sendBang(kMsgOff);
 		m_treesLayer->stopGrowing();
@@ -379,8 +396,8 @@ void ofApp::updateSimulationState(){
 	
 	if(m_simulationState == TIME_GROWING){
 		
-		if(m_numberOfIterations < g_firstIterations){
-			if(m_treesLayer->averageMaturationLevel() > g_minColonization){
+		if(m_numberOfIterations < globalSettings::g_firstIterations){
+			if(m_treesLayer->averageMaturationLevel() > globalSettings::g_minColonization){
 				ofLog() << "TIME_GROWING -> TIME_LEAVESFALLING";
 				m_simulationTimer = 0;
 				m_simulationState = TIME_LEAVESFALLING;
@@ -388,10 +405,11 @@ void ofApp::updateSimulationState(){
 		} else{
 			// it reached the last iteration
 			
-			float maxMinColonization = MIN(g_minColonizationForLeaves, g_minColonization);
+			float maxMinColonization = MIN(globalSettings::g_minColonizationForLeaves, globalSettings::g_minColonization);
 			
 			if(m_treesLayer->averageMaturationLevel() > maxMinColonization){
 				m_simulationState = TIME_LEAVES;
+				ofLog() << " moving to TIME_LEAVES state";
 				InteractiveAudio::instance()->sendBang(kBreath);
 				InteractiveAudio::instance()->sendBang(kLeavesOn);
 				m_leavesLayer->start();
@@ -400,7 +418,7 @@ void ofApp::updateSimulationState(){
 		}
 	}
 	else if(m_simulationState == TIME_LEAVES){
-		if(m_leavesLayer->numberOfLeaves() >= g_leavesRows * g_leavesColumns){
+		if(m_leavesLayer->numberOfLeaves() >= globalSettings::g_leavesRows * globalSettings::g_leavesColumns){
 			m_leavesLayer->stop();
 			m_simulationTimer = 0;
 			m_simulationState = TIME_LINES_TRANS;
@@ -409,10 +427,10 @@ void ofApp::updateSimulationState(){
 	}
 	else if(m_simulationState == TIME_LINES_TRANS){
 	
-		if(m_simulationTimer >= g_waitLinesTime){ // HERE WE USE A TIMER
+		if(m_simulationTimer >= globalSettings::g_waitLinesTime){ // HERE WE USE A TIMER
 			ofLog() << "Moving to TIME_LINES state..";
-			g_linesMin = (float)g_linesMinNorm;
-			g_linesMax = (float)g_linesMaxNorm;
+			globalSettings::g_linesMin = (float)globalSettings::g_linesMinNorm;
+			globalSettings::g_linesMax = (float)globalSettings::g_linesMaxNorm;
 			InteractiveAudio::instance()->sendBang(kLinesOn);
 			m_linesLayer->start();
 			m_simulationTimer = 0;
@@ -420,12 +438,12 @@ void ofApp::updateSimulationState(){
 		}
 	}
 	else if(m_simulationState == TIME_LINES){
-		if(m_simulationTimer >= g_startDetachingLeavesTime){ // HERE WE USE A TIMER
+		if(m_simulationTimer >= globalSettings::g_startDetachingLeavesTime){ // HERE WE USE A TIMER
 			m_leavesLayer->setWindForce(0);
 			m_leavesLayer->detachLeaves();
 			InteractiveAudio::instance()->sendBang(kLeavesOff);
-			g_linesMin = (float)g_linesMinAcc;
-			g_linesMax = (float)g_linesMaxAcc;
+			globalSettings::g_linesMin = (float)globalSettings::g_linesMinAcc;
+			globalSettings::g_linesMax = (float)globalSettings::g_linesMaxAcc;
 			m_simulationState = TIME_LEAVESFALLING;
 			ofLog() << "Moving to TIME_LEAVESFALLING";
 			// NB: do not reset the counter
@@ -435,7 +453,7 @@ void ofApp::updateSimulationState(){
 		
 		if(m_leavesLayer->numberOfLeaves() == 0 && m_twitterLayer->numberOfBaloons() == 0){ // 12 seconds
 			m_linesLayer->stop();
-			if(m_numberOfIterations >= g_firstIterations){
+			if(m_numberOfIterations >= globalSettings::g_firstIterations){
 				InteractiveAudio::instance()->sendBang(kLinesOff);
 			}
 			else{
@@ -447,9 +465,9 @@ void ofApp::updateSimulationState(){
 	}
 	else if(m_simulationState == TIME_REGENERATE){
 		ofLog() << "TIME_REGENERATE!";
-		if(m_simulationTimer >= g_waitRegenerateTime){
+		if(m_simulationTimer >= globalSettings::g_waitRegenerateTime){
 			m_simulationTimer = 0;
-			if(m_numberOfIterations >= g_firstIterations){
+			if(m_numberOfIterations >= globalSettings::g_firstIterations){
 				m_treesLayer->fadeGhostFbo();
 				m_numberOfIterations = 0;
 			}
@@ -467,10 +485,10 @@ void ofApp::updateSimulationState(){
 		}
 	}
 	else if(m_simulationState == TIME_GROWING_TRANS){
-		if(m_simulationTimer == g_waitSeedTime - 3){
+		if(m_simulationTimer == globalSettings::g_waitSeedTime - 3){
 			InteractiveAudio::instance()->sendBang(kBreath);
 		}
-		if(m_simulationTimer >= g_waitSeedTime){
+		if(m_simulationTimer >= globalSettings::g_waitSeedTime){
 			m_treesLayer->restartGrowing();
 			RealtimeFetcher::instance()->restart();
 			InteractiveAudio::instance()->sendBang(kMsgOn);
@@ -485,7 +503,7 @@ void ofApp::mousePressed(ofMouseEventArgs & args){
 	if(!m_internetOk || bDebug){
 		return;
 	}
-	if(STATE_SETUP && g_activeThreads > 0){
+	if(STATE_SETUP && globalSettings::g_activeThreads > 0){
 		return;
 	}
 	Leaf * nleaf;
@@ -505,7 +523,7 @@ void ofApp::mouseMoved(ofMouseEventArgs & args){
 	if(!m_internetOk || bDebug){
 		return;
 	}
-	if(STATE_SETUP && g_activeThreads > 0){
+	if(STATE_SETUP && globalSettings::g_activeThreads > 0){
 		return;
 	}
 	switch(m_state){
@@ -525,7 +543,7 @@ void ofApp::mouseDragged(ofMouseEventArgs & args){
 	if(!m_internetOk || bDebug){
 		return;
 	}
-	if(STATE_SETUP && g_activeThreads > 0){
+	if(STATE_SETUP && globalSettings::g_activeThreads > 0){
 		return;
 	}
 	switch(m_state){
@@ -547,9 +565,9 @@ void ofApp::draw(){
 		m_clearFBO = false;
 	}
 	
-	if(m_state == STATE_SETUP && g_activeThreads > 0){
+	if(m_state == STATE_SETUP && globalSettings::g_activeThreads > 0){
 		ofSetColor(255, 255, 255);
-		ofDrawBitmapString("Resetting: " + ofToString(100.f - ((float)g_activeThreads / m_maxThreads) * 100.F) + " %", ofGetWidth() / 2 - 200, ofGetHeight() / 2);
+		ofDrawBitmapString("Resetting: " + ofToString(100.f - ((float)globalSettings::g_activeThreads / m_maxThreads) * 100.F) + " %", ofGetWidth() / 2 - 200, ofGetHeight() / 2);
 		return;
 	}
 	if(!m_internetOk){
@@ -570,8 +588,8 @@ void ofApp::draw(){
 	//m_fadeRectangle.draw();
 
 	if(m_splashActive){
-		ofSetColor(g_backgroundC, m_splashOpacity * g_splashOpacity);
-		ofRect(0, 0, g_scene.width, g_scene.height);
+		ofSetColor(globalSettings::g_backgroundC, m_splashOpacity * globalSettings::g_splashOpacity);
+		ofRect(0, 0, globalSettings::g_scene.width, globalSettings::g_scene.height);
 		ofSetColor(255);
 		ofSetColor(255, 255.0F * m_splashOpacity);
 		m_splash.draw(m_splashPosition.x, m_splashPosition.y);
@@ -581,13 +599,31 @@ void ofApp::draw(){
 
 	ofSetLineWidth(1);
 
+	if(bDrawStatesInfo){
+		stringstream ss;
+		
+//		ss << "Draw Trees Layer   : " << boolalpha << _bDrawTreesLayer << "\n";
+//		ss << "Draw Lines Layer   : " << boolalpha << _bDrawLinesLayer << "\n";
+//		ss << "Draw Leaves Layer  : " << boolalpha << _bDrawLeavesLayer << "\n";
+//		ss << "Draw Twitter Layer : " << boolalpha << _bDrawTwitterLayer << "\n";
+//
+		
+		
+		
+	ofDrawBitmapStringHighlight("state : " + toString(m_state)+ "\n" +
+								"simulation : " + toString(m_simulationState) +
+//								"\n" + ss.str() +
+								"\n\n press key 'i' to toggle this message", 200, 50);
+	}
+	
+	
 }
 
 void ofApp::goClicked(bool & do_){
 	if(!m_internetOk){
 		return;
 	}
-	if(STATE_SETUP && g_activeThreads > 0){
+	if(STATE_SETUP && globalSettings::g_activeThreads > 0){
 		return;
 	}
 	start();
@@ -599,7 +635,7 @@ void ofApp::resetClicked(bool & do_){
 		return;
 	}
 	
-	if(STATE_SETUP && g_activeThreads > 0){
+	if(STATE_SETUP && globalSettings::g_activeThreads > 0){
 		return;
 	}
 	
@@ -623,11 +659,11 @@ void ofApp::setupControlPanel(){
 
 	// Color Preview
 
-	g_treeColorPreview = new guiCustomColorPreview();
+	globalSettings::g_treeColorPreview = new guiCustomColorPreview();
 
-	g_treeGradStartPreview = new guiCustomColorPreview();
-	g_treeGradEndPreview = new guiCustomColorPreview();
-	g_treeGradPreview = new guiCustomGradientPreview();
+	globalSettings::g_treeGradStartPreview = new guiCustomColorPreview();
+	globalSettings::g_treeGradEndPreview = new guiCustomColorPreview();
+	globalSettings::g_treeGradPreview = new guiCustomGradientPreview();
 
 	controlPanel.defaultConfigurationDirectory = "../../../data/configurations/";
 
@@ -791,7 +827,7 @@ void ofApp::setupControlPanel(){
 
 	controlPanel.setWhichColumn(1);
 	controlPanel.addLabel("Branches");
-	controlPanel.addCustomRect("Branch Color", g_treeColorPreview, 60, 60);
+	controlPanel.addCustomRect("Branch Color", globalSettings::g_treeColorPreview, 60, 60);
 	controlPanel.addSlider("Branch R", "treeR", 255, 0, 255, true);
 	controlPanel.addSlider("Branch G", "treeG", 255, 0, 255, true);
 	controlPanel.addSlider("Branch B", "treeB", 255, 0, 255, true);
@@ -848,18 +884,18 @@ void ofApp::setupControlPanel(){
 	controlPanel.setWhichPanel(panelNr++);
 	controlPanel.setWhichColumn(0);
 
-	controlPanel.addCustomRect("Gradient Start", g_treeGradStartPreview, 60, 60);
+	controlPanel.addCustomRect("Gradient Start", globalSettings::g_treeGradStartPreview, 60, 60);
 	controlPanel.addSlider("Grad Start Hue", "gradStartR", 0, 0, 360, true);
 	controlPanel.addSlider("Grad Start Sat", "gradStartG", 100, 0, 255, true);
 	controlPanel.addSlider("Grad Start Val", "gradStartB", 100, 0, 255, true);
 	controlPanel.addSlider("Grad Start Alpha", "gradStartA", 255, 0, 255, true);
 
-	controlPanel.addCustomRect("Gradient End", g_treeGradEndPreview, 60, 60);
+	controlPanel.addCustomRect("Gradient End", globalSettings::g_treeGradEndPreview, 60, 60);
 	controlPanel.addSlider("Grad End Hue", "gradEndR", 255, 0, 360, true);
 	controlPanel.addSlider("Grad End Sat", "gradEndG", 255, 0, 255, true);
 	controlPanel.addSlider("Grad End Val", "gradEndB", 255, 0, 255, true);
 	controlPanel.addSlider("Grad End Alpha", "gradEndA", 255, 0, 255, true);
-	controlPanel.addCustomRect("Preview", g_treeGradPreview, 200, 60);
+	controlPanel.addCustomRect("Preview", globalSettings::g_treeGradPreview, 200, 60);
 	controlPanel.addSlider("Ghost Alpha", "ghostAlpha", 255, 0, 255, true);
 
 	// warp control
@@ -877,358 +913,358 @@ void ofApp::setupControlPanel(){
 }
 
 void ofApp::setupControlPanelVariables(){
-	g_treeGradStart.setHsb(controlPanel.getValueI("gradStartR"), controlPanel.getValueI("gradStartG"), controlPanel.getValueI("gradStartB"), controlPanel.getValueI("gradStartA"));
-	g_treeGradStart.setHueAngle(controlPanel.getValueI("gradStartR"));
+	globalSettings::g_treeGradStart.setHsb(controlPanel.getValueI("gradStartR"), controlPanel.getValueI("gradStartG"), controlPanel.getValueI("gradStartB"), controlPanel.getValueI("gradStartA"));
+	globalSettings::g_treeGradStart.setHueAngle(controlPanel.getValueI("gradStartR"));
 
-	g_treeGradEnd.setHsb(controlPanel.getValueI("gradEndR"), controlPanel.getValueI("gradEndG"), controlPanel.getValueI("gradEndB"), controlPanel.getValueI("gradEndA"));
-	g_treeGradEnd.setHueAngle(controlPanel.getValueI("gradEndR"));
+	globalSettings::g_treeGradEnd.setHsb(controlPanel.getValueI("gradEndR"), controlPanel.getValueI("gradEndG"), controlPanel.getValueI("gradEndB"), controlPanel.getValueI("gradEndA"));
+	globalSettings::g_treeGradEnd.setHueAngle(controlPanel.getValueI("gradEndR"));
 
-	g_treeGradStartPreview->color = g_treeGradStart;
-	g_treeGradEndPreview->color = g_treeGradEnd;
+	globalSettings::g_treeGradStartPreview->color = globalSettings::g_treeGradStart;
+	globalSettings::g_treeGradEndPreview->color = globalSettings::g_treeGradEnd;
 
-	g_treeGradPreview->colorA = g_treeGradStart;
-	g_treeGradPreview->colorB = g_treeGradEnd;
+	globalSettings::g_treeGradPreview->colorA = globalSettings::g_treeGradStart;
+	globalSettings::g_treeGradPreview->colorB = globalSettings::g_treeGradEnd;
 }
 
 void ofApp::controlChanged(guiCallbackData & data){
 	if(data.isElement("backgroundR")){
-		g_backgroundC.r = data.getInt(0);
-		g_updateBackground();
+		globalSettings::g_backgroundC.r = data.getInt(0);
+		globalSettings::g_updateBackground();
 	}
 	else if(data.isElement("backgroundG")){
-		g_backgroundC.g = data.getInt(0);
-		g_updateBackground();
+		globalSettings::g_backgroundC.g = data.getInt(0);
+		globalSettings::g_updateBackground();
 	}
 	else if(data.isElement("backgroundB")){
-		g_backgroundC.b = data.getInt(0);
-		g_updateBackground();
+		globalSettings::g_backgroundC.b = data.getInt(0);
+		globalSettings::g_updateBackground();
 	}
 	else if(data.isElement("treeR")){
-		g_treeC.r = data.getInt(0);
-		g_changeBranchImages = true;
-		g_treeColorPreview->color = g_treeC;
+		globalSettings::g_treeC.r = data.getInt(0);
+		globalSettings::g_changeBranchImages = true;
+		globalSettings::g_treeColorPreview->color = globalSettings::g_treeC;
 	}
 	else if(data.isElement("treeG")){
-		g_treeC.g = data.getInt(0);
-		g_changeBranchImages = true;
-		g_treeColorPreview->color = g_treeC;
+		globalSettings::g_treeC.g = data.getInt(0);
+		globalSettings::g_changeBranchImages = true;
+		globalSettings::g_treeColorPreview->color = globalSettings::g_treeC;
 	}
 	else if(data.isElement("treeB")){
-		g_treeC.b = data.getInt(0);
-		g_changeBranchImages = true;
-		g_treeColorPreview->color = g_treeC;
+		globalSettings::g_treeC.b = data.getInt(0);
+		globalSettings::g_changeBranchImages = true;
+		globalSettings::g_treeColorPreview->color = globalSettings::g_treeC;
 	}
 	else if(data.isElement("treeA")){
-		g_treeC.a = data.getInt(0);
-		g_changeBranchImages = true;
-		g_treeColorPreview->color = g_treeC;
+		globalSettings::g_treeC.a = data.getInt(0);
+		globalSettings::g_changeBranchImages = true;
+		globalSettings::g_treeColorPreview->color = globalSettings::g_treeC;
 	}
 	else if(data.isElement("jointsAreCircles")){
-		g_jointsAreCircles = data.getInt(0);
+		globalSettings::g_jointsAreCircles = data.getInt(0);
 	}
 	else if(data.isElement("jointR")){
-		g_jointC.r = data.getInt(0);
+		globalSettings::g_jointC.r = data.getInt(0);
 	}
 	else if(data.isElement("jointG")){
-		g_jointC.g = data.getInt(0);
+		globalSettings::g_jointC.g = data.getInt(0);
 	}
 	else if(data.isElement("jointB")){
-		g_jointC.b = data.getInt(0);
+		globalSettings::g_jointC.b = data.getInt(0);
 	}
 	else if(data.isElement("jointA")){
-		g_jointC.a = data.getInt(0);
+		globalSettings::g_jointC.a = data.getInt(0);
 	}
 	else if(data.isElement("branchWidth")){
-		g_branchWidth = data.getFloat(0);
+		globalSettings::g_branchWidth = data.getFloat(0);
 	}
 	else if(data.isElement("branchMinWidth")){
-		g_branchMinWidth = data.getFloat(0);
+		globalSettings::g_branchMinWidth = data.getFloat(0);
 	}
 	else if(data.isElement("branchLength")){
-		g_branchLength = data.getFloat(0);
+		globalSettings::g_branchLength = data.getFloat(0);
 	}
 	else if(data.isElement("widthDecrease")){
-		g_widthDecrease = data.getFloat(0) / 100.F;
+		globalSettings::g_widthDecrease = data.getFloat(0) / 100.F;
 	}
 	else if(data.isElement("lengthDecrease")){
-		g_lengthDecrease = data.getFloat(0) / 100.F;
+		globalSettings::g_lengthDecrease = data.getFloat(0) / 100.F;
 	}
 	else if(data.isElement("pastTweets")){
-		g_pastTweets = data.getInt(0);
+		globalSettings::g_pastTweets = data.getInt(0);
 	}
 	else if(data.isElement("jointThickness")){
-		g_jointThickness = data.getInt(0);
+		globalSettings::g_jointThickness = data.getInt(0);
 	}
 	else if(data.isElement("jointLength")){
-		g_jointLength = data.getInt(0);
+		globalSettings::g_jointLength = data.getInt(0);
 	}
 	else if(data.isElement("tweetMsgR")){
-		g_tweetMsgC.r = data.getInt(0);
+		globalSettings::g_tweetMsgC.r = data.getInt(0);
 	}
 	else if(data.isElement("tweetMsgG")){
-		g_tweetMsgC.g = data.getInt(0);
+		globalSettings::g_tweetMsgC.g = data.getInt(0);
 	}
 	else if(data.isElement("tweetMsgB")){
-		g_tweetMsgC.b = data.getInt(0);
+		globalSettings::g_tweetMsgC.b = data.getInt(0);
 	}
 	else if(data.isElement("tweetMsgSize")){
-		g_setTwitterMsgFontSize(data.getInt(0));
+		globalSettings::g_setTwitterMsgFontSize(data.getInt(0));
 	}
 	else if(data.isElement("tweetUsR")){
-		g_tweetUsrC.r = data.getInt(0);
+		globalSettings::g_tweetUsrC.r = data.getInt(0);
 	}
 	else if(data.isElement("tweetUsG")){
-		g_tweetUsrC.g = data.getInt(0);
+		globalSettings::g_tweetUsrC.g = data.getInt(0);
 	}
 	else if(data.isElement("tweetUsB")){
-		g_tweetUsrC.b = data.getInt(0);
+		globalSettings::g_tweetUsrC.b = data.getInt(0);
 	}
 	else if(data.isElement("twilioMsgR")){
-		g_twilioMsgC.r = data.getInt(0);
+		globalSettings::g_twilioMsgC.r = data.getInt(0);
 	}
 	else if(data.isElement("twilioMsgG")){
-		g_twilioMsgC.g = data.getInt(0);
+		globalSettings::g_twilioMsgC.g = data.getInt(0);
 	}
 	else if(data.isElement("twilioMsgB")){
-		g_twilioMsgC.b = data.getInt(0);
+		globalSettings::g_twilioMsgC.b = data.getInt(0);
 	}
 	else if(data.isElement("twilioMsgSize")){
-		g_setTwilioMsgFontSize(data.getInt(0));
+		globalSettings::g_setTwilioMsgFontSize(data.getInt(0));
 	}
 	else if(data.isElement("twilioUsR")){
-		g_twilioUsrC.r = data.getInt(0);
+		globalSettings::g_twilioUsrC.r = data.getInt(0);
 	}
 	else if(data.isElement("twilioUsG")){
-		g_twilioUsrC.g = data.getInt(0);
+		globalSettings::g_twilioUsrC.g = data.getInt(0);
 	}
 	else if(data.isElement("twilioUsB")){
-		g_twilioUsrC.b = data.getInt(0);
+		globalSettings::g_twilioUsrC.b = data.getInt(0);
 	}
 	else if(data.isElement("databaseMsgR")){
-		g_databaseMsgC.r = data.getInt(0);
+		globalSettings::g_databaseMsgC.r = data.getInt(0);
 	}
 	else if(data.isElement("databaseMsgG")){
-		g_databaseMsgC.g = data.getInt(0);
+		globalSettings::g_databaseMsgC.g = data.getInt(0);
 	}
 	else if(data.isElement("databaseMsgB")){
-		g_databaseMsgC.b = data.getInt(0);
+		globalSettings::g_databaseMsgC.b = data.getInt(0);
 	}
 	else if(data.isElement("databaseMsgSize")){
-		g_setDatabaseMsgFontSize(data.getInt(0));
+		globalSettings::g_setDatabaseMsgFontSize(data.getInt(0));
 	}
 	else if(data.isElement("databaseUsR")){
-		g_databaseUsrC.r = data.getInt(0);
+		globalSettings::g_databaseUsrC.r = data.getInt(0);
 	}
 	else if(data.isElement("databaseUsG")){
-		g_databaseUsrC.g = data.getInt(0);
+		globalSettings::g_databaseUsrC.g = data.getInt(0);
 	}
 	else if(data.isElement("databaseUsB")){
-		g_databaseUsrC.b = data.getInt(0);
+		globalSettings::g_databaseUsrC.b = data.getInt(0);
 	}
 	else if(data.isElement("tLineR")){
-		g_tLineC.r = data.getInt(0);
+		globalSettings::g_tLineC.r = data.getInt(0);
 	}
 	else if(data.isElement("tLineG")){
-		g_tLineC.g = data.getInt(0);
+		globalSettings::g_tLineC.g = data.getInt(0);
 	}
 	else if(data.isElement("tLineB")){
-		g_tLineC.b = data.getInt(0);
+		globalSettings::g_tLineC.b = data.getInt(0);
 	}
 	else if(data.isElement("tLineWidth")){
-		g_tLineWidth = data.getInt(0);
+		globalSettings::g_tLineWidth = data.getInt(0);
 	}
 	else if(data.isElement("growthMin")){
-		g_growthMin = data.getInt(0);
+		globalSettings::g_growthMin = data.getInt(0);
 	}
 	else if(data.isElement("growthMax")){
-		g_growthMax = data.getInt(0);
+		globalSettings::g_growthMax = data.getInt(0);
 	}
 	else if(data.isElement("timedExhibit")){
-		g_timedExhibit = data.getInt(0);
+		globalSettings::g_timedExhibit = data.getInt(0);
 	}
 	else if(data.isElement("showDuration")){
-		g_showDuration = data.getInt(0);
+		globalSettings::g_showDuration = data.getInt(0);
 	}
 	else if(data.isElement("minFrequency")){
-		g_minFrequency = data.getInt(0);
+		globalSettings::g_minFrequency = data.getInt(0);
 	}
 	else if(data.isElement("maxFrequency")){
-		g_maxFrequency = data.getInt(0);
+		globalSettings::g_maxFrequency = data.getInt(0);
 	}
 	else if(data.isElement("minAngle")){
-		g_minAngle = data.getInt(0);
+		globalSettings::g_minAngle = data.getInt(0);
 	}
 	else if(data.isElement("maxAngle")){
-		g_minAngle = data.getInt(0);
+		globalSettings::g_minAngle = data.getInt(0);
 	}
 	else if(data.isElement("showThumbs")){
-		g_showThumbs = data.getInt(0);
+		globalSettings::g_showThumbs = data.getInt(0);
 	}
 	else if(data.isElement("fertility")){
-		g_fertility = data.getInt(0);
-		g_computeMaxBranches();
+		globalSettings::g_fertility = data.getInt(0);
+		globalSettings::g_computeMaxBranches();
 	}
 	else if(data.isElement("maxLevel")){
-		g_maxLevel = data.getInt(0);
-		g_computeMaxBranches();
+		globalSettings::g_maxLevel = data.getInt(0);
+		globalSettings::g_computeMaxBranches();
 	}
 	else if(data.isElement("floatingSpeed")){
-		g_floatingSpeed = data.getFloat(0) / 300.F;
+		globalSettings::g_floatingSpeed = data.getFloat(0) / 300.F;
 	}
 	else if(data.isElement("splashR")){
-		g_splashC.r = data.getInt(0);
+		globalSettings::g_splashC.r = data.getInt(0);
 	}
 	else if(data.isElement("splashG")){
-		g_splashC.g = data.getInt(0);
+		globalSettings::g_splashC.g = data.getInt(0);
 	}
 	else if(data.isElement("splashB")){
-		g_splashC.b = data.getInt(0);
+		globalSettings::g_splashC.b = data.getInt(0);
 	}
 	else if(data.isElement("soundVolume")){
-		g_soundVolume = data.getFloat(0) / 100.F;
+		globalSettings::g_soundVolume = data.getFloat(0) / 100.F;
 	}
 	else if(data.isElement("flowersMin")){
-		g_flowersMin = data.getInt(0);
+		globalSettings::g_flowersMin = data.getInt(0);
 	}
 	else if(data.isElement("flowersMax")){
-		g_flowersMax = data.getInt(0);
+		globalSettings::g_flowersMax = data.getInt(0);
 	}
 	else if(data.isElement("crazyLineWidth")){
-		g_crazyLineWidth = data.getInt(0);
+		globalSettings::g_crazyLineWidth = data.getInt(0);
 	}
 	else if(data.isElement("crazyCircleWidth")){
-		g_crazyCircleWidth = data.getInt(0);
+		globalSettings::g_crazyCircleWidth = data.getInt(0);
 	}
 	else if(data.isElement("useBackgroundImage")){
 		use_background = data.getInt(0);
 	} /* else if (data.isElement("useInteractiveAudio")) {
-	g_useInteractiveAudio = data.getInt(0);
-	g_activateSoundtrack();
+	globalSettings::g_useInteractiveAudio = data.getInt(0);
+	globalSettings::g_activateSoundtrack();
 	}*/
 	else if(data.isElement("Soundtrack")){
-		g_soundtrack = data.getString(2);
-		g_activateSoundtrack();
+		globalSettings::g_soundtrack = data.getString(2);
+		globalSettings::g_activateSoundtrack();
 	}
 	else if(data.isElement("minColonization")){
-		g_minColonization = data.getFloat(0);
+		globalSettings::g_minColonization = data.getFloat(0);
 	}
 	else if(data.isElement("minColonizationForLeaves")){
-		g_minColonizationForLeaves = data.getFloat(0);
+		globalSettings::g_minColonizationForLeaves = data.getFloat(0);
 	}
 	else if(data.isElement("treesOpacity")){
-		g_treesLayerOpacity = data.getFloat(0);
+		globalSettings::g_treesLayerOpacity = data.getFloat(0);
 	}
 	else if(data.isElement("twitterOpacity")){
-		g_twitterLayerOpacity = data.getFloat(0);
+		globalSettings::g_twitterLayerOpacity = data.getFloat(0);
 	}
 	else if(data.isElement("splashOpacity")){
-		g_splashOpacity = data.getFloat(0);
+		globalSettings::g_splashOpacity = data.getFloat(0);
 	}
 	else if(data.isElement("flowersOpacity")){
-		g_flowersOpacity = data.getFloat(0);
+		globalSettings::g_flowersOpacity = data.getFloat(0);
 	}
 	else if(data.isElement("showFlowers")){
-		g_showFlowers = data.getInt(0);
+		globalSettings::g_showFlowers = data.getInt(0);
 	}
 	else if(data.isElement("tLeavesR")){
-		g_leavesEndColor.r = data.getInt(0);
+		globalSettings::g_leavesEndColor.r = data.getInt(0);
 	}
 	else if(data.isElement("tLeavesG")){
-		g_leavesEndColor.g = data.getInt(0);
+		globalSettings::g_leavesEndColor.g = data.getInt(0);
 	}
 	else if(data.isElement("tLeavesB")){
-		g_leavesEndColor.b = data.getInt(0);
+		globalSettings::g_leavesEndColor.b = data.getInt(0);
 	}
 	else if(data.isElement("tLeavesA")){
-		g_leavesOpacity = data.getFloat(0);
+		globalSettings::g_leavesOpacity = data.getFloat(0);
 	}
 	else if(data.isElement("leafFertility")){
-		g_leavesFertility = data.getFloat(0);
+		globalSettings::g_leavesFertility = data.getFloat(0);
 	}
 	else if(data.isElement("leafMinWidth")){
-		g_leavesMinWidth = data.getFloat(0);
+		globalSettings::g_leavesMinWidth = data.getFloat(0);
 	}
 	else if(data.isElement("leafMaxWidth")){
-		g_leavesMaxWidth = data.getFloat(0);
+		globalSettings::g_leavesMaxWidth = data.getFloat(0);
 	}
 	else if(data.isElement("tweetMin")){
-		g_tweetMinLife = data.getFloat(0);
+		globalSettings::g_tweetMinLife = data.getFloat(0);
 	}
 	else if(data.isElement("tweetMax")){
-		g_tweetMaxLife = data.getFloat(0);
+		globalSettings::g_tweetMaxLife = data.getFloat(0);
 	} /* else if (data.isElement("useTwilio")) {
-	g_useTwilio = data.getInt(0);
+	globalSettings::g_useTwilio = data.getInt(0);
 	}*/
 	else if(data.isElement("leavesRows")){
-		g_leavesRows = data.getInt(0);
+		globalSettings::g_leavesRows = data.getInt(0);
 	}
 	else if(data.isElement("leavesColumns")){
-		g_leavesColumns = data.getInt(0);
+		globalSettings::g_leavesColumns = data.getInt(0);
 	}
 	else if(data.isElement("showLeaves")){
-		g_leavesActive = data.getInt(0);
+		globalSettings::g_leavesActive = data.getInt(0);
 	}
 	else if(data.isElement("leavesMinFreq")){
-		g_leavesMinFreq = data.getInt(0);
+		globalSettings::g_leavesMinFreq = data.getInt(0);
 	}
 	else if(data.isElement("leavesMaxFreq")){
-		g_leavesMaxFreq = data.getInt(0);
+		globalSettings::g_leavesMaxFreq = data.getInt(0);
 	}
 	else if(data.isElement("treesFadeTime")){
-		g_treesFadeTime = data.getInt(0);
+		globalSettings::g_treesFadeTime = data.getInt(0);
 	}
 	else if(data.isElement("backgroundTransitionTime")){
-		g_backgroundTransitionTime = data.getInt(0);
+		globalSettings::g_backgroundTransitionTime = data.getInt(0);
 	}
 
 	else if(data.isElement("tFlowersLinesR")){
-		g_flowersLineColor.r = data.getInt(0);
+		globalSettings::g_flowersLineColor.r = data.getInt(0);
 	}
 	else if(data.isElement("tFlowersLinesG")){
-		g_flowersLineColor.g = data.getInt(0);
+		globalSettings::g_flowersLineColor.g = data.getInt(0);
 	}
 	else if(data.isElement("tFlowersLinesB")){
-		g_flowersLineColor.b = data.getInt(0);
+		globalSettings::g_flowersLineColor.b = data.getInt(0);
 	}
 	else if(data.isElement("waitSeedTime")){
-		g_waitSeedTime = data.getInt(0);
+		globalSettings::g_waitSeedTime = data.getInt(0);
 	}
 	else if(data.isElement("waitLinesTime")){
-		g_waitLinesTime = data.getInt(0);
+		globalSettings::g_waitLinesTime = data.getInt(0);
 	}
 	else if(data.isElement("startDetachingLeavesTime")){
-		g_startDetachingLeavesTime = data.getInt(0);
+		globalSettings::g_startDetachingLeavesTime = data.getInt(0);
 	}
 	else if(data.isElement("waitRegenerateTime")){
-		g_waitRegenerateTime = data.getInt(0);
+		globalSettings::g_waitRegenerateTime = data.getInt(0);
 	}
 	else if(data.isElement("leavesLife")){
-		g_leavesLife = data.getInt(0);
+		globalSettings::g_leavesLife = data.getInt(0);
 	}
 	else if(data.isElement("msgOpacity")){
-		g_msgOpacity = data.getInt(0);
+		globalSettings::g_msgOpacity = data.getInt(0);
 	}
 	else if(data.isElement("LinesMin")){
-		g_linesMin = data.getInt(0);
-		g_linesMinNorm = data.getInt(0);
-		g_linesMinAcc = g_linesMinNorm * 1.5;
+		globalSettings::g_linesMin = data.getInt(0);
+		globalSettings::g_linesMinNorm = data.getInt(0);
+		globalSettings::g_linesMinAcc = globalSettings::g_linesMinNorm * 1.5;
 	}
 	else if(data.isElement("LinesMax")){
-		g_linesMax = data.getInt(0);
-		g_linesMaxNorm = data.getInt(0);
-		g_linesMaxAcc = g_linesMaxNorm * 1.5;
+		globalSettings::g_linesMax = data.getInt(0);
+		globalSettings::g_linesMaxNorm = data.getInt(0);
+		globalSettings::g_linesMaxAcc = globalSettings::g_linesMaxNorm * 1.5;
 	}
 	else if(data.isElement("firstIterations")){
-		g_firstIterations = data.getInt(0);
+		globalSettings::g_firstIterations = data.getInt(0);
 	}
 	else if(data.isElement("splashFrequency")){
-		g_splashFrequency = data.getInt(0);
+		globalSettings::g_splashFrequency = data.getInt(0);
 	}
 	else if(data.isElement("splashDuration")){
-		g_splashDuration = data.getInt(0);
+		globalSettings::g_splashDuration = data.getInt(0);
 	}
 	else if(data.isElement("splashOpacity")){
-		g_splashOpacity = data.getFloat(0);
+		globalSettings::g_splashOpacity = data.getFloat(0);
 	}
 	else if(data.isElement("eq100")){
 		InteractiveAudio::instance()->sendFloat(kEq100, data.getFloat(0) / 100.F);
@@ -1255,62 +1291,62 @@ void ofApp::controlChanged(guiCallbackData & data){
 		InteractiveAudio::instance()->sendFloat(kEqGain, data.getFloat(0) / 100.F);
 	}
 	else if(data.isElement("gradStartR")){
-		g_treeGradStart.setHueAngle(data.getInt(0));
-		g_changeBranchImages = true;
-		g_treeGradStartPreview->color = g_treeGradStart;
-		g_treeGradPreview->colorA = g_treeGradStart;
-		g_treeGradPreview->colorB = g_treeGradEnd;
+		globalSettings::g_treeGradStart.setHueAngle(data.getInt(0));
+		globalSettings::g_changeBranchImages = true;
+		globalSettings::g_treeGradStartPreview->color = globalSettings::g_treeGradStart;
+		globalSettings::g_treeGradPreview->colorA = globalSettings::g_treeGradStart;
+		globalSettings::g_treeGradPreview->colorB = globalSettings::g_treeGradEnd;
 	}
 	else if(data.isElement("gradStartG")){
-		g_treeGradStart.setSaturation(data.getInt(0));
-		g_changeBranchImages = true;
-		g_treeGradStartPreview->color = g_treeGradStart;
-		g_treeGradPreview->colorA = g_treeGradStart;
-		g_treeGradPreview->colorB = g_treeGradEnd;
+		globalSettings::g_treeGradStart.setSaturation(data.getInt(0));
+		globalSettings::g_changeBranchImages = true;
+		globalSettings::g_treeGradStartPreview->color = globalSettings::g_treeGradStart;
+		globalSettings::g_treeGradPreview->colorA = globalSettings::g_treeGradStart;
+		globalSettings::g_treeGradPreview->colorB = globalSettings::g_treeGradEnd;
 	}
 	else if(data.isElement("gradStartB")){
-		g_treeGradStart.setBrightness(data.getInt(0));
-		g_changeBranchImages = true;
-		g_treeGradStartPreview->color = g_treeGradStart;
-		g_treeGradPreview->colorA = g_treeGradStart;
-		g_treeGradPreview->colorB = g_treeGradEnd;
+		globalSettings::g_treeGradStart.setBrightness(data.getInt(0));
+		globalSettings::g_changeBranchImages = true;
+		globalSettings::g_treeGradStartPreview->color = globalSettings::g_treeGradStart;
+		globalSettings::g_treeGradPreview->colorA = globalSettings::g_treeGradStart;
+		globalSettings::g_treeGradPreview->colorB = globalSettings::g_treeGradEnd;
 	}
 	else if(data.isElement("gradStartA")){
-		g_treeGradStart.a = data.getInt(0);
-		g_changeBranchImages = true;
-		g_treeGradStartPreview->color = g_treeGradStart;
-		g_treeGradPreview->colorA = g_treeGradStart;
-		g_treeGradPreview->colorB = g_treeGradEnd;
+		globalSettings::g_treeGradStart.a = data.getInt(0);
+		globalSettings::g_changeBranchImages = true;
+		globalSettings::g_treeGradStartPreview->color = globalSettings::g_treeGradStart;
+		globalSettings::g_treeGradPreview->colorA = globalSettings::g_treeGradStart;
+		globalSettings::g_treeGradPreview->colorB = globalSettings::g_treeGradEnd;
 	}
 	else if(data.isElement("gradEndR")){
-		g_treeGradEnd.setHueAngle(data.getInt(0));
-		g_changeBranchImages = true;
-		g_treeGradEndPreview->color = g_treeGradEnd;
-		g_treeGradPreview->colorA = g_treeGradStart;
-		g_treeGradPreview->colorB = g_treeGradEnd;
+		globalSettings::g_treeGradEnd.setHueAngle(data.getInt(0));
+		globalSettings::g_changeBranchImages = true;
+		globalSettings::g_treeGradEndPreview->color = globalSettings::g_treeGradEnd;
+		globalSettings::g_treeGradPreview->colorA = globalSettings::g_treeGradStart;
+		globalSettings::g_treeGradPreview->colorB = globalSettings::g_treeGradEnd;
 	}
 	else if(data.isElement("gradEndG")){
-		g_treeGradEnd.setSaturation(data.getInt(0));
-		g_changeBranchImages = true;
-		g_treeGradEndPreview->color = g_treeGradEnd;
-		g_treeGradPreview->colorA = g_treeGradStart;
-		g_treeGradPreview->colorB = g_treeGradEnd;
+		globalSettings::g_treeGradEnd.setSaturation(data.getInt(0));
+		globalSettings::g_changeBranchImages = true;
+		globalSettings::g_treeGradEndPreview->color = globalSettings::g_treeGradEnd;
+		globalSettings::g_treeGradPreview->colorA = globalSettings::g_treeGradStart;
+		globalSettings::g_treeGradPreview->colorB = globalSettings::g_treeGradEnd;
 	}
 	else if(data.isElement("gradEndB")){
-		g_treeGradEnd.setBrightness(data.getInt(0));
-		g_changeBranchImages = true;
-		g_treeGradEndPreview->color = g_treeGradEnd;
-		g_treeGradPreview->colorA = g_treeGradStart;
-		g_treeGradPreview->colorB = g_treeGradEnd;
+		globalSettings::g_treeGradEnd.setBrightness(data.getInt(0));
+		globalSettings::g_changeBranchImages = true;
+		globalSettings::g_treeGradEndPreview->color = globalSettings::g_treeGradEnd;
+		globalSettings::g_treeGradPreview->colorA = globalSettings::g_treeGradStart;
+		globalSettings::g_treeGradPreview->colorB = globalSettings::g_treeGradEnd;
 	}
 	else if(data.isElement("gradEndA")){
-		g_treeGradEnd.a = data.getInt(0);
-		g_changeBranchImages = true;
-		g_treeGradEndPreview->color = g_treeGradEnd;
-		g_treeGradPreview->colorA = g_treeGradStart;
-		g_treeGradPreview->colorB = g_treeGradEnd;
+		globalSettings::g_treeGradEnd.a = data.getInt(0);
+		globalSettings::g_changeBranchImages = true;
+		globalSettings::g_treeGradEndPreview->color = globalSettings::g_treeGradEnd;
+		globalSettings::g_treeGradPreview->colorA = globalSettings::g_treeGradStart;
+		globalSettings::g_treeGradPreview->colorB = globalSettings::g_treeGradEnd;
 	} else if(data.isElement("ghostAlpha")) {
-		g_treeGhostOpacity = data.getInt(0);
+		globalSettings::g_treeGhostOpacity = data.getInt(0);
 	}
 }
 
@@ -1329,7 +1365,7 @@ void ofApp::windowResized(int w, int h){
 		float * thisOut = output;
 		int numberOfSamples = bufferSize * nChannels;
 		for(int i = 0; i < numberOfSamples; ++i, ++thisOut){
-			*thisOut *= g_soundVolume;
+			*thisOut *= globalSettings::g_soundVolume;
 		}
 	}
 #endif

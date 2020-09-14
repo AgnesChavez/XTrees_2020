@@ -115,7 +115,7 @@ void TwitterTrigger::fetch() {
 	}
 	ofxTwitter::SearchQuery query(m_keyword);
 	query.setLanguage("en");
-	query.setCount((m_lastId == 0)?g_pastTweets:100);
+	query.setCount((m_lastId == 0)?globalSettings::g_pastTweets:100);
 	query.setSinceId(m_lastId);
 	client.search(query);
 	

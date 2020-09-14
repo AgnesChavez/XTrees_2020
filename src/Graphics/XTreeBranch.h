@@ -23,6 +23,7 @@
 #include "ofMain.h"
 #include "ofxTimer.h"
 #include "GraphicUtilities.hpp"
+#include "Leaf.h"
 
 class FlowersLayer;
 class XTree;

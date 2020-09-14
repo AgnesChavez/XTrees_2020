@@ -1,8 +1,9 @@
 <?xml version="1.0" ?>
 <trees>
-    <tree name="tree" x="432" y="600" dir="-1.570796" />
-    <tree name="trees" x="548" y="600" dir="-1.570796" />
-    <tree name="plant trees" x="657" y="600" dir="-1.570796" />
-    <tree name="tree planting" x="717" y="600" dir="-1.570796" />
-    <tree name="nature rights" x="815" y="600" dir="4.669861" />
+    <tree name="tree" x="501" y="600" dir="-1.570796" />
+    <tree name="trees" x="583" y="600" dir="-1.570796" />
+    <tree name="plant trees" x="813" y="600" dir="-1.570796" />
+    <tree name="tree planting" x="738" y="600" dir="-1.570796" />
+    <tree name="nature rights" x="762" y="600" dir="4.669861" />
+    <tree name="trees" x="594" y="747" dir="-1.570796" />
 </trees>

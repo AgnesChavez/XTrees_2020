@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2012-2013 Agnes Chavez and Alessandro Saccoia
  * Written by Alessandro Saccoia, <alessandro.saccoia@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -32,13 +32,9 @@
 #include "FTGL/ftgles.h"
 #endif
 
-#include "ofEvents.h"
+
 #include "MSACore.h"
 #include "MSAFluidSolver.h"
-#include "LeavesLayer.h"
-#include "guiCustomColorPreview.h"
-#include "guiCustomGradientPreview.h"
-#include "guiTypeConfigFileList.h"
 
 using namespace MSA;
 
@@ -48,201 +44,204 @@ using namespace MSA;
 
 
 #define notifySetting(eventNr) Setting tont = eventNr; ofNotifyEvent(ofConfigurationChanged, tont, this)
-
-extern unsigned int g_globalCounter;
-extern unsigned int g_globalCounterSec;
-extern unsigned int g_splashFrequency;
-extern unsigned int g_splashDuration;
-extern float g_splashOpacity;
-
 class ofApp;
 class LeavesLayer;
+class guiCustomColorPreview;
+class guiCustomGradientPreview;
+class guiTypeConfigFileList;
 
-extern ofApp* g_app;
-
-extern guiCustomColorPreview *g_treeColorPreview;
-
-//Gradient
-extern guiCustomColorPreview *g_treeGradStartPreview;
-extern guiCustomColorPreview *g_treeGradEndPreview;
-extern ofColor g_treeGradStart;
-extern ofColor g_treeGradEnd;
-extern guiCustomGradientPreview *g_treeGradPreview;
-extern guiTypeConfigFileList *m_configurationLister;
-extern float g_treeGhostOpacity;
-
-extern ofColor g_backgroundC;
-extern ofColor g_treeC;
-extern bool g_jointsAreCircles;
-extern ofColor g_jointC;
-extern float g_branchWidth;
-extern float g_branchMinWidth;
-extern float g_branchLength;
-extern float g_lengthDecrease;
-extern float g_widthDecrease;
-extern int g_pastTweets;
-extern int g_jointThickness;
-extern int g_jointLength;
-
-extern ofColor g_tweetMsgC;
-extern ofColor g_tweetUsrC;
-extern ofColor g_twilioMsgC;
-extern ofColor g_twilioUsrC;
-extern ofColor g_databaseMsgC;
-extern ofColor g_databaseUsrC;
-
-extern ofColor g_tLineC;
-extern int g_tLineWidth;
-extern int g_growthMin;
-extern int g_growthMax;
-extern bool g_timedExhibit;
-extern float g_showDuration;
-extern int g_minFrequency;
-extern int g_maxFrequency;
-extern int g_minAngle;
-extern int g_maxAngle;
-extern bool g_showThumbs;
-extern int g_fertility;
-extern int g_maxLevel; // how many branches per tree given the currentLevel
-extern int g_maxBranches; // how many branches per tree given the currentLevel
-extern float g_floatingSpeed;
-extern ofColor g_splashC;
-extern int g_flowersMin;
-extern int g_flowersMax;
-extern int g_crazyLineWidth;
-extern int g_crazyCircleWidth;
-extern bool g_useBackground;
-extern int g_tweetMinLife;
-extern int g_tweetMaxLife;
+class globalSettings
+{
+public:
 	
-extern std::map<string, int> g_textAnchorX;
-extern std::map<string, int> g_textAnchorY;
-
-
-extern FTFont*  g_guiFont;
-extern FTSimpleLayout* g_guiRenderer;
-
-extern FTSimpleLayout* g_twitterLayout;
-extern FTSimpleLayout* g_twilioLayout;
-extern FTSimpleLayout* g_databaseLayout;
-
-extern FTFont* g_twitterFont;
-extern FTFont* g_twilioFont;
-extern FTFont* g_databaseFont;
-
-extern std::vector<ofImage*> g_originalImages;
-extern std::vector<ofImage*> g_leafImages;
-extern std::vector<ofImage*> g_backgroundImages;
-
-extern bool g_changeBranchImages;
-
-extern ofRectangle g_scene;
-extern ofRectangle g_sceneBounded;
-
-extern float g_soundVolume;
-
-extern bool g_useInteractiveAudio;
-
-extern bool g_useBackgroundImage;
-extern std::string g_backgroundImage;
-extern std::string g_soundtrack;
-
-extern float g_minColonization;
-extern float g_minColonizationForLeaves;
-
-extern bool g_treesCanFade;
-
-extern float g_fps;
-extern float g_currentFps;
-
-extern int g_numberOfseeds;
-extern char g_seed1[60];
-extern char g_seed2[60];
-extern char g_seed3[60];
-extern char g_seed4[60];
-extern char g_seed5[60];
-
-extern float g_treesLayerOpacity;
-extern float g_twitterLayerOpacity;
-extern float g_flowersOpacity;
-
-extern ofImage g_flowerImage;
-
-extern bool g_showFlowers;
-
-extern FluidSolver *s_solver;
-extern Vec2f s_windowSize;
-extern Vec2f s_invWindowSize;
-
-extern LeavesLayer* g_leavesLayer;
-
-extern float g_leavesFertility;
-extern ofColor g_leavesEndColor;
-extern float g_leavesOpacity;
-extern float g_leavesLife;
-extern float g_leavesMinWidth;
-extern float g_leavesMaxWidth;
-extern float g_leavesMinFreq;
-extern float g_leavesMaxFreq;
-
-extern ofColor g_flowersColor;
-extern ofColor g_flowersLineColor;
-
-extern bool g_useTwilio;
-extern bool g_useTwitter;
-
-
-extern int g_leavesRows;
-extern int g_leavesColumns;
-
-extern bool g_leavesActive;
-
-extern int g_treesFadeTime;
-
-extern int g_backgroundTransitionTime;
-
-extern bool g_useArchive;
-
-extern std::atomic<int> g_activeThreads;
-//extern ofMutex g_activeThreadsMutex;
-
-extern float g_waitSeedTime; // wait in seed mode
-extern float g_waitLinesTime; // tree full, wait to start lines
-extern float g_startDetachingLeavesTime;
-extern float g_waitRegenerateTime; // after leaves fell how long does it take to regenerate
-
-
-
-
-extern int g_msgOpacity;
-
-extern float g_linesMin;
-extern float g_linesMax;
-
-extern float g_linesMinNorm;
-extern float g_linesMaxNorm;
-extern float g_linesMinAcc;
-extern float g_linesMaxAcc;
-
-extern int g_firstIterations;
-
-/////////////////////////////////////////////////////////////////////////
-
-void g_initializeFonts();
-void g_initializeBranchImages();
-void g_initializeLeafImages();
-void g_initializeBackgroundImages();
-void g_releaseBranchImages();
-void g_releaseLeafImages();
-void g_setTwitterMsgFontSize(int fontsize);
-void g_setTwilioMsgFontSize(int fontsize);
-void g_setDatabaseMsgFontSize(int fontsize);
-
-void g_colorizeSplashImages();
-void g_computeMaxBranches();
-void g_updateBackground();
-void g_activateSoundtrack();
-
-
+	
+	static unsigned int g_globalCounter;
+	static unsigned int g_globalCounterSec;
+	static unsigned int g_splashFrequency;
+	static unsigned int g_splashDuration;
+	static float g_splashOpacity;
+	
+	
+	static ofApp* g_app;
+	
+	static guiCustomColorPreview *g_treeColorPreview;
+	
+	//Gradient
+	static guiCustomColorPreview *g_treeGradStartPreview;
+	static guiCustomColorPreview *g_treeGradEndPreview;
+	static ofColor g_treeGradStart;
+	static ofColor g_treeGradEnd;
+	static guiCustomGradientPreview *g_treeGradPreview;
+	static guiTypeConfigFileList *m_configurationLister;
+	static float g_treeGhostOpacity;
+	
+	static ofColor g_backgroundC;
+	static ofColor g_treeC;
+	static bool g_jointsAreCircles;
+	static ofColor g_jointC;
+	static float g_branchWidth;
+	static float g_branchMinWidth;
+	static float g_branchLength;
+	static float g_lengthDecrease;
+	static float g_widthDecrease;
+	static int g_pastTweets;
+	static int g_jointThickness;
+	static int g_jointLength;
+	
+	static ofColor g_tweetMsgC;
+	static ofColor g_tweetUsrC;
+	static ofColor g_twilioMsgC;
+	static ofColor g_twilioUsrC;
+	static ofColor g_databaseMsgC;
+	static ofColor g_databaseUsrC;
+	
+	static ofColor g_tLineC;
+	static int g_tLineWidth;
+	static int g_growthMin;
+	static int g_growthMax;
+	static bool g_timedExhibit;
+	static float g_showDuration;
+	static int g_minFrequency;
+	static int g_maxFrequency;
+	static int g_minAngle;
+	static int g_maxAngle;
+	static bool g_showThumbs;
+	static int g_fertility;
+	static int g_maxLevel; // how many branches per tree given the currentLevel
+	static int g_maxBranches; // how many branches per tree given the currentLevel
+	static float g_floatingSpeed;
+	static ofColor g_splashC;
+	static int g_flowersMin;
+	static int g_flowersMax;
+	static int g_crazyLineWidth;
+	static int g_crazyCircleWidth;
+	static bool g_useBackground;
+	static int g_tweetMinLife;
+	static int g_tweetMaxLife;
+	
+	static std::map<string, int> g_textAnchorX;
+	static std::map<string, int> g_textAnchorY;
+	
+	
+	static FTFont*  g_guiFont;
+	static FTSimpleLayout* g_guiRenderer;
+	
+	static FTSimpleLayout* g_twitterLayout;
+	static FTSimpleLayout* g_twilioLayout;
+	static FTSimpleLayout* g_databaseLayout;
+	
+	static FTFont* g_twitterFont;
+	static FTFont* g_twilioFont;
+	static FTFont* g_databaseFont;
+	
+	static std::vector<ofImage> g_originalImages;
+	static std::vector<ofImage> g_leafImages;
+	static std::vector<ofImage> g_backgroundImages;
+	
+	static bool g_changeBranchImages;
+	
+	static ofRectangle g_scene;
+	static ofRectangle g_sceneBounded;
+	
+	static float g_soundVolume;
+	
+	static bool g_useInteractiveAudio;
+	
+	static bool g_useBackgroundImage;
+	static std::string g_backgroundImage;
+	static std::string g_soundtrack;
+	
+	static float g_minColonization;
+	static float g_minColonizationForLeaves;
+	
+	static bool g_treesCanFade;
+	
+	static float g_fps;
+	static float g_currentFps;
+	
+	static int g_numberOfseeds;
+	
+	
+	static float g_treesLayerOpacity;
+	static float g_twitterLayerOpacity;
+	static float g_flowersOpacity;
+	
+	static ofImage g_flowerImage;
+	
+	static bool g_showFlowers;
+	
+	static FluidSolver *s_solver;
+	static Vec2f s_windowSize;
+	static Vec2f s_invWindowSize;
+	
+	static LeavesLayer* g_leavesLayer;
+	
+	static float g_leavesFertility;
+	static ofColor g_leavesEndColor;
+	static float g_leavesOpacity;
+	static float g_leavesLife;
+	static float g_leavesMinWidth;
+	static float g_leavesMaxWidth;
+	static float g_leavesMinFreq;
+	static float g_leavesMaxFreq;
+	
+	static ofColor g_flowersColor;
+	static ofColor g_flowersLineColor;
+	
+	static bool g_useTwilio;
+	static bool g_useTwitter;
+	
+	
+	static int g_leavesRows;
+	static int g_leavesColumns;
+	
+	static bool g_leavesActive;
+	
+	static int g_treesFadeTime;
+	
+	static int g_backgroundTransitionTime;
+	
+	static bool g_useArchive;
+	
+	static std::atomic<int> g_activeThreads;
+	//static ofMutex g_activeThreadsMutex;
+	
+	static float g_waitSeedTime; // wait in seed mode
+	static float g_waitLinesTime; // tree full, wait to start lines
+	static float g_startDetachingLeavesTime;
+	static float g_waitRegenerateTime; // after leaves fell how long does it take to regenerate
+	
+	
+	
+	
+	static int g_msgOpacity;
+	
+	static float g_linesMin;
+	static float g_linesMax;
+	
+	static float g_linesMinNorm;
+	static float g_linesMaxNorm;
+	static float g_linesMinAcc;
+	static float g_linesMaxAcc;
+	
+	static int g_firstIterations;
+	
+	/////////////////////////////////////////////////////////////////////////
+	
+	static void g_initializeFonts();
+	static void g_initializeBranchImages();
+	static void g_initializeLeafImages();
+	static void g_initializeBackgroundImages();
+	
+	static void g_setTwitterMsgFontSize(int fontsize);
+	static void g_setTwilioMsgFontSize(int fontsize);
+	static void g_setDatabaseMsgFontSize(int fontsize);
+	
+	static void g_colorizeSplashImages();
+	static void g_computeMaxBranches();
+	static void g_updateBackground();
+	static void g_activateSoundtrack();
+	
+};
 #endif //
 

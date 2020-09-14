@@ -82,7 +82,7 @@ public:
 	
 	static ofColor getRandomTreeColor(){
 		float t = abs(ofRandomf());
-		return lerpHSB(g_treeGradStart, g_treeGradEnd, t);
+		return lerpHSB(globalSettings::g_treeGradStart, globalSettings::g_treeGradEnd, t);
 	}
 
   static void initGhostFbo() {
@@ -100,7 +100,7 @@ public:
 	  s_fbo.begin();
 	 
 		if(bClear) {
-			ofClear(g_backgroundC.r,g_backgroundC.g,g_backgroundC.b,0);
+			ofClear(globalSettings::g_backgroundC.r,globalSettings::g_backgroundC.g,globalSettings::g_backgroundC.b,0);
 		}
 	}
 
@@ -137,7 +137,7 @@ private:
   
   inline float getColonizationLevel() {
     // consider also stuck the branches... FIXME kludge
-    return (((float)m_numberOfBranches + ((float)m_numberOfBranchesStuck / 2.F)) / (float)g_maxBranches) * 100.F;
+    return (((float)m_numberOfBranches + ((float)m_numberOfBranchesStuck / 2.F)) / (float)globalSettings::g_maxBranches) * 100.F;
   }
   
 

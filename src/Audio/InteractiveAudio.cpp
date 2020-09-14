@@ -20,8 +20,7 @@
 
 #if USE_PDLIB
 
-extern ofSoundStream soundStreamInput;
-extern ofSoundStream soundStreamOutput;
+
 
 extern "C" void moog_tilde_setup(void);
 extern "C" void freeverb_tilde_setup(void);
@@ -75,15 +74,26 @@ InteractiveAudio::InteractiveAudio() :
 InteractiveAudio::~InteractiveAudio() {
   m_pd->closePatch(m_patch);
   delete m_pd;
-	if(_bIsInited)
+	closeSoundStream();
+}
+
+void InteractiveAudio::closeSoundStream()
+{
+	if(_bIsSoundStreamInited)
 	{
+		_bIsSoundStreamInited = false;
 		ofSoundStreamClose();
 	}
 }
-
 void InteractiveAudio::init(ofBaseApp* app_) {
   int ticksPerBuffer = 8;
   ofSoundStreamSetup(2, 0, app_, 44100, ofxPd::blockSize()*ticksPerBuffer, 3);
+	_bIsSoundStreamInited = true;
+	
+	exitListener = ofEvents().exit.newListener([&](ofEventArgs&){
+		closeSoundStream();
+	});
+	
   m_pd = new ofxPd();
   if(!m_pd->init(2, 0, 44100, ticksPerBuffer)) {
 		ofLog(OF_LOG_ERROR, "Could not init pd");
@@ -116,7 +126,7 @@ void InteractiveAudio::init(ofBaseApp* app_) {
 #endif
 	m_pd->start(); // DSP ON
 	
-	_bIsInited = true;
+	
 	
 }
 

@@ -64,7 +64,6 @@
 		253050340F29FA5D8EF20BC4 /* metablock.c in Sources */ = {isa = PBXBuildFile; fileRef = 50FC1C7AE5280445EB0FD2B8 /* metablock.c */; };
 		25B79206FB0A59E1DE03FAD4 /* simpleColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EF577E83988397C36F01AD8B /* simpleColor.cpp */; };
 		2687B1C07A10EEAD7689CF27 /* x_misc.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C69DFEE749ABBCA5CBAB764 /* x_misc.c */; };
-		26D1AFBEE7F75086874B9AE7 /* KplHttpRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 260A9846FB3646D0452CAD0C /* KplHttpRequest.cpp */; };
 		279143BE4759DFD9E2A5D3CD /* User.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F562B9D7BFEB27422C7E073C /* User.cpp */; };
 		2828A77BB5E2D565E60AB26F /* guiTypeTextInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7151C69C5DE7598C6BB09781 /* guiTypeTextInput.cpp */; };
 		28A6E9BA6E8D63725FFB7D7E /* histogram.c in Sources */ = {isa = PBXBuildFile; fileRef = CB977F55D4B0D819421437AD /* histogram.c */; };
@@ -122,7 +121,6 @@
 		52879B293457F714C2FCDE30 /* bit_reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 435F153348292B6921D118D7 /* bit_reader.c */; };
 		52E0D9D8CC9D0F3AB04182F5 /* entropy_encode.c in Sources */ = {isa = PBXBuildFile; fileRef = CA68874B4EA8C0D647FA49C8 /* entropy_encode.c */; };
 		5324FB8A3638FF191A09BEF1 /* HTTPUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F438CF931C8ADF5F87E4ECDA /* HTTPUtils.cpp */; };
-		539C8AC526131ECD4FE8E0CA /* controlsCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BD4CCDE76225771504469AC3 /* controlsCommon.cpp */; };
 		53CE859243E068F13063920C /* OAuth10HTTPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5D1F8C28D29E12D276CD63BA /* OAuth10HTTPClient.cpp */; };
 		5472CCBDC7B6C1AF21661319 /* s_main.c in Sources */ = {isa = PBXBuildFile; fileRef = F96600F815252113425D4E74 /* s_main.c */; };
 		567B2851E1CA540790055C1F /* guiTypeToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C210D1E16C1DA3824E49B4BC /* guiTypeToggle.cpp */; };
@@ -298,7 +296,6 @@
 		C0255B510C719A9393A1E1D3 /* Request.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0427DAAAFBBD2B49A74EC6F9 /* Request.cpp */; };
 		C03093110A285D1F2241961E /* DefaultProxyProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00290A7A86EF45C1786B6DDC /* DefaultProxyProcessor.cpp */; };
 		C06458734FF651C910D378B9 /* MediaTypeMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A31FB08F6660CE0DC758509E /* MediaTypeMap.cpp */; };
-		C146D892BE785267747E4652 /* KplHttpRequest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A7315E2DC8C80B4E1BC7D38D /* KplHttpRequest.mm */; };
 		C3167F8E5105283443E3D5BF /* m_conf.c in Sources */ = {isa = PBXBuildFile; fileRef = 288F7169CFEB722BB4EEAF07 /* m_conf.c */; };
 		C318655C47AEF7BE8103803A /* d_arithmetic.c in Sources */ = {isa = PBXBuildFile; fileRef = A9B7B97845A34CEB03A100F0 /* d_arithmetic.c */; };
 		C4782ECC372420ACE0615B74 /* OscPrintReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BC8881B3C8C0A1C45F042E7A /* OscPrintReceivedElements.cpp */; };
@@ -530,7 +527,6 @@
 		24AA625B2D4584A3B0FA136C /* CookieStore.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = CookieStore.cpp; path = ../../../addons/ofxHTTP/libs/ofxHTTP/src/CookieStore.cpp; sourceTree = SOURCE_ROOT; };
 		25050EE51910D22D30B78FFB /* MessageTrigger.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = MessageTrigger.cpp; path = src/Realtime/MessageTrigger.cpp; sourceTree = SOURCE_ROOT; };
 		25A3F5B24C5156471AE4E7B5 /* guiTypeSlider.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = guiTypeSlider.cpp; path = ./local_addons/ofxControlPanel/src/guiTypeSlider.cpp; sourceTree = SOURCE_ROOT; };
-		260A9846FB3646D0452CAD0C /* KplHttpRequest.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = KplHttpRequest.cpp; path = src/Realtime/KplHttpRequest.cpp; sourceTree = SOURCE_ROOT; };
 		2636FD3EC05BF45970C5BC0C /* FormRequest.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = FormRequest.cpp; path = ../../../addons/ofxHTTP/libs/ofxHTTP/src/FormRequest.cpp; sourceTree = SOURCE_ROOT; };
 		268DEFCC431A8C69155F2B82 /* PutRequest.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = PutRequest.h; path = ../../../addons/ofxHTTP/libs/ofxHTTP/include/ofx/HTTP/PutRequest.h; sourceTree = SOURCE_ROOT; };
 		26FD7792D0FC0533A46C4B0D /* comp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = comp.h; path = ../../../addons/ofxPoco/libs/openssl/include/openssl/comp.h; sourceTree = SOURCE_ROOT; };
@@ -790,7 +786,6 @@
 		6DBC6226F5BAEA525768E2DB /* FTBufferFont.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = FTBufferFont.cpp; path = ./local_addons/ofxFTGL/libs/FTGL/src/FTFont/FTBufferFont.cpp; sourceTree = SOURCE_ROOT; };
 		6E5FE39C5705683EDFBB1E22 /* ofxApp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxApp.h; path = ./local_addons/ofxAppUtils/src/ofxApp.h; sourceTree = SOURCE_ROOT; };
 		6F088B5627F1D7AAAB52E29C /* LeavesMovement.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = LeavesMovement.cpp; path = src/Graphics/LeavesMovement.cpp; sourceTree = SOURCE_ROOT; };
-		6F11E828CFB6239DAC1087D1 /* KplHttpRequest.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = KplHttpRequest.h; path = src/Realtime/KplHttpRequest.h; sourceTree = SOURCE_ROOT; };
 		6F65B5134D555338C87F426A /* BaseServer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = BaseServer.cpp; path = ../../../addons/ofxHTTP/libs/ofxHTTP/src/BaseServer.cpp; sourceTree = SOURCE_ROOT; };
 		6F70399AB86FED2BAB300FC5 /* Session.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Session.h; path = ../../../addons/ofxHTTP/libs/ofxHTTP/include/ofx/HTTP/Session.h; sourceTree = SOURCE_ROOT; };
 		6FAD48A406A21AF7ECBA2834 /* RESTClient.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = RESTClient.cpp; path = ../../../addons/ofxTwitter/libs/ofxTwitter/src/RESTClient.cpp; sourceTree = SOURCE_ROOT; };
@@ -971,7 +966,6 @@
 		A6EB63992AB760322220D82E /* simpleLogger.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = simpleLogger.cpp; path = ./local_addons/ofxControlPanel/src/simpleLogger.cpp; sourceTree = SOURCE_ROOT; };
 		A7233FE746DDE6D234D84452 /* cluster.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cluster.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/cluster.h; sourceTree = SOURCE_ROOT; };
 		A7271D59E999D051862CAF03 /* JSONUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = JSONUtils.h; path = ../../../addons/ofxIO/libs/ofxIO/include/ofx/IO/JSONUtils.h; sourceTree = SOURCE_ROOT; };
-		A7315E2DC8C80B4E1BC7D38D /* KplHttpRequest.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = KplHttpRequest.mm; path = src/Realtime/KplHttpRequest.mm; sourceTree = SOURCE_ROOT; };
 		A7B8D161DA11E1C34ADDDD57 /* x_list.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = x_list.c; path = "../../../addons/ofxPd/libs/libpd/pure-data/src/x_list.c"; sourceTree = SOURCE_ROOT; };
 		A8367EC8C17E277DFC088C4B /* ClientState.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ClientState.h; path = ../../../addons/ofxHTTP/libs/ofxHTTP/include/ofx/HTTP/ClientState.h; sourceTree = SOURCE_ROOT; };
 		A845B79AD3787E21EA8DFEDD /* compressor.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = compressor.h; path = ../../../addons/ofxIO/libs/brotli/src/enc/compressor.h; sourceTree = SOURCE_ROOT; };
@@ -1047,7 +1041,6 @@
 		BC8923D9E506707DE397F553 /* x_scalar.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = x_scalar.c; path = "../../../addons/ofxPd/libs/libpd/pure-data/src/x_scalar.c"; sourceTree = SOURCE_ROOT; };
 		BCCF9F25227CD1DFCF943F80 /* Request.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Request.h; path = ../../../addons/ofxHTTP/libs/ofxHTTP/include/ofx/HTTP/Request.h; sourceTree = SOURCE_ROOT; };
 		BD13826DCF9753ABBBE38561 /* textInput.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = textInput.cpp; path = src/UserInterface/textInput.cpp; sourceTree = SOURCE_ROOT; };
-		BD4CCDE76225771504469AC3 /* controlsCommon.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = controlsCommon.cpp; path = src/Settings/controlsCommon.cpp; sourceTree = SOURCE_ROOT; };
 		BD8E7BBD548BB4727273440E /* iemlib.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = iemlib.h; path = src/Audio/iemlib.h; sourceTree = SOURCE_ROOT; };
 		BE10E456A9066BE3516AD23E /* encode.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = encode.c; path = ../../../addons/ofxIO/libs/brotli/src/enc/encode.c; sourceTree = SOURCE_ROOT; };
 		BECDD04933ED6C2CF49EC28A /* guiCallback.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = guiCallback.cpp; path = ./local_addons/ofxControlPanel/src/guiCallback.cpp; sourceTree = SOURCE_ROOT; };
@@ -1358,7 +1351,7 @@
 		E451F26C7B6F796BABA8E687 /* GetRequest.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = GetRequest.h; path = ../../../addons/ofxHTTP/libs/ofxHTTP/include/ofx/HTTP/GetRequest.h; sourceTree = SOURCE_ROOT; };
 		E4797D580A5F0AD9C523A971 /* ofxMSAInteractiveObject.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxMSAInteractiveObject.h; path = ./local_addons/ofxMSAInteractiveObject/src/ofxMSAInteractiveObject.h; sourceTree = SOURCE_ROOT; };
 		E4AD99833D90BF4D6375E9B0 /* hStringUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = hStringUtils.h; path = ./local_addons/ofxhUtils/src/hStringUtils/hStringUtils.h; sourceTree = SOURCE_ROOT; };
-		E4B69B5B0A3A1756003C02F2 /* XTreesV2_6Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XTreesV2_6Debug.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69B5B0A3A1756003C02F2 /* XTrees_2020Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XTrees_2020Debug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofApp.cpp; path = src/ofApp.cpp; sourceTree = SOURCE_ROOT; };
 		E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofApp.h; path = src/ofApp.h; sourceTree = SOURCE_ROOT; };
@@ -2587,18 +2580,15 @@
 			isa = PBXGroup;
 			children = (
 				F4853C2AE02FA14803C0E62F /* DatabaseTrigger.cpp */,
-				A32B9DF0A9521E76F3C78AAC /* DatabaseTrigger.h */,
-				260A9846FB3646D0452CAD0C /* KplHttpRequest.cpp */,
-				6F11E828CFB6239DAC1087D1 /* KplHttpRequest.h */,
-				A7315E2DC8C80B4E1BC7D38D /* KplHttpRequest.mm */,
-				25050EE51910D22D30B78FFB /* MessageTrigger.cpp */,
-				B9770D74DB7D8E0F6FC1E8E1 /* MessageTrigger.h */,
-				79E9CF979969C1C7F2086CBF /* RealtimeFetcher.cpp */,
 				40C689131DD0E864A43E8248 /* RealtimeFetcher.h */,
 				2D2155A264E9BD499453D3FA /* TwilioTrigger.cpp */,
+				25050EE51910D22D30B78FFB /* MessageTrigger.cpp */,
+				79E9CF979969C1C7F2086CBF /* RealtimeFetcher.cpp */,
+				B9770D74DB7D8E0F6FC1E8E1 /* MessageTrigger.h */,
 				F4887D58C81EA65A76679A48 /* TwilioTrigger.h */,
-				C0E004C2D97FD9230C7993C9 /* TwitterTrigger.cpp */,
+				A32B9DF0A9521E76F3C78AAC /* DatabaseTrigger.h */,
 				C636F0B9FA98659DAF6EE915 /* TwitterTrigger.h */,
+				C0E004C2D97FD9230C7993C9 /* TwitterTrigger.cpp */,
 			);
 			name = Realtime;
 			sourceTree = "<group>";
@@ -3395,7 +3385,6 @@
 			isa = PBXGroup;
 			children = (
 				EE0BF987388FF332B5728F13 /* Settings.h */,
-				BD4CCDE76225771504469AC3 /* controlsCommon.cpp */,
 				2C0598E806D35950AA30A14D /* Settings.cpp */,
 			);
 			name = Settings;
@@ -3701,7 +3690,7 @@
 				E42962AA2163EDD300A6A9E2 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				6948EE371B920CB800B5AC1A /* local_addons */,
-				E4B69B5B0A3A1756003C02F2 /* XTreesV2_6Debug.app */,
+				E4B69B5B0A3A1756003C02F2 /* XTrees_2020Debug.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -3812,9 +3801,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4B69B5A0A3A1756003C02F2 /* XTreesV2_6 */ = {
+		E4B69B5A0A3A1756003C02F2 /* XTrees_2020 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "XTreesV2_6" */;
+			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "XTrees_2020" */;
 			buildPhases = (
 				E42962A92163ECCD00A6A9E2 /* ShellScript */,
 				E4B69B580A3A1756003C02F2 /* Sources */,
@@ -3827,9 +3816,9 @@
 			);
 			dependencies = (
 			);
-			name = XTreesV2_6;
+			name = XTrees_2020;
 			productName = myOFApp;
-			productReference = E4B69B5B0A3A1756003C02F2 /* XTreesV2_6Debug.app */;
+			productReference = E4B69B5B0A3A1756003C02F2 /* XTrees_2020Debug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -3840,7 +3829,7 @@
 			attributes = {
 				LastUpgradeCheck = 0600;
 			};
-			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "XTreesV2_6" */;
+			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "XTrees_2020" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -3855,7 +3844,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E4B69B5A0A3A1756003C02F2 /* XTreesV2_6 */,
+				E4B69B5A0A3A1756003C02F2 /* XTrees_2020 */,
 			);
 		};
 /* End PBXProject section */
@@ -3909,16 +3898,13 @@
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
-				539C8AC526131ECD4FE8E0CA /* controlsCommon.cpp in Sources */,
 				49FD2D0B9BC58634902C9D37 /* Settings.cpp in Sources */,
 				2CECBE7725A5F641062A7908 /* guiTypeConfigFileList.cpp in Sources */,
 				E26819DB47BB0FA8A35DB3A1 /* KepleroUtils.cpp in Sources */,
 				59993CC6674C0FA5C6762774 /* GraphicUtilities.cpp in Sources */,
 				08574E9D468B64AD4585FE68 /* DatabaseTrigger.cpp in Sources */,
-				C146D892BE785267747E4652 /* KplHttpRequest.mm in Sources */,
 				30ED9B02CF8E65E7BB69D542 /* TwilioTrigger.cpp in Sources */,
 				09C9DD9D1C144D9CB738DE64 /* MessageTrigger.cpp in Sources */,
-				26D1AFBEE7F75086874B9AE7 /* KplHttpRequest.cpp in Sources */,
 				DFD7AB4872156940B35EA031 /* RealtimeFetcher.cpp in Sources */,
 				AB879E157D9D1A4EF615514F /* TwitterTrigger.cpp in Sources */,
 				A0BD632B11D49372AA37613C /* moog~.c in Sources */,
@@ -5293,7 +5279,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "XTreesV2_6" */ = {
+		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "XTrees_2020" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B4E0A3A1720003C02F2 /* Debug */,
@@ -5303,7 +5289,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "XTreesV2_6" */ = {
+		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "XTrees_2020" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E4B69B600A3A1757003C02F2 /* Debug */,
