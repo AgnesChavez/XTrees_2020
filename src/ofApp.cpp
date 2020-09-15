@@ -72,9 +72,11 @@ void ofApp::setup(){
 		return;
 	}
 
+	XTree::initGhostFbo();
+	
 	// needs to be called after the settings have been loaded!
 	globalSettings::g_initializeBranchImages();
-	globalSettings::g_initializeFonts();
+//	globalSettings::g_initializeFonts();
 	globalSettings::g_initializeLeafImages();
 	globalSettings::g_initializeBackgroundImages();
 	TwitterBaloon::initFbo();
@@ -88,14 +90,20 @@ void ofApp::setup(){
 	globalSettings::g_useTwitter = false;
 	
 	
+//	msg = ofToDataPath("fonts/ArialUnicode.ttf");
+//	stringstream ss;
+//	ss << msg << " exists: " << boolalpha << ofFile::doesFileExist(msg);
+//
+	
+	
 	// Archive is enabled if the file achive.txt is present
-	if(ofFile::doesFileExist(ofToDataPath("archive.txt"))) {
-		globalSettings::g_useArchive = true;
-	} else{
-		globalSettings::g_useArchive = false;
-	}
-	cout << "globalSettings::g_useArchive "<< boolalpha << globalSettings::g_useArchive<< endl;
+	globalSettings::g_useArchive =  ofFile::doesFileExist(ofToDataPath("archive.txt"));
+	
+	
+//	cout << "globalSettings::g_useArchive "<< boolalpha << globalSettings::g_useArchive<< endl;
 
+//	msg = ss.str();
+	
 	m_leavesLayer = make_shared<LeavesLayer>();
 	  globalSettings::g_leavesLayer = m_leavesLayer.get();
 	  m_twitterLayer = make_shared<TwitterLayer>();
@@ -120,8 +128,13 @@ void ofApp::setup(){
 	controlPanel.loadSettings(ofToDataPath("configurations/default.xml"));
 	setupControlPanelVariables();
 
+	
+	
+	
+	
+	
 	// init Ghost Fbo
-	XTree::initGhostFbo();
+	
 
 	if(use_background){
 		int size = globalSettings::g_backgroundImages.size();
@@ -665,7 +678,7 @@ void ofApp::setupControlPanel(){
 	globalSettings::g_treeGradEndPreview = new guiCustomColorPreview();
 	globalSettings::g_treeGradPreview = new guiCustomGradientPreview();
 
-	controlPanel.defaultConfigurationDirectory = "../../../data/configurations/";
+	controlPanel.defaultConfigurationDirectory = ofToDataPath("configurations");
 
 	int panelNr = 0;
 
@@ -1370,3 +1383,10 @@ void ofApp::windowResized(int w, int h){
 	}
 #endif
 
+
+
+void ofApp::exit()
+{
+	cout << "ofApp::exit\n";
+	globalSettings::g_deallocateFonts();
+}

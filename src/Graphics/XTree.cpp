@@ -55,7 +55,7 @@ m_isFadingImagesQuickly(false),
 m_treeIsStarvingOfRealtimeMessages(false),
 m_isStopped(false) {
 	
-	m_textbox.init(globalSettings::g_guiRenderer);
+	m_textbox.init(&globalSettings::g_guiRenderer());
 	m_textbox.setText(key_);
 	m_textbox.enabled = false;
 	ofAddListener(m_textbox.evtEnter, this, &XTree::setKeyword);
@@ -80,7 +80,6 @@ m_isStopped(false) {
 	
 	
 	realtimeStarving(!globalSettings::g_useTwilio && !globalSettings::g_useTwitter);
-	
 	
 	
 }

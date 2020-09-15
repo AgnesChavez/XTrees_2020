@@ -23,6 +23,8 @@ int main(){
 	int dimensionX = 1440;
 	int dimensionY = 900;
 	
+	ofEnableDataPath();
+	ofSetDataPathRoot("../Resources");
 	
     ofSetupOpenGL(dimensionX,dimensionY, OF_WINDOW);
 		

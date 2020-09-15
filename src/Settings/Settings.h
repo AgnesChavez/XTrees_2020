@@ -123,16 +123,16 @@ public:
 	static std::map<string, int> g_textAnchorY;
 	
 	
-	static FTFont*  g_guiFont;
-	static FTSimpleLayout* g_guiRenderer;
+	static FTTextureFont&  g_guiFont();
+	static FTSimpleLayout& g_guiRenderer();
 	
-	static FTSimpleLayout* g_twitterLayout;
-	static FTSimpleLayout* g_twilioLayout;
-	static FTSimpleLayout* g_databaseLayout;
+	static FTSimpleLayout& g_twitterLayout();
+	static FTSimpleLayout& g_twilioLayout();
+	static FTSimpleLayout& g_databaseLayout();
 	
-	static FTFont* g_twitterFont;
-	static FTFont* g_twilioFont;
-	static FTFont* g_databaseFont;
+	static FTTextureFont& g_twitterFont();
+	static FTTextureFont& g_twilioFont();
+	static FTTextureFont& g_databaseFont();
 	
 	static std::vector<ofImage> g_originalImages;
 	static std::vector<ofImage> g_leafImages;
@@ -228,7 +228,8 @@ public:
 	
 	/////////////////////////////////////////////////////////////////////////
 	
-	static void g_initializeFonts();
+//	static void g_initializeFonts();
+
 	static void g_initializeBranchImages();
 	static void g_initializeLeafImages();
 	static void g_initializeBackgroundImages();
@@ -242,6 +243,13 @@ public:
 	static void g_updateBackground();
 	static void g_activateSoundtrack();
 	
+	static void g_deallocateFonts();
+	
+private:
+	static FTTextureFont* _guiFont;
+	static FTTextureFont* _twitterFont;
+	static FTTextureFont* _twilioFont;
+	static FTTextureFont* _databaseFont;
 };
 #endif //
 

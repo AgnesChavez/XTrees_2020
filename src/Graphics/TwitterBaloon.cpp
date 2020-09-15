@@ -55,22 +55,22 @@ TwitterBaloon::TwitterBaloon(XTree* tree_,
 		
   switch (src_) {
     case SRC_TWITTER:
-      m_layout =globalSettings::g_twitterLayout;
-      m_font =globalSettings::g_twitterFont;
+      m_layout = &globalSettings::g_twitterLayout();
+      m_font = &globalSettings::g_twitterFont();
       m_msgColor =globalSettings::g_tweetMsgC;
       m_userColor =globalSettings::g_tweetUsrC;
       break;
 
     case SRC_TWILIO:
-      m_layout =globalSettings::g_twilioLayout;
-      m_font =globalSettings::g_twilioFont;
+      m_layout = &globalSettings::g_twilioLayout();
+      m_font = &globalSettings::g_twilioFont();
       m_msgColor =globalSettings::g_twilioMsgC;
       m_userColor =globalSettings::g_twilioUsrC;
       break;
 
     case SRC_DATABASE:
-      m_layout =globalSettings::g_databaseLayout;
-      m_font =globalSettings::g_databaseFont;
+      m_layout = &globalSettings::g_databaseLayout();
+      m_font = &globalSettings::g_databaseFont();
       m_msgColor =globalSettings::g_databaseMsgC;
       m_userColor =globalSettings::g_databaseUsrC;
       m_userColor.a = 0;

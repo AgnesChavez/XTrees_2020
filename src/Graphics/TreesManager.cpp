@@ -271,14 +271,15 @@ void TreesManager::saveSeeds() {
   }
   
   xmlDocument.LinkEndChild(treesNode);
-  std::string filename("../../../data/init.xml");
+//  std::string filename("../../../data/init.xml");
+	std::string filename(ofToDataPath("init.xml"));
   xmlDocument.SaveFile(filename);
 
 }
 
 void TreesManager::loadSeeds() {
 	ofxXmlSettings xml;
-  std::string filename("../../../data/init.xml");
+  std::string filename(ofToDataPath("init.xml"));
 		if(!xml.loadFile(filename)){
       return;
 		}

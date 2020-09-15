@@ -21,6 +21,7 @@ class ofApp : public ofxApp{
 		void setup();
 		void update();
 		void draw();
+	void exit();
     
     void mousePressed(ofMouseEventArgs& args);
     void mouseMoved(ofMouseEventArgs& args);
@@ -147,6 +148,6 @@ private:
 
 
 
-
   
+	
 };

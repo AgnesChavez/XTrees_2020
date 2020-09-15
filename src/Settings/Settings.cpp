@@ -108,16 +108,7 @@ int globalSettings::g_tweetMaxLife = 10000;
 std::map <string, int> globalSettings::g_textAnchorX =  std::map <string, int>();
 std::map <string, int> globalSettings::g_textAnchorY =  std::map <string, int>();
 
-FTFont * globalSettings::g_guiFont = nullptr;
-FTSimpleLayout * globalSettings::g_guiRenderer = nullptr;
 
-FTSimpleLayout * globalSettings::g_twitterLayout = nullptr;
-FTSimpleLayout * globalSettings::g_twilioLayout = nullptr;
-FTSimpleLayout * globalSettings::g_databaseLayout = nullptr;
-
-FTFont * globalSettings::g_twitterFont = nullptr;
-FTFont * globalSettings::g_twilioFont = nullptr;
-FTFont * globalSettings::g_databaseFont = nullptr;
 
 std::vector <ofImage > globalSettings::g_originalImages = std::vector <ofImage >();
 std::vector <ofImage > globalSettings::g_leafImages = std::vector <ofImage >();
@@ -206,141 +197,366 @@ float globalSettings::g_linesMaxAcc = 1.f;
 
 int globalSettings::g_firstIterations = 0;
 
-void globalSettings::g_initializeFonts(){
-	int fontsize = 16;
-
-	// this is for the seeds
-	g_guiFont = new FTTextureFont(ofToDataPath("fonts/ArialUnicode.ttf").c_str());
-	g_guiFont->Outset(0.0f, fontsize);
-	g_guiFont->CharMap(ft_encoding_unicode);
-
-	if(g_guiFont->Error()){
-		ofLog(OF_LOG_ERROR, "error loading font");
-		exit(1);
-	}
-
-	if(!g_guiFont->FaceSize(fontsize)){
-		ofLog(OF_LOG_ERROR, "Failed to set size");
-		exit(1);
-	}
 
 
-	g_guiRenderer = new FTSimpleLayout();
-	g_guiRenderer->SetFont(g_guiFont);
-	g_guiRenderer->SetLineLength(300);
-	g_guiRenderer->SetAlignment(FTGL::ALIGN_CENTER);
-	g_guiRenderer->SetLineSpacing(.9F);
 
-	fontsize = 12;
-
-	// this is for twitter
-	g_twitterFont = new FTTextureFont(ofToDataPath("fonts/ArialUnicode.ttf").c_str());
-	g_twitterFont->Outset(0.0f, fontsize);
-	g_twitterFont->CharMap(ft_encoding_unicode);
-	if(g_twitterFont->Error()){
-		ofLog(OF_LOG_ERROR, "error loading font");
-		exit(1);
-	}
-	if(!g_twitterFont->FaceSize(fontsize)){
-		ofLog(OF_LOG_ERROR, "Failed to set size");
-		exit(1);
-	}
-	g_twitterLayout = new FTSimpleLayout();
-	g_twitterLayout->SetFont(g_twitterFont);
-	g_twitterLayout->SetLineLength(BALOON_MSG_SIZE);
-	g_twitterLayout->SetAlignment(FTGL::ALIGN_JUSTIFY);
-	g_twitterLayout->SetLineSpacing(BALOON_MWG_LINESPACING);
-
-	// this is for twilio
-	g_twilioFont = new FTTextureFont(ofToDataPath("fonts/ArialUnicode.ttf").c_str());
-	g_twilioFont->Outset(0.0f, fontsize);
-	g_twilioFont->CharMap(ft_encoding_unicode);
-	if(g_twilioFont->Error()){
-		ofLog(OF_LOG_ERROR, "error loading font");
-		exit(1);
-	}
-	if(!g_twilioFont->FaceSize(fontsize)){
-		ofLog(OF_LOG_ERROR, "Failed to set size");
-		exit(1);
-	}
-	g_twilioLayout = new FTSimpleLayout();
-	g_twilioLayout->SetFont(g_twilioFont);
-	g_twilioLayout->SetLineLength(BALOON_MSG_SIZE);
-	g_twilioLayout->SetAlignment(FTGL::ALIGN_JUSTIFY);
-	g_twilioLayout->SetLineSpacing(BALOON_MWG_LINESPACING);
-
-	// this is for twilio
-	g_databaseFont = new FTTextureFont(ofToDataPath("fonts/ArialUnicode.ttf").c_str());
-	g_databaseFont->Outset(0.0f, fontsize);
-	g_databaseFont->CharMap(ft_encoding_unicode);
-	if(g_databaseFont->Error()){
-		ofLog(OF_LOG_ERROR, "error loading font");
-		exit(1);
-	}
-	if(!g_databaseFont->FaceSize(fontsize)){
-		ofLog(OF_LOG_ERROR, "Failed to set size");
-		exit(1);
-	}
-	g_databaseLayout = new FTSimpleLayout();
-	g_databaseLayout->SetFont(g_databaseFont);
-	g_databaseLayout->SetLineLength(BALOON_MSG_SIZE);
-	g_databaseLayout->SetAlignment(FTGL::ALIGN_JUSTIFY);
-	g_databaseLayout->SetLineSpacing(BALOON_MWG_LINESPACING);
+void globalSettings::g_deallocateFonts()
+{
+	if(_guiFont){ delete _guiFont; _guiFont = nullptr;}
+	if(_twitterFont){ delete _twitterFont; _twitterFont = nullptr;}
+	if(_twilioFont){ delete _twilioFont; _twilioFont = nullptr;}
+	if(_databaseFont){ delete _databaseFont; _databaseFont = nullptr;}
 }
+	
+FTTextureFont* globalSettings::_guiFont = nullptr;
+FTTextureFont* globalSettings::_twitterFont = nullptr;
+FTTextureFont* globalSettings::_twilioFont = nullptr;
+FTTextureFont* globalSettings::_databaseFont = nullptr;
+
+
+
+//std::unique_ptr<FTTextureFont> makeFTFont(const std::string & filepath, int fontsize)
+FTTextureFont* makeFTFont(const std::string & filepath, int fontsize)
+{
+//	std::unique_ptr<FTTextureFont> font = std::make_unique<FTTextureFont>(ofToDataPath(filepath).c_str());
+	FTTextureFont* font = new FTTextureFont(ofToDataPath(filepath).c_str());
+	font->Outset(0.0f, fontsize);
+	font->CharMap(ft_encoding_unicode);
+	if(font->Error()){
+		ofLog(OF_LOG_ERROR, "error loading font");
+		exit(1);
+		return nullptr;
+	}
+	if(!font->FaceSize(fontsize)){
+		ofLog(OF_LOG_ERROR, "Failed to set size");
+		exit(1);
+		return nullptr;
+	}
+
+//	return std::move(font);
+	return font;
+}
+
+
+
+FTTextureFont & globalSettings::g_twitterFont()
+{
+//	int fontsize = 12;
+	// this is for twitter
+//	static std::unique_ptr<FTFont> g_twitterFont = std::make_unique<FTTextureFont>(ofToDataPath("fonts/ArialUnicode.ttf").c_str());
+//	g_twitterFont->Outset(0.0f, fontsize);
+//	g_twitterFont->CharMap(ft_encoding_unicode);
+//	if(g_twitterFont->Error()){
+//		ofLog(OF_LOG_ERROR, "error loading font");
+//		exit(1);
+//	}
+//	if(!g_twitterFont->FaceSize(fontsize)){
+//		ofLog(OF_LOG_ERROR, "Failed to set size");
+//		exit(1);
+//	}
+	
+//	static std::unique_ptr<FTTextureFont> font = nullptr;
+//	static FTTextureFont* font = nullptr;
+	
+	if(_twitterFont == nullptr)
+	{
+		_twitterFont = makeFTFont("fonts/ArialUnicode.ttf", 12);
+	}
+	return *_twitterFont;
+	
+}
+
+
+
+
+FTTextureFont & globalSettings::g_twilioFont()
+{
+//	static std::unique_ptr<FTTextureFont> font = nullptr;
+//	static FTTextureFont* font = nullptr;
+	
+	if(_twilioFont == nullptr)
+	{
+		_twilioFont = makeFTFont("fonts/ArialUnicode.ttf", 12);
+	}
+	return *_twilioFont;
+	
+	
+	
+//	int fontsize = 12;
+//
+//	g_twilioFont = new FTTextureFont(ofToDataPath("fonts/ArialUnicode.ttf").c_str());
+//	g_twilioFont->Outset(0.0f, fontsize);
+//	g_twilioFont->CharMap(ft_encoding_unicode);
+//	if(g_twilioFont->Error()){
+//		ofLog(OF_LOG_ERROR, "error loading font");
+//		exit(1);
+//	}
+//	if(!g_twilioFont->FaceSize(fontsize)){
+//		ofLog(OF_LOG_ERROR, "Failed to set size");
+//		exit(1);
+//	}
+	
+
+}
+
+FTTextureFont & globalSettings::g_databaseFont()
+{
+//	static std::unique_ptr<FTTextureFont> font = nullptr;
+//	static FTTextureFont* font = nullptr;
+	if(_databaseFont == nullptr)
+	{
+		_databaseFont = makeFTFont("fonts/ArialUnicode.ttf", 12);
+	}
+	return *_databaseFont;
+}
+
+
+
+
+FTTextureFont & globalSettings::g_guiFont()
+{
+//	static std::unique_ptr<FTTextureFont> font = nullptr;
+//	static FTTextureFont* font = nullptr;
+	if(_guiFont == nullptr)
+	{
+		_guiFont = makeFTFont("fonts/ArialUnicode.ttf", 16);
+	}
+	return *_guiFont;
+	
+//	int fontsize = 16;
+//
+//	// this is for the seeds
+//	g_guiFont = new FTTextureFont(ofToDataPath("fonts/ArialUnicode.ttf").c_str());
+//	g_guiFont->Outset(0.0f, fontsize);
+//	g_guiFont->CharMap(ft_encoding_unicode);
+//
+//	if(g_guiFont->Error()){
+//		ofLog(OF_LOG_ERROR, "error loading font");
+//		exit(1);
+//	}
+//
+//	if(!g_guiFont->FaceSize(fontsize)){
+//		ofLog(OF_LOG_ERROR, "Failed to set size");
+//		exit(1);
+//	}
+}
+
+std::unique_ptr<FTSimpleLayout> makeLayout(FTTextureFont* font, float lineLength, const FTGL::TextAlignment alignment,  float lineSpacing)
+{
+	std::unique_ptr<FTSimpleLayout> layout = std::make_unique<FTSimpleLayout>();
+	layout->SetFont(font);
+	layout->SetLineLength(lineLength);
+	layout->SetAlignment(alignment);
+	layout->SetLineSpacing(lineSpacing);
+	
+	return std::move(layout);
+}
+
+FTSimpleLayout & globalSettings::g_guiRenderer()
+{
+	static std::unique_ptr<FTSimpleLayout> layout = nullptr;
+	if(layout == nullptr)
+	{
+		layout = makeLayout(&g_guiFont(), 300, FTGL::ALIGN_CENTER, .9F);
+	}
+
+	return *layout;
+
+}
+
+FTSimpleLayout & globalSettings::g_twitterLayout()
+{
+	
+	static std::unique_ptr<FTSimpleLayout> layout = nullptr;
+	if(layout == nullptr)
+	{
+		layout = makeLayout(&g_twitterFont(), BALOON_MSG_SIZE, FTGL::ALIGN_JUSTIFY, BALOON_MWG_LINESPACING);
+		
+	}
+	return *layout;
+	
+//	g_twitterLayout = new FTSimpleLayout();
+//	g_twitterLayout->SetFont(g_twitterFont);
+//	g_twitterLayout->SetLineLength(BALOON_MSG_SIZE);
+//	g_twitterLayout->SetAlignment(FTGL::ALIGN_JUSTIFY);
+//	g_twitterLayout->SetLineSpacing(BALOON_MWG_LINESPACING);
+}
+
+FTSimpleLayout & globalSettings::g_twilioLayout()
+{
+	static std::unique_ptr<FTSimpleLayout> layout = nullptr;
+	if(layout == nullptr)
+	{
+		layout = makeLayout(&g_twilioFont(), BALOON_MSG_SIZE, FTGL::ALIGN_JUSTIFY, BALOON_MWG_LINESPACING);
+	}
+	return *layout;
+	
+	
+//	g_twilioLayout = new FTSimpleLayout();
+//	g_twilioLayout->SetFont(g_twilioFont);
+//	g_twilioLayout->SetLineLength(BALOON_MSG_SIZE);
+//	g_twilioLayout->SetAlignment(FTGL::ALIGN_JUSTIFY);
+//	g_twilioLayout->SetLineSpacing(BALOON_MWG_LINESPACING);
+}
+
+FTSimpleLayout & globalSettings::g_databaseLayout()
+{
+	static std::unique_ptr<FTSimpleLayout> layout = nullptr;
+	if(layout == nullptr)
+	{
+		layout = makeLayout(&g_databaseFont(), BALOON_MSG_SIZE, FTGL::ALIGN_JUSTIFY, BALOON_MWG_LINESPACING);
+	}
+	return *layout;
+	
+	
+//	g_databaseLayout = new FTSimpleLayout();
+//	g_databaseLayout->SetFont(g_databaseFont());
+//	g_databaseLayout->SetLineLength(BALOON_MSG_SIZE);
+//	g_databaseLayout->SetAlignment(FTGL::ALIGN_JUSTIFY);
+//	g_databaseLayout->SetLineSpacing(BALOON_MWG_LINESPACING);
+}
+
+
+
+
+//void globalSettings::g_initializeFonts(){
+	
+
+//	fontsize = 12;
+
+//	// this is for twitter
+//	g_twitterFont = new FTTextureFont(ofToDataPath("fonts/ArialUnicode.ttf").c_str());
+//	g_twitterFont->Outset(0.0f, fontsize);
+//	g_twitterFont->CharMap(ft_encoding_unicode);
+//	if(g_twitterFont->Error()){
+//		ofLog(OF_LOG_ERROR, "error loading font");
+//		exit(1);
+//	}
+//	if(!g_twitterFont->FaceSize(fontsize)){
+//		ofLog(OF_LOG_ERROR, "Failed to set size");
+//		exit(1);
+//	}
+//	g_twitterLayout = new FTSimpleLayout();
+//	g_twitterLayout->SetFont(g_twitterFont);
+//	g_twitterLayout->SetLineLength(BALOON_MSG_SIZE);
+//	g_twitterLayout->SetAlignment(FTGL::ALIGN_JUSTIFY);
+//	g_twitterLayout->SetLineSpacing(BALOON_MWG_LINESPACING);
+
+	// this is for twilio
+//	g_twilioFont = new FTTextureFont(ofToDataPath("fonts/ArialUnicode.ttf").c_str());
+//	g_twilioFont->Outset(0.0f, fontsize);
+//	g_twilioFont->CharMap(ft_encoding_unicode);
+//	if(g_twilioFont->Error()){
+//		ofLog(OF_LOG_ERROR, "error loading font");
+//		exit(1);
+//	}
+//	if(!g_twilioFont->FaceSize(fontsize)){
+//		ofLog(OF_LOG_ERROR, "Failed to set size");
+//		exit(1);
+//	}
+//	g_twilioLayout = new FTSimpleLayout();
+//	g_twilioLayout->SetFont(g_twilioFont);
+//	g_twilioLayout->SetLineLength(BALOON_MSG_SIZE);
+//	g_twilioLayout->SetAlignment(FTGL::ALIGN_JUSTIFY);
+//	g_twilioLayout->SetLineSpacing(BALOON_MWG_LINESPACING);
+
+	// this is for twilio
+//	g_databaseFont = new FTTextureFont(ofToDataPath("fonts/ArialUnicode.ttf").c_str());
+//	g_databaseFont->Outset(0.0f, fontsize);
+//	g_databaseFont->CharMap(ft_encoding_unicode);
+//	if(g_databaseFont->Error()){
+//		ofLog(OF_LOG_ERROR, "error loading font");
+//		exit(1);
+//	}
+//	if(!g_databaseFont->FaceSize(fontsize)){
+//		ofLog(OF_LOG_ERROR, "Failed to set size");
+//		exit(1);
+//	}
+//	g_databaseLayout = new FTSimpleLayout();
+//	g_databaseLayout->SetFont(g_databaseFont);
+//	g_databaseLayout->SetLineLength(BALOON_MSG_SIZE);
+//	g_databaseLayout->SetAlignment(FTGL::ALIGN_JUSTIFY);
+//	g_databaseLayout->SetLineSpacing(BALOON_MWG_LINESPACING);
+//}
 
 void globalSettings::g_setTwitterMsgFontSize(int fontsize){
-	g_twitterFont->Outset(0.0f, fontsize);
-	g_twitterFont->FaceSize(fontsize);
+	g_twitterFont().Outset(0.0f, fontsize);
+	g_twitterFont().FaceSize(fontsize);
 }
 void globalSettings::g_setTwilioMsgFontSize(int fontsize){
-	g_twilioFont->Outset(0.0f, fontsize);
-	g_twilioFont->FaceSize(fontsize);
+	g_twilioFont().Outset(0.0f, fontsize);
+	g_twilioFont().FaceSize(fontsize);
 }
 
 void globalSettings::g_setDatabaseMsgFontSize(int fontsize){
-	g_databaseFont->Outset(0.0f, fontsize);
-	g_databaseFont->FaceSize(fontsize);
+	g_databaseFont().Outset(0.0f, fontsize);
+	g_databaseFont().FaceSize(fontsize);
 }
 
-
+void loadImgDir(std::vector<ofImage>& imgs, const std::string& dirPath)
+{
+	ofDirectory dir;
+	dir.allowExt("jpg");
+	dir.allowExt("png");
+	dir.allowExt("jpeg");
+	dir.allowExt("tiff");
+	dir.listDir(ofToDataPath(dirPath));
+	
+	imgs.resize(dir.size());
+	for(int i = 0; i < dir.size(); ++i){
+		imgs[i].load(dir.getPath(i));
+	}
+}
 
 void globalSettings::g_initializeBranchImages(){
 	g_changeBranchImages = false;
 
-	ofDirectory texturesDir(ofToDataPath(""));
-	texturesDir.listDir("linesTex");
-	std::vector <ofFile> files = texturesDir.getFiles();
-
-	g_originalImages.resize(files.size());
-	for(int i = 0; i < files.size(); ++i){
-		g_originalImages[i].load(files[i].getAbsolutePath());
-	}
+//	ofDirectory texturesDir(ofToDataPath(""));
+//	texturesDir.listDir("linesTex");
+//	std::vector <ofFile> files = texturesDir.getFiles();
+//
+//	g_originalImages.resize(files.size());
+//	for(int i = 0; i < files.size(); ++i){
+//		g_originalImages[i].load(files[i].getAbsolutePath());
+//	}
+	loadImgDir(g_originalImages, "linesTex");
+	
 }
 
 void globalSettings::g_initializeBackgroundImages(){
-	ofDirectory texturesDir(ofToDataPath(""));
-	texturesDir.listDir("backgrounds");
-	std::vector <ofFile> files = texturesDir.getFiles();
-	g_backgroundImages.resize(files.size());
-	for(int i = 0; i < files.size(); ++i){
-		g_backgroundImages[i].load(files[i].getAbsolutePath());
-	}
+//	ofDirectory texturesDir(ofToDataPath(""));
+//	texturesDir.listDir("backgrounds");
+//	std::vector <ofFile> files = texturesDir.getFiles();
+//	g_backgroundImages.resize(files.size());
+//	for(int i = 0; i < files.size(); ++i){
+//		g_backgroundImages[i].load(files[i].getAbsolutePath());
+//	}
+//
+	loadImgDir(g_backgroundImages, "backgrounds");
+	
 }
 
 
 
 void globalSettings::g_initializeLeafImages(){
 
-	ofDirectory texturesDir(ofToDataPath(""));
-	texturesDir.listDir("graphics/leaves");
-	std::vector <ofFile> files = texturesDir.getFiles();
-	//std::map<std::string, int>& ax = globalSettings::g_getTextAnchorX();
-	//std::map<std::string, int>& ay = globalSettings::g_getTextAnchorY();
-	g_leafImages.resize(files.size());
-	for(int i = 0; i < files.size(); ++i){
-		g_leafImages[i].load(files[i].getAbsolutePath());
-	}
+//	ofDirectory texturesDir(ofToDataPath(""));
+//	texturesDir.listDir("graphics/leaves");
+//	std::vector <ofFile> files = texturesDir.getFiles();
+//	//std::map<std::string, int>& ax = globalSettings::g_getTextAnchorX();
+//	//std::map<std::string, int>& ay = globalSettings::g_getTextAnchorY();
+//	g_leafImages.resize(files.size());
+//	for(int i = 0; i < files.size(); ++i){
+//		g_leafImages[i].load(files[i].getAbsolutePath());
+//	}
+	
+	loadImgDir(g_leafImages, "graphics/leaves");
+	
+	
 }
+
+
+
 
 
 void globalSettings::g_computeMaxBranches(){
@@ -364,8 +580,4 @@ void globalSettings::g_activateSoundtrack(){
 	//g_app->soundtrack.loadSound("soundtracks/" + g_soundtrack, true);
 	//}
 }
-
-
-
-
 
