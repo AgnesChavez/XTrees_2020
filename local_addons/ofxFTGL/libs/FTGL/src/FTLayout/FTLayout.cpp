@@ -28,8 +28,8 @@
 
 #include "FTGL/ftgl.h"
 
-#include "../FTFont/FTFontImpl.h"
-#include "./FTLayoutImpl.h"
+#include "FTFont/FTFontImpl.h"
+#include "FTLayoutImpl.h"
 
 
 //

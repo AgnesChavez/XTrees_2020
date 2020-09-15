@@ -33,8 +33,8 @@
 
 #include "FTInternals.h"
 
-#include "../FTGlyph/FTTextureGlyphImpl.h"
-#include "./FTTextureFontImpl.h"
+#include "FTGlyph/FTTextureGlyphImpl.h"
+#include "FTTextureFontImpl.h"
 
 
 //
