@@ -82,7 +82,7 @@ public:
   void setDelTree(int id);
   bool visible;
 private:
-
+	
   bool m_bRemoveTree;
   int m_treeIdToRemove;
 

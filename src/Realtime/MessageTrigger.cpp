@@ -141,6 +141,15 @@ void BaseTrigger::update() {
 
 
 
+void BaseTrigger::addMessageToBuffer(std::shared_ptr<MessageEvent> m)
+{
+	m_msgBuffer.push_front(m);
+	if (m_current == m_msgBuffer.end()) {
+		m_current = m_msgBuffer.begin();
+	}
+}
+
+
 
 
 MessageTrigger::MessageTrigger(XTree* tree, std::string keyword_, size_t capacity_) :

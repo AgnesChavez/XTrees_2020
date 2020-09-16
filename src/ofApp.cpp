@@ -51,7 +51,7 @@ void ofApp::setup(){
 	m_numberOfIterations = 0;
 	m_clearFBO = false;
 
-	//ofSetLogLevel(OF_LOG_VERBOSE);
+	ofSetLogLevel(OF_LOG_VERBOSE);
 	ofEnableSmoothing();
 	ofSetFrameRate(globalSettings::g_fps);
 	ofSetRectMode(OF_RECTMODE_CORNER);
@@ -87,7 +87,7 @@ void ofApp::setup(){
 	globalSettings::g_useTwilio = false;
 	
 	//disable twitter
-	globalSettings::g_useTwitter = false;
+//	globalSettings::g_useTwitter = false;
 	
 	
 //	msg = ofToDataPath("fonts/ArialUnicode.ttf");
@@ -1387,6 +1387,6 @@ void ofApp::windowResized(int w, int h){
 
 void ofApp::exit()
 {
-	cout << "ofApp::exit\n";
+//	cout << "ofApp::exit\n";
 	globalSettings::g_deallocateFonts();
 }

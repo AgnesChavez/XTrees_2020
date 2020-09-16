@@ -15,10 +15,21 @@
 
 
 #include "RealtimeFetcher.h"
+#include "Settings.h"
 
 RealtimeFetcher::RealtimeFetcher() :
   m_running(false),
   m_paused(false) {
+
+
+	  	if(globalSettings::g_useTwitter)
+	  	{
+	  		twitterStream = make_unique<ofxTwitterStream>();
+			twitterStream->setup();
+	  	}
+
+	  
+	  
 }
 
 void RealtimeFetcher::start() {
@@ -26,6 +37,7 @@ void RealtimeFetcher::start() {
 	ofThread::startThread();
   m_paused = false;
   m_running = true;
+	if(twitterStream)twitterStream->start();
 }
 
 void RealtimeFetcher::reset() {  
@@ -38,6 +50,7 @@ void RealtimeFetcher::stop() {
   for (int i = 0; i < triggers.size(); ++i ) {
     triggers[i]->clearMessages();
   }
+if(twitterStream)twitterStream->stop();
 }
 
 void RealtimeFetcher::pause() {
@@ -67,6 +80,10 @@ exitNow:
 
 void RealtimeFetcher::update() {
   if (!m_paused) {
+	  if(twitterStream)
+	  {
+		  twitterStream->update();
+	  }
     for (int i = 0; i < triggers.size(); ++i ) {
       triggers[i]->update();
     }
@@ -77,7 +94,14 @@ void RealtimeFetcher::removeTrigger(BaseTrigger * trigger){
 	
 	ofRemove(triggers,[trigger](BaseTrigger * t){return trigger == t;});
 	
+	if(twitterStream){
+		auto tw = dynamic_cast<TwitterTrigger*>(trigger);
 	
+		if(tw)
+		{
+			twitterStream->unregisterTrigger(tw);
+		}
+	}
 //	auto it = triggers.begin();
 //	while(it != triggers.end()){
 //		if(*it == trigger){
@@ -87,4 +111,24 @@ void RealtimeFetcher::removeTrigger(BaseTrigger * trigger){
 //			++it;
 //		}
 //	}
+}
+
+void RealtimeFetcher::addTrigger(BaseTrigger * trigger){
+
+	if(std::find(triggers.begin(), triggers.end(), trigger) == triggers.end())
+	{
+		triggers.push_back(trigger);
+	}
+	if(twitterStream){
+		auto tw = dynamic_cast<TwitterTrigger*>(trigger);
+	
+		if(tw)
+		{
+			twitterStream->registerTrigger(tw);
+		}
+	}
+	
+	
+	
+	
 }

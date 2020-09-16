@@ -106,6 +106,15 @@ public:
 	
 	ofEvent<std::shared_ptr<MessageEvent> > newMessageEvent;
 	
+	XTree* m_tree = nullptr;
+	
+	void addMessageToBuffer(std::shared_ptr<MessageEvent> m);
+
+	bool isRunning()
+	{
+		return m_running;
+	}
+	
 protected:
 	///this gets called from the main thread
 	void notifyMessages();
@@ -120,7 +129,7 @@ protected:
 	std::list<std::shared_ptr<MessageEvent> >::iterator m_current;
 	
 	ofxTimer m_timer;
-	XTree* m_tree = nullptr;
+	
 
 };
 

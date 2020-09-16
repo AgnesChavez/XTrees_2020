@@ -20,7 +20,7 @@
 #include "ofMain.h"
 #include "Singleton.hpp"
 #include "MessageTrigger.h"
-
+#include "TwitterStream.h"
 class RealtimeFetcher :
   public ofThread,
   public Singleton<RealtimeFetcher> {
@@ -33,12 +33,19 @@ public:
   void update();
   void reset();
   void removeTrigger(BaseTrigger *trigger);
-  void threadedFunction();
+  void addTrigger(BaseTrigger *trigger);
+  private:
+
+	  void threadedFunction();
   
   volatile bool m_running;
   bool m_paused;
 
   std::vector<BaseTrigger*> triggers;
+	  
+	  std::unique_ptr<ofxTwitterStream> twitterStream = nullptr;
+	  
+	  
 };
 
 #endif

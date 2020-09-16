@@ -43,57 +43,41 @@
 #include "tinyxml.h"
 #include "Settings.h"
 
-#include "ofxTwitter.h"
-
 class TwitterTrigger :
 public BaseTrigger {
 public:
 	TwitterTrigger(XTree* tree, std::string keyword_, int capacity = 100);
 	virtual ~TwitterTrigger();
-	
-	virtual void start() override;
-	virtual void stop() override;
-	
-	virtual void fetch()override;
+
+	virtual void fetch()override {}
 	virtual float timeBetweenQueries()override
 	{
-		if(globalSettings::g_timedExhibit) {
-			return ofClamp(1, globalSettings::g_showDuration, 60) * 60.F * 1000.F * s_instances / 150.F;
-		} else {
-			return 60.F * 60.F * 1000.F * s_instances / 150.F;
-		}
+		return 0;
 	}
 	virtual void setKeyword(std::string key_) override{
 		m_keyword = key_;
 		m_msgBuffer.clear();
 	}
+
+	void updateTreeStarvation();
 	
-	
-	void onStatus(const ofxTwitter::Status& status);
-	void onError(const ofxTwitter::Error& error);
-	void onException(const std::exception& exception);
-	void onMessage(const ofJson& json);
-	
-	ofxTwitter::SearchClient client;
-	
-	
-private: 
-	
-	void retrieveMessages();
-	
+private:
+
+//	void retrieveMessages();
+
 	// <id>tag:search.twitter.com,2005:159700307838894080</id>
-	unsigned long long extractId(std::string fieldValue_);
-	std::string extractTime(std::string fieldValue_);
-	
-	
-	string m_requestUrl;
-	
+//	unsigned long long extractId(std::string fieldValue_);
+//	std::string extractTime(std::string fieldValue_);
+
+
+//	string m_requestUrl;
+
 	static int s_instances;
-	
-	unsigned long long int m_lastId;
+
+//	unsigned long long int m_lastId;
 	// ofxFTGL crashing with emoji
-	string killEmoji(string s);
-	
+//	string killEmoji(string s);
+
 };
 
 

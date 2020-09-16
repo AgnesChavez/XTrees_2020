@@ -63,16 +63,16 @@ m_isStopped(false) {
 	
 	if(globalSettings::g_useTwitter){
 		m_twitterTrigger = std::make_unique<TwitterTrigger>(this, key_);
-		RealtimeFetcher::instance()->triggers.push_back(m_twitterTrigger.get());
+		RealtimeFetcher::instance()->addTrigger(m_twitterTrigger.get());
 	}
 	
 	if (globalSettings::g_useTwilio) {
 		m_twilioTrigger = std::make_unique<TwilioTrigger>(this, key_);
-		RealtimeFetcher::instance()->triggers.push_back(m_twilioTrigger.get());
+		RealtimeFetcher::instance()->addTrigger(m_twilioTrigger.get());
 	}
 	if (globalSettings::g_useArchive) {
 		m_databaseTrigger = std::make_unique<DatabaseTrigger>(this, key_);
-		RealtimeFetcher::instance()->triggers.push_back(m_databaseTrigger.get());
+		RealtimeFetcher::instance()->addTrigger(m_databaseTrigger.get());
 	}
 	m_seed = new XTreeSeed(this);
 	m_flowerTimer.setAlarm(100);
@@ -277,9 +277,9 @@ void XTree::mouseDragged(int mouseX, int mouseY) {
 
 void XTree::keyIn(int key_) {
 	if (m_isSelected) {
-#ifdef XTREES_APP
+//#ifdef XTREES_APP
 		m_textbox.keyPressed(key_);
-#endif
+//#endif
 	}
 }
 

@@ -11,7 +11,7 @@
 #include "TwitterLayer.h"
 #include "LeavesLayer.h"
 #include "LinesLayer.h"
-
+#include "TwitterStream.h"
 
 class ofApp : public ofxApp{
 	public:
@@ -82,13 +82,15 @@ private:
   
   GuiState m_state;
 
-  std::shared_ptr<TreesManager> m_treesLayer;
-  std::shared_ptr<TwitterLayer> m_twitterLayer;
-  std::shared_ptr<LinesLayer> m_linesLayer;
-  std::shared_ptr<LeavesLayer> m_leavesLayer;
+	
   
-  std::unique_ptr<XTreeButton> m_goBtn;
-  std::unique_ptr<XTreeButton> m_resetBtn;
+  std::shared_ptr<TreesManager> m_treesLayer = nullptr;
+  std::shared_ptr<TwitterLayer> m_twitterLayer = nullptr;
+  std::shared_ptr<LinesLayer> m_linesLayer = nullptr;
+  std::shared_ptr<LeavesLayer> m_leavesLayer = nullptr;
+  
+  std::unique_ptr<XTreeButton> m_goBtn = nullptr;
+  std::unique_ptr<XTreeButton> m_resetBtn = nullptr;
   
   ofColor m_layerObfuscationColor;
   simpleFileLister m_backgroundsLister;
@@ -143,7 +145,7 @@ private:
 	}
 	
 	
-	bool bDrawStatesInfo = true;
+	bool bDrawStatesInfo = false;
 	
 
 

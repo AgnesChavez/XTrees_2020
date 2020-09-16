@@ -100,10 +100,11 @@ void TwilioTrigger::fetch() {
         // trylock polling
         ofSleepMillis(10);
       }
-      m_msgBuffer.push_front(theEvent);      
-      if (m_current == m_msgBuffer.end()) {
-        m_current = m_msgBuffer.begin();
-      }
+		addMessageToBuffer(theEvent);
+//      m_msgBuffer.push_front(theEvent);
+//      if (m_current == m_msgBuffer.end()) {
+//        m_current = m_msgBuffer.begin();
+//      }
       unlock();
       ofSleepMillis(50);
         

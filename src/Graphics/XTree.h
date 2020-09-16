@@ -66,7 +66,9 @@ public:
   
   // could use this for reloading from saved seeds
   void setKeyword(std::string& m_keyword);
-  
+	std::string getKeyword(){return  m_keyword;}
+	
+	
   int getCurrentLevel() {
     return m_currentLevel;
   }
