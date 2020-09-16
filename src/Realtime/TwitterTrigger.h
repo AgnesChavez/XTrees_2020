@@ -63,20 +63,8 @@ public:
 	
 private:
 
-//	void retrieveMessages();
-
-	// <id>tag:search.twitter.com,2005:159700307838894080</id>
-//	unsigned long long extractId(std::string fieldValue_);
-//	std::string extractTime(std::string fieldValue_);
-
-
-//	string m_requestUrl;
-
 	static int s_instances;
 
-//	unsigned long long int m_lastId;
-	// ofxFTGL crashing with emoji
-//	string killEmoji(string s);
 
 };
 

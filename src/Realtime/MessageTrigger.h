@@ -145,41 +145,14 @@ public:
   
 	virtual void start() override;
 	virtual void stop() override;
-//	virtual void pause() override;
-//	virtual void restart() override;
-  
-  // done from the external thread
-//  void cleanup();
-//  void clearMessages();
-  
-//  virtual void update()override;
 	
 	int getNumQueued() {
 		  return m_msgBuffer.size();
 	  }
   
   
-  
-//  std::string getKeyword() const {
-//    return m_keyword;
-//  }
-
-  
   void threadedFunction() override;
   
-
-	  
-protected:
-//  std::string m_keyword;
-//  bool m_running;
-//  bool m_paused;
-//  bool m_needsReset;
-
-//public:
-//  std::list<std::shared_ptr<MessageEvent> > m_msgBuffer;
-//protected:
-//  std::list<std::shared_ptr<MessageEvent> >::iterator m_current;
-
 };
 
 #endif // MESSAGETRIGGER_HPP_

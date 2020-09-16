@@ -28,17 +28,13 @@ DatabaseTrigger::DatabaseTrigger(XTree* tree, std::string keyword_, int capacity
 }
 
 DatabaseTrigger::~DatabaseTrigger() {
-  //if (m_running) {
-   // ofThread::stopThread();
-  //}
+  
 }
 
 
 void DatabaseTrigger::fetch() {
-//	std::cout << "DatabaseTrigger::fetch\n";
+
   if (m_size > 0 && m_tree->isRealtmeStarving()) {
-	//if(m_size > 0) {
-		//ofLog(OF_LOG_WARNING, "Offline database access for tree %s", m_keyword.c_str());
     int pos = kplToss(m_size);
     std::shared_ptr<MessageEvent> theEvent(make_shared<MessageEvent>());
     theEvent->user = m_users[pos];
@@ -51,10 +47,6 @@ void DatabaseTrigger::fetch() {
     }
 	  
 	  addMessageToBuffer(theEvent);
-//    m_msgBuffer.push_front(theEvent);
-//    if (m_current == m_msgBuffer.end()) {
-//      m_current = m_msgBuffer.begin();
-//    }
     unlock();
     ofSleepMillis(50);      
   } else {
@@ -64,7 +56,7 @@ void DatabaseTrigger::fetch() {
 
 
 void DatabaseTrigger::setKeyword(std::string key_) {
-//	std::cout << "DatabaseTrigger::setKeyword\n";
+
   m_keyword = key_;
   m_size = 0;
   m_users.clear();
@@ -79,7 +71,6 @@ void DatabaseTrigger::setKeyword(std::string key_) {
 		return;
 	}
 	
-//	for (ofBuffer::Line it = buffer.getLines().begin(), end = buffer.getLines().end(); it != end; ++it) {
 	for(auto& line: buffer.getLines())
 	{
 		int found = line.find(m_keyword);
@@ -92,41 +83,4 @@ void DatabaseTrigger::setKeyword(std::string key_) {
 		  }
 		}
 	}
-	
-	
-//	  getline (myfile,line);
-		
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//  std::string line;
-//  std::ifstream myfile ("../../../data/archive.txt");
-//  if (myfile.is_open())
-//  {
-//    while ( myfile.good() )
-//    {
-//      getline (myfile,line);
-//      int found = line.find(m_keyword);
-//      if (found!=string::npos) {
-//        std::vector<std::string> tokens = tokenize(line,"#");
-//        if (tokens.size() == 2 ) {
-//          m_users.push_back(tokens[0]);
-//          m_messages.push_back(tokens[1]);
-//          ++m_size;
-//        }
-//      }
-//    }
-//    myfile.close();
-////	  std::cout << "DatabaseTrigger::setKeyword  " << m_size << "\n";
-//  } else {
-//
-//  }
-  
 }

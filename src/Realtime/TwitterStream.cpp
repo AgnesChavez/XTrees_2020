@@ -19,40 +19,10 @@ void ofxTwitterStream::setup()
 	client.setCredentialsFromFile("credentials.json");
 	
 	
-	// Register all available streaming events.
-	// Alternatively, one can register events individually.
 	//
 	// In default mode all events are sent during the update() event loop.
 	client.registerStreamingEvents(this);
 	
-	// Create a bounding box for San Francisco.
-	//    ofxGeo::CoordinateBounds sanFranciscoBounds(ofxGeo::Coordinate(37.8, -122.75),
-	//                                                ofxGeo::Coordinate(36.8, -121.75));
-	//
-	//
-	//    // Create a bounding box for New York.
-	//    ofxGeo::CoordinateBounds newYorkBounds(ofxGeo::Coordinate(41, -74),
-	//                                           ofxGeo::Coordinate(40, -73));
-	
-	// Create a filter query.
-//	ofxTwitter::FilterQuery query;
-//
-	// Set the bouning boxes of interest.
-	
-	// Note that bounding boxes do not act as filters for other filter
-	// parameters. For example the locations below match any Tweets containing
-	// track terms (even non-geo Tweets) OR coming from the San Francisco /
-	// New York area.
-	//
-	// query.setLocations({ sanFranciscoBounds, newYorkBounds });
-	
-	// Track two emoji.
-	// Read more about query terms here:
-	// https://dev.twitter.com/streaming/overview/request-parameters
-//	query.setTracks({":(", ":)"});
-//
-//	// Start filter query.
-//	client.filter(query);
 	
 }
 
@@ -81,13 +51,6 @@ void ofxTwitterStream::onDisconnect()
 
 void ofxTwitterStream::onStatus(const ofxTwitter::Status& status)
 {
-	//    count++;
-//	    ofLogNotice("ofxTwitterStream::onStatus") << "Text: " << status.text();
-	//    ofLogNotice("ofxTwitterStream::onStatus") << "\tCoordinates: " << (status.coordinates() ? ofToString(status.coordinates()) : "NONE");
-	//    ofLogNotice("ofxTwitterStream::onStatus") << "\tPlace: " << (status.place() ? ofToString(status.place()->fullName()) : "NONE");
-	
-	
-
 	
 	
 	string text = killEmoji(status.text());
@@ -97,23 +60,11 @@ void ofxTwitterStream::onStatus(const ofxTwitter::Status& status)
 	}
 	string created_at = ofx::Twitter::Utils::format(status.createdAt(), ofx::Twitter::Utils::TWITTER_DATE_FORMAT);
 	
-//	statuses[i]["user"]["name"].get_to(name);
-//	statuses[i]["created_at"].get_to(created_at);
-//
-	
-	//Emojis in the names was making FTGL to crash too
-//	name = killEmoji(name);
-	
-	
 	
 	auto theEvent = make_shared<MessageEvent>(text,
 										 name,
 										 created_at,
 										 SRC_TWITTER );
-	
-	//			if (id > m_lastId) {
-	//				m_lastId = id;
-	//			}
 	
 	if (theEvent->isValid()) {
 		for(auto t: _triggers)
@@ -126,7 +77,7 @@ void ofxTwitterStream::onStatus(const ofxTwitter::Status& status)
 					{
 						if(ofIsStringInString(text, t->m_tree->getKeyword()))
 						{
-//							std::cout << "Adding message " << text << "\n";
+
 							t->addMessageToBuffer(theEvent);
 						}
 					}else{ofLogVerbose("ofxTwitterStream::onStatus") << "invalid trigger's tree";}
@@ -160,13 +111,13 @@ void ofxTwitterStream::onLimitNotice(const ofxTwitter::LimitNotice& notice)
 
 void ofxTwitterStream::onStatusWithheldNotice(const ofxTwitter::StatusWithheldNotice& notice)
 {
-	//    ofLogNotice("ofxTwitterStream::onLimitNotice") << "Status witheld.";
+	    ofLogNotice("ofxTwitterStream::onStatusWithheldNotice") << "Status witheld.";
 }
 
 
 void ofxTwitterStream::onUserWitheldNotice(const ofxTwitter::UserWithheldNotice& notice)
 {
-	//    ofLogNotice("ofxTwitterStream::onUserWitheldNotice") << "User witheld.";
+	    ofLogNotice("ofxTwitterStream::onUserWitheldNotice") << "User witheld.";
 }
 
 
@@ -185,6 +136,13 @@ void ofxTwitterStream::onStallWarning(const ofxTwitter::StallWarning& notice)
 void ofxTwitterStream::onException(const std::exception& notice)
 {
 	ofLogError("ofxTwitterStream::onException") << "Exception: " << notice.what();
+}
+
+
+void ofxTwitterStream::onMessage(const ofJson& json)
+{
+	// This is the raw message json and is ignored here.
+	
 }
 
 
@@ -229,87 +187,6 @@ std::string ofxTwitterStream::extractTime(std::string fieldValue_) {
 }
 
 
-
-
-
-void ofxTwitterStream::onMessage(const ofJson& json)
-{
-	// This is the raw message json and is ignored here.
-	
-//	if(json.empty()){
-//		m_tree->realtimeStarving(true);
-//		return;
-//	}
-//
-//	unsigned long long id;
-//	std::shared_ptr<MessageEvent> theEvent;
-//
-//	if(!json.contains("statuses"))
-//	{
-////		m_tree->realtimeStarving(true);
-//		return;
-//	}
-//	auto statuses = json["statuses"];
-//
-//	if(statuses.is_array()){
-//
-////		if(statuses.size() == 0){
-////			m_tree->realtimeStarving(true);
-////			return;
-////		}
-//
-//		for(int i = 0; i < statuses.size(); ++i){
-//
-////			id = statuses[i]["id"].get<uint64_t>();
-//
-//
-//
-//			string text = killEmoji(statuses[i]["text"].get<std::string>());
-//
-//
-//			string name;
-//			string created_at;
-//
-//			statuses[i]["user"]["name"].get_to(name);
-//			statuses[i]["created_at"].get_to(created_at);
-//
-//
-//			//Emojis in the names was making FTGL to crash too
-//			name = killEmoji(name);
-//
-//
-//			theEvent = make_shared<MessageEvent>(text,
-//												 name,
-//												 created_at,
-//												 SRC_TWITTER );
-//
-//			//			if (id > m_lastId) {
-//			//				m_lastId = id;
-//			//			}
-//
-//			if (theEvent->isValid()) {
-//				for(auto t: _triggers)
-//				{
-//					if(t && t->isRunning() && t->m_tree && ofIsStringInString(text, t->m_tree->getKeyword()))
-//					{
-//						t->addMessageToBuffer(theEvent);
-//					}
-//				}
-////				m_tree->realtimeStarving(false);
-//
-////				ofLog() << "Current Buffser Size : " << m_msgBuffer.size();
-//
-////				m_msgBuffer.push_front(theEvent);
-////				if (m_current == m_msgBuffer.end())
-////				{
-////					m_current = m_msgBuffer.begin();
-////				}
-//			}
-//		}
-//	}
-	
-}
-
 void ofxTwitterStream::start()
 {
 	client.filter(query);
@@ -353,7 +230,6 @@ void ofxTwitterStream::unregisterTrigger(TwitterTrigger* t)
 void ofxTwitterStream::updateQuery()
 {
 	std::vector<std::string> tracks;
-//	std::cout << "ofxTwitterStream::updateQuery " ;
 	std::string keyword;
 	for(auto t: _triggers)
 	{
@@ -361,20 +237,11 @@ void ofxTwitterStream::updateQuery()
 		{
 			keyword = t->m_tree->getKeyword();
 			tracks.push_back(keyword);
-			
-//			std::cout << keyword << ", ";
-			
 		}
 	}
-//	std::cout << "\n";
 	query.setTracks(tracks);
 	if(client.isRunning())
 	{
 		client.filter(query);
 	}
-	
-	
-	
-	
-	
 }

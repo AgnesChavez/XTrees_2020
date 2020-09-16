@@ -33,7 +33,6 @@ RealtimeFetcher::RealtimeFetcher() :
 }
 
 void RealtimeFetcher::start() {
-//  ofThread::startThread(false, false);
 	ofThread::startThread();
   m_paused = false;
   m_running = true;
@@ -102,15 +101,6 @@ void RealtimeFetcher::removeTrigger(BaseTrigger * trigger){
 			twitterStream->unregisterTrigger(tw);
 		}
 	}
-//	auto it = triggers.begin();
-//	while(it != triggers.end()){
-//		if(*it == trigger){
-//			it = triggers.erase(it);
-//		}
-//		else{
-//			++it;
-//		}
-//	}
 }
 
 void RealtimeFetcher::addTrigger(BaseTrigger * trigger){
