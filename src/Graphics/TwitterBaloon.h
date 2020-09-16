@@ -55,12 +55,15 @@ public:
   
   static void initFbo() {
     s_fbo.allocate(500, 200);
+	  s_fbo.begin();
+	  ofClear(0,0);
+	  s_fbo.end();
     s_images.resize(60);
     s_busy.resize(60);
     for (int i = 0; i < 60; ++i) {
       s_images[i].allocate(500, 200, OF_IMAGE_COLOR_ALPHA);
       s_busy[i] = false;
-    } 
+    }
   }
   
   static int returnFreeSlot() {
