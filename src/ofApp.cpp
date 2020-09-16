@@ -1108,7 +1108,7 @@ void ofApp::controlChanged(guiCallbackData & data){
 		globalSettings::g_minAngle = data.getInt(0);
 	}
 	else if(data.isElement("maxAngle")){
-		globalSettings::g_minAngle = data.getInt(0);
+		globalSettings::g_maxAngle = data.getInt(0);
 	}
 	else if(data.isElement("showThumbs")){
 		globalSettings::g_showThumbs = data.getInt(0);
