@@ -87,7 +87,23 @@ void InteractiveAudio::closeSoundStream()
 }
 void InteractiveAudio::init(ofBaseApp* app_) {
   int ticksPerBuffer = 8;
-  ofSoundStreamSetup(2, 0, app_, 44100, ofxPd::blockSize()*ticksPerBuffer, 3);
+	auto devices = ofSoundStreamListDevices();
+
+	ofSoundStreamSettings streamSettings;
+	streamSettings.numInputChannels = 0;
+	streamSettings.numOutputChannels = 2;
+	streamSettings.sampleRate = 44100; //make sure you pass the correct sample rate.
+	streamSettings.bufferSize = ofxPd::blockSize()*ticksPerBuffer;
+	streamSettings.numBuffers = 3;
+
+	streamSettings.setInListener(app_);
+	streamSettings.setOutListener(app_);
+
+	streamSettings.setOutDevice(devices[4]);
+
+
+	ofSoundStreamSetup(streamSettings);
+//  ofSoundStreamSetup(2, 0, app_, 44100, ofxPd::blockSize()*ticksPerBuffer, 3);
 	_bIsSoundStreamInited = true;
 	
 	exitListener = ofEvents().exit.newListener([&](ofEventArgs&){
