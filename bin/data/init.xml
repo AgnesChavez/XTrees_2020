@@ -1,9 +1,12 @@
 <?xml version="1.0" ?>
 <trees>
-    <tree name="tree" x="501" y="600" dir="-1.570796" />
-    <tree name="trees" x="583" y="600" dir="-1.570796" />
-    <tree name="plant trees" x="813" y="600" dir="-1.570796" />
-    <tree name="tree planting" x="738" y="600" dir="-1.570796" />
-    <tree name="nature rights" x="762" y="600" dir="4.669861" />
-    <tree name="trees" x="594" y="747" dir="-1.570796" />
+	<tree name="PASEO" 				x="288"  y="1032" dir="-1.570796" />
+	<tree name="nature rights" 		x="480"  y="1032" dir="-1.570796" />
+	<tree name="trees" 				x="672"  y="1032" dir="-1.570796" />
+	<tree name="biodiversity" 		x="864"  y="1032" dir="-1.570796" />
+	<tree name="Outer space treaty" x="1056" y="1032" dir="-1.570796" />
+	<tree name="trees" 				x="1248" y="1032" dir="-1.570796" />
+	<tree name="nature rights" 		x="1440" y="1032" dir="-1.570796" />
+	<tree name="PASEO" 				x="1632" y="1032" dir="-1.570796" />
+
 </trees>
