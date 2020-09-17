@@ -48,6 +48,25 @@ void ofxTwitterStream::onDisconnect()
 	bNeedsReconnect = false;
 }
 
+bool keywordsInString(const std::string& haystack, const std::string& needle, bool splitNeedle, bool makeLower)
+{
+	std::string lowerHaystack = makeLower?ofToLower(haystack):haystack;
+	std::string lowerNeedle = makeLower?ofToLower(needle):needle;
+	
+	if(!splitNeedle)
+	{
+		return ofIsStringInString(lowerHaystack, lowerNeedle);
+	}else
+	{
+		auto split = ofSplitString(lowerNeedle, " ", true, true);
+		
+		for(auto & s: split)
+		{
+			if(ofIsStringInString(lowerHaystack, s)) return true;
+		}
+	}
+	return false;
+}
 
 void ofxTwitterStream::onStatus(const ofxTwitter::Status& status)
 {
@@ -66,6 +85,9 @@ void ofxTwitterStream::onStatus(const ofxTwitter::Status& status)
 										 created_at,
 										 SRC_TWITTER );
 	
+//	auto lowerText = ofToLower(text);
+	
+	bool bMessageAdded = false;
 	if (theEvent->isValid()) {
 		for(auto t: _triggers)
 		{
@@ -75,10 +97,13 @@ void ofxTwitterStream::onStatus(const ofxTwitter::Status& status)
 				{
 					if(t->m_tree)
 					{
-						if(ofIsStringInString(text, t->m_tree->getKeyword()))
+//						if(ofIsStringInString(lowerText, ofToLower(t->m_tree->getKeyword())))
+						
+						if(keywordsInString(text, t->m_tree->getKeyword(), true, true))						
 						{
 
 							t->addMessageToBuffer(theEvent);
+							bMessageAdded = true;
 						}
 					}else{ofLogVerbose("ofxTwitterStream::onStatus") << "invalid trigger's tree";}
 				}
@@ -86,6 +111,12 @@ void ofxTwitterStream::onStatus(const ofxTwitter::Status& status)
 			}
 			else{ofLogVerbose("ofxTwitterStream::onStatus")  << "Invalid trigger";}
 		}
+	}
+	
+	if(!bMessageAdded)
+	{
+		ofLogWarning("ofxTwitterStream::onStatus") << "Message not added to buffer: " << text;
+		
 	}
 }
 
