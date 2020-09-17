@@ -47,6 +47,10 @@ class ofApp : public ofxApp{
     bool use_background;
     int backgroundOpacity;
 
+	
+	void setFromWindowSize();
+	
+	
 private:
   void start();
   void stop();

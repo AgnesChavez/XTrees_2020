@@ -51,7 +51,7 @@ void ofApp::setup(){
 	m_numberOfIterations = 0;
 	m_clearFBO = false;
 
-	ofSetLogLevel(OF_LOG_VERBOSE);
+//	ofSetLogLevel(OF_LOG_VERBOSE);
 	ofEnableSmoothing();
 	ofSetFrameRate(globalSettings::g_fps);
 	ofSetRectMode(OF_RECTMODE_CORNER);
@@ -169,25 +169,48 @@ void ofApp::setup(){
 
 	InteractiveAudio::instance()->sendBang(kStart);
 
-	m_fadeRectangle.init(ofGetWidth(), ofGetHeight() / 7);
-	// to set the color of the fading rectangle
-	globalSettings::g_updateBackground();
-
-	globalSettings::g_scene = ofRectangle(0, 0, ofGetWidth(), ofGetHeight());
-	globalSettings::g_sceneBounded = ofRectangle(20, 0, ofGetWidth() - 20, ofGetHeight());
+//	m_fadeRectangle.init(ofGetWidth(), ofGetHeight() / 7);
+//	// to set the color of the fading rectangle
+//	globalSettings::g_updateBackground();
+//
+//	globalSettings::g_scene = ofRectangle(0, 0, ofGetWidth(), ofGetHeight());
+//	globalSettings::g_sceneBounded = ofRectangle(20, 0, ofGetWidth() - 20, ofGetHeight());
 	m_layerObfuscationColor = ofColor(0);
 
 	m_splash.loadImage(ofToDataPath("splash/splash.png"));
 
-	m_splashPosition.x = std::max(ofGetWidth() / 2 - m_splash.getWidth() / 2, m_splash.getWidth() / 2);
-	m_splashPosition.y = ofGetHeight() / 2 - m_splash.getHeight() / 2;
+//	m_splashPosition.x = std::max(ofGetWidth() / 2 - m_splash.getWidth() / 2, m_splash.getWidth() / 2);
+//	m_splashPosition.y = ofGetHeight() / 2 - m_splash.getHeight() / 2;
 
+	setFromWindowSize();
+	
 
 	m_goBtn->showImmediately();
 	m_resetBtn->showImmediately();
 
 	// save seeds
 	m_treesLayer->loadSeeds();
+}
+//--------------------------------------------------------------
+void ofApp::setFromWindowSize()
+{
+	XTree::initGhostFbo();
+	
+	m_fadeRectangle.init(ofGetWidth(), ofGetHeight() / 7);
+	// to set the color of the fading rectangle
+	globalSettings::g_updateBackground();
+
+	globalSettings::g_scene = ofRectangle(0, 0, ofGetWidth(), ofGetHeight());
+	globalSettings::g_sceneBounded = ofRectangle(20, 0, ofGetWidth() - 20, ofGetHeight());
+	
+	m_splashPosition.x = std::max(ofGetWidth() / 2 - m_splash.getWidth() / 2, m_splash.getWidth() / 2);
+	m_splashPosition.y = ofGetHeight() / 2 - m_splash.getHeight() / 2;
+
+	
+	globalSettings::s_windowSize = Vec2f(ofGetWidth(),ofGetHeight());
+	globalSettings::s_invWindowSize = Vec2f( 1.0f / globalSettings::s_windowSize.x, 1.0f / globalSettings::s_windowSize.y );
+	
+	setRenderSize(ofGetWidth(), ofGetHeight());
 }
 
 //--------------------------------------------------------------
@@ -845,8 +868,8 @@ void ofApp::setupControlPanel(){
 	controlPanel.addSlider("Branch G", "treeG", 255, 0, 255, true);
 	controlPanel.addSlider("Branch B", "treeB", 255, 0, 255, true);
 	controlPanel.addSlider("Branch A", "treeA", 255, 0, 255, true);
-	controlPanel.addSlider("Branch width (px)", "branchWidth", 1, 1, 30, true);
-	controlPanel.addSlider("Branch min width (px)", "branchMinWidth", 1, 1, 30, true);
+	controlPanel.addSlider("Branch width (px)", "branchWidth", 1, 1, 200, true);
+	controlPanel.addSlider("Branch min width (px)", "branchMinWidth", 1, 1, 200, true);
 	controlPanel.addSlider("Width decrease (%)", "widthDecrease", 1, 1, 100, true);
 	controlPanel.addSlider("Branch length (px)", "branchLength", 100, 50, 500, true);
 	controlPanel.addSlider("Length decrease (%)", "lengthDecrease", 1, 1, 100, true);
@@ -1364,6 +1387,9 @@ void ofApp::controlChanged(guiCallbackData & data){
 }
 
 void ofApp::windowResized(int w, int h){
+	
+	setFromWindowSize();
+	
 }
 
 #if USE_PDLIB
