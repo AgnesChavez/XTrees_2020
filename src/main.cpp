@@ -20,8 +20,8 @@
 #include "ofxAppUtils.h"
 
 int main(){
-	int dimensionX = 1280;
-	int dimensionY = 600;
+	int dimensionX = 1920;
+	int dimensionY = 1080;
 	
 	ofEnableDataPath();
 	ofSetDataPathRoot("../Resources");
