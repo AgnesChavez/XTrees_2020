@@ -318,6 +318,7 @@ void XTree::setKeyword(std::string& keyword) {
 }
 
 void XTree::evolve(std::shared_ptr<MessageEvent>& args) {
+	if(args->consumed)return;
 	if (m_trunk == NULL) {
 		ofVec2f start(m_x, m_y);   //20% randomicity
 		ofVec2f end = ofPointFromPivot(start, m_direction, globalSettings::g_branchLength + ofRandomf() * (float)globalSettings::g_branchLength / 10.F);

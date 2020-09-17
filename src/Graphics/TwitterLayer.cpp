@@ -26,6 +26,7 @@ TwitterLayer::~TwitterLayer() {
 }
 
 void TwitterLayer::addBaloon(XTree* tree_, std::shared_ptr<MessageEvent> args, ofVec2f* position_, float rotation) {
+	args->consumed = true;
   TwitterBaloon* p = new TwitterBaloon(tree_, 
     args->message,
     args->user,
