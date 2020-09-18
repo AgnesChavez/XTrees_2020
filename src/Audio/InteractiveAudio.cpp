@@ -99,9 +99,9 @@ void InteractiveAudio::init(ofBaseApp* app_) {
 	streamSettings.setInListener(app_);
 	streamSettings.setOutListener(app_);
 
-	streamSettings.setOutDevice(devices[4]);
-
-
+//	streamSettings.setOutDevice(devices[4]);
+//
+//
 	ofSoundStreamSetup(streamSettings);
 //  ofSoundStreamSetup(2, 0, app_, 44100, ofxPd::blockSize()*ticksPerBuffer, 3);
 	_bIsSoundStreamInited = true;
