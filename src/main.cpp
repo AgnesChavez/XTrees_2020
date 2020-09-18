@@ -16,69 +16,39 @@
 
 #include "ofMain.h"
 #include "ofApp.h"
-
+#include <mach-o/dyld.h>
+#include <limits.h>
 #include "ofxAppUtils.h"
+#include "ofConstants.h"
 
 int main(){
-	int dimensionX = 1920;
-	int dimensionY = 1080;
 	
+	// Set the data path to the resources folder inside the app bundle
 	ofEnableDataPath();
 	ofSetDataPathRoot("../Resources");
 	
-    ofSetupOpenGL(dimensionX,dimensionY, OF_WINDOW);
+	
+	
+	int screenWidth = 1920;
+	int screenHeight = 1080;
+	
+	
+	bool startOnFullscreen = false;
+
+	auto filepath =   ofFilePath::join(ofFilePath::getCurrentExeDir(), "../Resources/screenDimensions.json");
+	
+	auto json = ofLoadJson(filepath);
+	
+
+	if(json.count("screenWidth")){  screenWidth = json["screenWidth"].get<int>();}
+	if(json.count("screenHeight")){  screenHeight = json["screenHeight"].get<int>();}
+	if(json.count("startOnFullscreen")){  startOnFullscreen = json["startOnFullscreen"].get<bool>();}
+	
+	
+    ofSetupOpenGL(screenWidth, screenHeight, (startOnFullscreen?OF_FULLSCREEN:OF_WINDOW));
 		
 	ofRunApp(std::make_shared<ofxRunnerApp>(new ofApp()));
 		  
 	
 	return 0;
 }
-//#include "KepleroUtils.h"
-//#include "inputBox.h"
-//
-//#include "CoreFoundation/CoreFoundation.h"
-//
-//
-//int main(){
-//
-//	#ifdef __APPLE__
-//		CFBundleRef mainBundle = CFBundleGetMainBundle();
-//		CFURLRef mainURL = CFBundleCopyExecutableURL(mainBundle);
-//		char path[PATH_MAX];
-//		if(!CFURLGetFileSystemRepresentation(mainURL, TRUE, (UInt8 *)path, PATH_MAX)){
-//			std::cout << "Doesn't work like this..." << std::endl;
-//			// error!
-//		}
-//		CFRelease(mainURL);
-//
-//		string strExecFile(path);
-//		int found = strExecFile.find_last_of("/");
-//		string strPath = strExecFile.substr(0, found + 1);
-//		strPath.append("../../../data/screenDimensions.txt");
-//	#endif
-//
-//	int resX = 1024;
-//	int resY = 768;
-//
-//
-//	std::ifstream myfile(strPath.c_str());
-//	std::string line;
-//	if(myfile.is_open()){
-//		getline(myfile, line);
-//		resX = ofToInt(line);
-//		getline(myfile, line);
-//		resY = ofToInt(line);
-//		myfile.close();
-//	}
-//
-//	// Always set the Extended Desktop to TRUE
-//	bool bUseExtendedDesktop = true;
-//	string cmd = "defaults write com.apple.glut GLUTUseExtendedDesktopKey ";
-//	cmd += bUseExtendedDesktop ? "TRUE" : "FALSE";
-//	std::system(cmd.c_str());
-//
-//
-//	ofAppGlutWindow window;
-//	ofSetupOpenGL(&window,  resX, resY, OF_FULLSCREEN);
-//	ofRunAppWithAppUtils(new ofApp());
-//}
