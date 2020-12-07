@@ -41,7 +41,7 @@ class ofApp : public ofxApp{
   AlphaRect m_fadeRectangle;
   
   ofSoundPlayer soundtrack;
-  FlowersLayer* m_flowersLayer;
+//  FlowersLayer* m_flowersLayer;
 	
 	ofImage background;
     bool use_background;

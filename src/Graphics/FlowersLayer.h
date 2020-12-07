@@ -12,48 +12,48 @@
  * The above copyright notice and this permission notice shall be included
  * in all copies or substantial portions of the Sotware.
  */
-
-#ifndef FLOWERSLAYER_H_
-#define FLOWERSLAYER_H_
-
-#include "ofMain.h"
-#include <vector>
-#include "TreesManager.h"
-#include "ofxTimer.h"
-
-class FlowersLayer {
-public:
-  struct FlowersOrb {
-    ofPoint start, end;
-    float circleWidth;
-    float opacity;
-    float life;
-    float maxRadius;
-    float currentLife;
-    void update();
-  };
-  FlowersLayer(TreesManager* trees);  
-  ~FlowersLayer();
-  
-  void update();
-  void draw();
-  void start();
-  void stopGrowing();
-  void stop();
-  void addLine(ofPoint start_, ofPoint end_);
-  void reset();
-
-  
-private:
-  TreesManager* m_trees;
-  std::vector	<FlowersOrb> m_lines; 
-  std::vector	<FlowersOrb>::iterator m_it;  
-  
-  bool m_active;
-  ofxTimer m_timer;
-  
-};
-
-
-
+//
+//#ifndef FLOWERSLAYER_H_
+//#define FLOWERSLAYER_H_
+//
+//#include "ofMain.h"
+//#include <vector>
+//#include "TreesManager.h"
+//#include "ofxTimer.h"
+//
+//class FlowersLayer {
+//public:
+//  struct FlowersOrb {
+//    ofPoint start, end;
+//    float circleWidth;
+//    float opacity;
+//    float life;
+//    float maxRadius;
+//    float currentLife;
+//    void update();
+//  };
+//  FlowersLayer(TreesManager* trees);  
+//  ~FlowersLayer();
+//  
+//  void update();
+//  void draw();
+//  void start();
+//  void stopGrowing();
+//  void stop();
+//  void addLine(ofPoint start_, ofPoint end_);
+//  void reset();
+//
+//  
+//private:
+//  TreesManager* m_trees;
+//  std::vector	<FlowersOrb> m_lines; 
+//  std::vector	<FlowersOrb>::iterator m_it;  
+//  
+//  bool m_active;
+//  ofxTimer m_timer;
+//  
+//};
+//
+//
+//
 #endif 

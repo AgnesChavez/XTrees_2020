@@ -31,13 +31,13 @@
 #include "Leaf.h"
 
 class XTreeSeed;
-class FlowersLayer;
+//class FlowersLayer;
 class TreesManager;
 
 class XTree {
   friend class TreesManager;
   friend class XTreeSeed;
-  friend class FlowersLayer;
+//  friend class FlowersLayer;
   friend class LinesLayer;
 public:
   XTree(int x, int y, std::string key_ , std::shared_ptr<TwitterLayer> twitterLayer_, float direction_ = -M_PI/2.F);

@@ -27,11 +27,11 @@
 #include "Settings.h"
 #include "TwitterLayer.h"
 
-class FlowersLayer;
+//class FlowersLayer;
 class Leaf;
 
 class TreesManager {
-  friend class FlowersLayer;
+//  friend class FlowersLayer;
   friend class LinesLayer;
 public:
   TreesManager(std::shared_ptr<TwitterLayer> twitterLayer_);

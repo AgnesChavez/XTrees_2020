@@ -48,6 +48,21 @@ public:
   void sendFloat(AudioDestination destination_, float arg_);
   void sendFloatList(AudioDestination destination_, std::vector<float>& args_ );
   
+	ofParameterGroup parameters{"Parametric Equalizer"};
+	ofParameter<float> eq100 = {"100 Hz", 0.30, 0, 1};
+	ofParameter<float> eq250 = {"250 Hz", 0.44, 0, 1};
+	ofParameter<float> eq700 = {"700 Hz", 0.50, 0, 1};
+	ofParameter<float> eq1500 = {"1500 Hz", 0.50, 0, 1};
+	ofParameter<float> eq3000 = {"3000 Hz", 0.50, 0, 1};
+	ofParameter<float> eq7000 = {"7000 Hz", 0.50, 0, 1};
+	ofParameter<float> eq15000 = {"15000 Hz", 0.50, 0, 1};
+	ofParameter<float> eqGain = {"Gain", 0.50, 0, 1};
+	
+	
+	void setupParams();
+	
+	ofEventListeners paramsListeners;
+	
 #if USE_PDLIB
   void audioReceived(float * input, int bufferSize, int nChannels);
   void audioRequested(float * output, int bufferSize, int nChannels);

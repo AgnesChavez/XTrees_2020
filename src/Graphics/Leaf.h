@@ -17,14 +17,15 @@
 #define __LEAF_H__
 
 #include "MSACore.h"
-#include "MSAFluidSolver.h"
+//#include "MSAFluidSolver.h"
 #include "Joint.h"
 #include "Spring.h"
 #include "ofxTimer.h"
 
-using namespace MSA;
+//using namespace MSA;
 
-struct Leaf {
+class Leaf {
+public:
   Leaf(ofVec3f attach, ofVec3f direction, ofVec3f normal);
   void update();
   void init(ofVec3f attach, ofVec3f direction, ofVec3f normal);
@@ -32,6 +33,7 @@ struct Leaf {
   void draw();
   void detach();
   
+private:
   float alpha;
   
   vector<Joint> joints;

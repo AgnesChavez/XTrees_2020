@@ -802,8 +802,8 @@ void ofApp::setupControlPanel(){
 	controlPanel.addSlider("Lines max (ms)", "LinesMax", 300, 10, 10000, false);
 	//controlPanel.addSlider("Flowers min (ms)", "flowersMin", 50, 10, 10000, false);
 	//controlPanel.addSlider("Flowers max (ms)", "flowersMax", 300, 10, 10000, false);
-	controlPanel.addSlider("Leaves min (ms)", "leavesMinFreq", 5000, 100, 100000, false);
-	controlPanel.addSlider("Leaves max (ms)", "leavesMaxFreq", 15000, 100, 100000, false);
+//	controlPanel.addSlider("Leaves min (ms)", "leavesMinFreq", 5000, 100, 100000, false);
+//	controlPanel.addSlider("Leaves max (ms)", "leavesMaxFreq", 15000, 100, 100000, false);
 
 	controlPanel.addPanel("Messages", 4, false);
 	controlPanel.setWhichPanel(panelNr++);
@@ -891,29 +891,29 @@ void ofApp::setupControlPanel(){
 	controlPanel.addSlider("Tree Lines G", "tFlowersLinesG", 255, 0, 255, true);
 	controlPanel.addSlider("Tree Lines B", "tFlowersLinesB", 255, 0, 255, true);
 
-	controlPanel.setWhichColumn(3);
-	controlPanel.addLabel("Leaves");
-	controlPanel.addSlider("Leaf R", "tLeavesR", 0, 0, 255, true);
-	controlPanel.addSlider("Leaf G", "tLeavesG", 0, 0, 255, true);
-	controlPanel.addSlider("Leaf B", "tLeavesB", 0, 0, 255, true);
-	controlPanel.addSlider("Leaf Opacity", "tLeavesA", 255, 0, 255, true);
-	controlPanel.addSlider("Leaf fertility", "leafFertility", 1, 1, 10, true);
-	controlPanel.addSlider("Leaf min width", "leafMinWidth", 100, 5, 300, true);
-	controlPanel.addSlider("Leaf max width", "leafMaxWidth", 140, 5, 300, true);
+//	controlPanel.setWhichColumn(3);
+//	controlPanel.addLabel("Leaves");
+//	controlPanel.addSlider("Leaf R", "tLeavesR", 0, 0, 255, true);
+//	controlPanel.addSlider("Leaf G", "tLeavesG", 0, 0, 255, true);
+//	controlPanel.addSlider("Leaf B", "tLeavesB", 0, 0, 255, true);
+//	controlPanel.addSlider("Leaf Opacity", "tLeavesA", 255, 0, 255, true);
+//	controlPanel.addSlider("Leaf fertility", "leafFertility", 1, 1, 10, true);
+//	controlPanel.addSlider("Leaf min width", "leafMinWidth", 100, 5, 300, true);
+//	controlPanel.addSlider("Leaf max width", "leafMaxWidth", 140, 5, 300, true);
 
 	controlPanel.addPanel("Audio Setup", 4, false);
 	controlPanel.setWhichPanel(panelNr++);
 	controlPanel.setWhichColumn(1);
 	controlPanel.addSlider("Global Volume", "soundVolume", 30, 0, 100, false);
-	controlPanel.addLabel("Parametric Equalizer");
-	controlPanel.addSlider("eq100", "eq100", 30, 0, 100, true);
-	controlPanel.addSlider("eq250", "eq250", 44, 0, 100, true);
-	controlPanel.addSlider("eq700", "eq700", 50, 0, 100, true);
-	controlPanel.addSlider("eq1500", "eq1500", 50, 0, 100, true);
-	controlPanel.addSlider("eq3000", "eq3000", 50, 0, 100, true);
-	controlPanel.addSlider("eq7000", "eq7000", 50, 0, 100, true);
-	controlPanel.addSlider("eq15000", "eq15000", 50, 0, 100, true);
-	controlPanel.addSlider("eqGain", "eqGain", 50, 0, 100, true);
+	// controlPanel.addLabel("Parametric Equalizer");
+	// controlPanel.addSlider("eq100", "eq100", 30, 0, 100, true);
+	// controlPanel.addSlider("eq250", "eq250", 44, 0, 100, true);
+	// controlPanel.addSlider("eq700", "eq700", 50, 0, 100, true);
+	// controlPanel.addSlider("eq1500", "eq1500", 50, 0, 100, true);
+	// controlPanel.addSlider("eq3000", "eq3000", 50, 0, 100, true);
+	// controlPanel.addSlider("eq7000", "eq7000", 50, 0, 100, true);
+	// controlPanel.addSlider("eq15000", "eq15000", 50, 0, 100, true);
+	// controlPanel.addSlider("eqGain", "eqGain", 50, 0, 100, true);
 
 	// Gradient
 	controlPanel.addPanel("Color Manager", 4, false);
@@ -1202,27 +1202,27 @@ void ofApp::controlChanged(guiCallbackData & data){
 	else if(data.isElement("showFlowers")){
 		globalSettings::g_showFlowers = data.getInt(0);
 	}
-	else if(data.isElement("tLeavesR")){
-		globalSettings::g_leavesEndColor.r = data.getInt(0);
-	}
-	else if(data.isElement("tLeavesG")){
-		globalSettings::g_leavesEndColor.g = data.getInt(0);
-	}
-	else if(data.isElement("tLeavesB")){
-		globalSettings::g_leavesEndColor.b = data.getInt(0);
-	}
-	else if(data.isElement("tLeavesA")){
-		globalSettings::g_leavesOpacity = data.getFloat(0);
-	}
-	else if(data.isElement("leafFertility")){
-		globalSettings::g_leavesFertility = data.getFloat(0);
-	}
-	else if(data.isElement("leafMinWidth")){
-		globalSettings::g_leavesMinWidth = data.getFloat(0);
-	}
-	else if(data.isElement("leafMaxWidth")){
-		globalSettings::g_leavesMaxWidth = data.getFloat(0);
-	}
+	// else if(data.isElement("tLeavesR")){
+	// 	globalSettings::g_leavesEndColor.r = data.getInt(0);
+	// }
+	// else if(data.isElement("tLeavesG")){
+	// 	globalSettings::g_leavesEndColor.g = data.getInt(0);
+	// }
+	// else if(data.isElement("tLeavesB")){
+	// 	globalSettings::g_leavesEndColor.b = data.getInt(0);
+	// }
+	// else if(data.isElement("tLeavesA")){
+	// 	globalSettings::g_leavesOpacity = data.getFloat(0);
+	// }
+	// else if(data.isElement("leafFertility")){
+	// 	globalSettings::g_leavesFertility = data.getFloat(0);
+	// }
+	// else if(data.isElement("leafMinWidth")){
+	// 	globalSettings::g_leavesMinWidth = data.getFloat(0);
+	// }
+	// else if(data.isElement("leafMaxWidth")){
+	// 	globalSettings::g_leavesMaxWidth = data.getFloat(0);
+	// }
 	else if(data.isElement("tweetMin")){
 		globalSettings::g_tweetMinLife = data.getFloat(0);
 	}
@@ -1231,21 +1231,21 @@ void ofApp::controlChanged(guiCallbackData & data){
 	} /* else if (data.isElement("useTwilio")) {
 	globalSettings::g_useTwilio = data.getInt(0);
 	}*/
-	else if(data.isElement("leavesRows")){
-		globalSettings::g_leavesRows = data.getInt(0);
-	}
-	else if(data.isElement("leavesColumns")){
-		globalSettings::g_leavesColumns = data.getInt(0);
-	}
-	else if(data.isElement("showLeaves")){
-		globalSettings::g_leavesActive = data.getInt(0);
-	}
-	else if(data.isElement("leavesMinFreq")){
-		globalSettings::g_leavesMinFreq = data.getInt(0);
-	}
-	else if(data.isElement("leavesMaxFreq")){
-		globalSettings::g_leavesMaxFreq = data.getInt(0);
-	}
+	// else if(data.isElement("leavesRows")){
+	// 	globalSettings::g_leavesRows = data.getInt(0);
+	// }
+	// else if(data.isElement("leavesColumns")){
+	// 	globalSettings::g_leavesColumns = data.getInt(0);
+	// }
+	// else if(data.isElement("showLeaves")){
+	// 	globalSettings::g_leavesActive = data.getInt(0);
+	// }
+	// else if(data.isElement("leavesMinFreq")){
+	// 	globalSettings::g_leavesMinFreq = data.getInt(0);
+	// }
+	// else if(data.isElement("leavesMaxFreq")){
+	// 	globalSettings::g_leavesMaxFreq = data.getInt(0);
+	// }
 	else if(data.isElement("treesFadeTime")){
 		globalSettings::g_treesFadeTime = data.getInt(0);
 	}
@@ -1274,9 +1274,9 @@ void ofApp::controlChanged(guiCallbackData & data){
 	else if(data.isElement("waitRegenerateTime")){
 		globalSettings::g_waitRegenerateTime = data.getInt(0);
 	}
-	else if(data.isElement("leavesLife")){
-		globalSettings::g_leavesLife = data.getInt(0);
-	}
+	// else if(data.isElement("leavesLife")){
+	// 	globalSettings::g_leavesLife = data.getInt(0);
+	// }
 	else if(data.isElement("msgOpacity")){
 		globalSettings::g_msgOpacity = data.getInt(0);
 	}
@@ -1302,30 +1302,7 @@ void ofApp::controlChanged(guiCallbackData & data){
 	else if(data.isElement("splashOpacity")){
 		globalSettings::g_splashOpacity = data.getFloat(0);
 	}
-	else if(data.isElement("eq100")){
-		InteractiveAudio::instance()->sendFloat(kEq100, data.getFloat(0) / 100.F);
-	}
-	else if(data.isElement("eq250")){
-		InteractiveAudio::instance()->sendFloat(kEq250, data.getFloat(0) / 100.F);
-	}
-	else if(data.isElement("eq700")){
-		InteractiveAudio::instance()->sendFloat(kEq700, data.getFloat(0) / 100.F);
-	}
-	else if(data.isElement("eq1500")){
-		InteractiveAudio::instance()->sendFloat(kEq1500, data.getFloat(0) / 100.F);
-	}
-	else if(data.isElement("eq3000")){
-		InteractiveAudio::instance()->sendFloat(kEq3000, data.getFloat(0) / 100.F);
-	}
-	else if(data.isElement("eq7000")){
-		InteractiveAudio::instance()->sendFloat(kEq7000, data.getFloat(0) / 100.F);
-	}
-	else if(data.isElement("eq15000")){
-		InteractiveAudio::instance()->sendFloat(kEq15000, data.getFloat(0) / 100.F);
-	}
-	else if(data.isElement("eqGain")){
-		InteractiveAudio::instance()->sendFloat(kEqGain, data.getFloat(0) / 100.F);
-	}
+
 	else if(data.isElement("gradStartR")){
 		globalSettings::g_treeGradStart.setHueAngle(data.getInt(0));
 		globalSettings::g_changeBranchImages = true;

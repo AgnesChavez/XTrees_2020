@@ -25,11 +25,11 @@
 #include "GraphicUtilities.hpp"
 #include "Leaf.h"
 
-class FlowersLayer;
+//class FlowersLayer;
 class XTree;
 
 class XTreeBranch {
-  friend class FlowersLayer;
+//  friend class FlowersLayer;
   friend class LinesLayer;
 public:
   XTreeBranch(XTree* tree_, XTreeBranch* previous_, uint width_,  ofVec2f start_, ofVec2f end_);

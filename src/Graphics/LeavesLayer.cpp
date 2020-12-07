@@ -26,16 +26,25 @@ LeavesLayer::LeavesLayer() :
   m_running(false) {
   
   
-  globalSettings::s_solver = new FluidSolver();
+  s_solver = make_unique<MSA::FluidSolver>();
   globalSettings::s_windowSize = Vec2f(ofGetWidth(),ofGetHeight());
 	  globalSettings::s_invWindowSize = Vec2f( 1.0f / globalSettings::s_windowSize.x, 1.0f / globalSettings::s_windowSize.y );
-  globalSettings::s_solver->setup(100, 100);
-  globalSettings::s_solver->enableRGB(true).setFadeSpeed(0.01).setDeltaT(0.4).setVisc(0.0001).setColorDiffusion(0);
+  s_solver->setup(100, 100);
+  s_solver->enableRGB(true).setFadeSpeed(0.01).setDeltaT(0.4).setVisc(0.0001).setColorDiffusion(0);
   
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
   glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
 
+	  parameters.add(g_leavesEndColor);
+	  parameters.add(g_leavesOpacity);
+	  parameters.add(g_leavesFertility);
+	  parameters.add(g_leavesMinWidth);
+	  parameters.add(g_leavesMaxWidth);
+	  parameters.add(g_leavesMinFreq);
+	  parameters.add(g_leavesMaxFreq);
+	  
+	  
 }
 
 LeavesLayer::~LeavesLayer() {
@@ -69,8 +78,8 @@ void LeavesLayer::reset() {
 void LeavesLayer::update() {
 
   //always: gravity + wind
-  globalSettings::s_solver->addConstantForce(Vec2f(0.f,0.000004f));
-  globalSettings::s_solver->update();
+  s_solver->addConstantForce(MSA::Vec2f(0.f,0.000004f));
+  s_solver->update();
   
   if (globalSettings::g_globalCounterSec % 3 == 0) {  
     m_it = m_leaves.begin();
