@@ -1,3 +1,4 @@
+ofxGui
 ofxOsc
 ofxPoco
 ./local_addons/ofxGeo
@@ -11,14 +12,7 @@ ofxPoco
 ./local_addons/ofxXmlSettings
 ./local_addons/MSACore
 ./local_addons/MSAFluid
-./local_addons/MSATimer
-./local_addons/MSAUtils
 ./local_addons/ofxAppUtils
 ./local_addons/ofxControlPanel
 ./local_addons/ofxFTGL
-./local_addons/ofxHttpUtils
-./local_addons/ofxhUtils
-./local_addons/ofxMSADirManager
-./local_addons/ofxMSAImage
-./local_addons/ofxMSAInteractiveObject
 ./local_addons/ofxNetwork
