@@ -4,7 +4,7 @@
 
 - [ ] Add syphon output
 - [ ] Add GL warping
-- [ ] Show gui on extra window
+- [x] Show gui on extra window
 - [ ] Remote control parameters (ofxRemote or ofxOscParamSync)
 - [ ] Implement space messengers messages
 - [ ] Fix messages look
