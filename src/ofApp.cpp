@@ -46,14 +46,14 @@ void ofApp::setup(){
 	
 	globalSettings::instance()->setupGuis();
 	
-	
+	InteractiveAudio::instance()->setupParams();
 	
 	
 	
 	
 	m_screenshot = false;
 	globalSettings::instance()->g_activeThreads = 0;
-	globalSettings::instance()->g_app = this;
+	
 	globalSettings::instance()->g_fps = 30;
 	m_simulationState = TIME_GROWING;
 	m_simulationTimer = 0;

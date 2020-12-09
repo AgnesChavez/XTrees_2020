@@ -96,9 +96,6 @@ public:
 	ofParameter<float> g_branchMinWidth = { "Branch min width (px)",  1, 1, 200}; //branchMinWidth
 	ofParameter<float> g_branchWidth = { "Branch width (px)",  1, 1, 200}; //branchWidth
 
-	ofParameter<int> g_crazyCircleWidth = { "Circle Width",  15, 2, 50}; //crazyCircleWidth
-	ofParameter<int> g_crazyLineWidth = { "Line Width",  2, 1, 10}; //crazyLineWidth
-
 	ofParameter<int> g_fertility = { "Fertility",  0, 0, 5}; //fertility
 	ofParameter<int> g_firstIterations = { "First iterations",  3, 0, 10}; //firstIterations
 	ofParameter<float> g_floatingSpeed = { "Floating speed",  0.06, 0, 0.3}; //floatingSpeed
@@ -107,7 +104,7 @@ public:
 	ofParameter<int> g_flowersMin = { "Flowers min (ms)",  50, 10, 10000}; //addSlider        flowersMin
 	ofParameter<float> g_flowersOpacity = { "Flowers opacity",  255, 0, 255}; //addSlider        flowersOpacity
 
-	ofParameter<ofColor> g_jointC = { "Joint Color",  255, 0, 255}; //jointR
+	ofParameter<ofColor> g_jointC = { "Joint Color",  {255, 255}, {0,0}, {255, 255}}; //jointR
 	ofParameter<int> g_jointLength = { "Joint length",  20, 0, 80}; //jointLength
 	ofParameter<bool> g_jointsAreCircles = { "Joints are circles",  true};//addToggle        jointsAreCircles
 	ofParameter<int> g_jointThickness = { "Joint thickness",  1, 1, 10}; //jointThickness
@@ -140,17 +137,17 @@ public:
 
 	ofParameter<float> g_soundVolume = { "Global Volume",  0.3, 0, 1}; //addSlider        soundVolume
 
-	ofParameter<ofColor> g_splashC = { "Splash Screen Color",  255, 0, 255}; //splashR
+	ofParameter<ofColor> g_splashC = { "Splash Screen Color", {255, 255}, {0,0}, {255, 255}}; //splashR
 	ofParameter<int> g_splashDuration = { "Splash duration",  15, 5, 60}; //addSlider        splashDuration
 	ofParameter<int> g_splashFrequency = { "Splash frequency",  60, 30, 600}; //addSlider        splashFrequency
 	ofParameter<float> g_splashOpacity = { "Splash opacity",  255, 0, 255}; //addSlider        splashOpacity
 
 	ofParameter<bool> g_timedExhibit = { "Timed show",  true};//addToggle        timedExhibit
 
-	ofParameter<ofColor> g_tLineC = { "Line Color",  0, 0, 255}; //tLineR
-	ofParameter<int> g_tLineWidth = { "Line width",  1, 1, 10}; //tLineWidth
+	ofParameter<ofColor> g_tLineC = { "Msg2Tree Line Color",  {0,0}, {0,0}, {255, 255}}; //tLineR
+	ofParameter<int> g_tLineWidth = { "Msg2Tree Line width",  1, 1, 10}; //tLineWidth
 
-	ofParameter<ofColor> g_treeC = { "Branch Color",  255, 0, 255}; //treeR
+	ofParameter<ofColor> g_treeC = { "Branch Color",  {255, 255}, {0,0}, {255, 255}}; //treeR
 	ofParameter<int> g_treeGhostOpacity = { "Ghost Alpha",  255, 0, 255}; //ghostAlpha
 	ofParameter<int> g_treesFadeTime = { "Ghost img time",  30, 1, 60}; //addSlider        treesFadeTime
 	ofParameter<float> g_treesLayerOpacity = { "Trees opacity",  255, 0, 255}; //addSlider        treesOpacity
@@ -167,18 +164,18 @@ public:
 	ofParameter<float> g_widthDecrease = { "Width decrease (%)",  0, 0, 1}; //widthDecrease
 
 	
-	ofParameter<float> g_linesWidth= {"Line Width", 2, 1, 10};
-	ofParameter<ofColor> g_linesColor = {"Lines Color", {255,255,255,255}, {0,0,0,0}, {255,255,255,255}};
+	ofParameter<float> g_linesWidth= {"Final Line Width", 2, 1, 10};
+	ofParameter<ofColor> g_linesColor = {"Final Lines Color", {255,255,255,255}, {0,0,0,0}, {255,255,255,255}};
 	
 	
 	ofParameterGroup messagesColors = {"Messages colors"};
 	
-	ofParameter<ofColor> g_tweetMsgC = { "Tweet Message",  255, 0, 255}; //tweetMsgR
-	ofParameter<ofColor> g_tweetUsrC = { "Tweet User",  255, 0, 255}; //tweetMsgR
-	ofParameter<ofColor> g_twilioMsgC = { "Twilio Message",  255, 0, 255}; //tweetMsgR
-	ofParameter<ofColor> g_twilioUsrC = { "Twilio User",  255, 0, 255}; //tweetMsgR
-	ofParameter<ofColor> g_databaseMsgC = { "Archive Message",  255, 0, 255}; //tweetMsgR
-	ofParameter<ofColor> g_databaseUsrC = { "Archive User",  255, 0, 255}; //tweetMsgR
+	ofParameter<ofColor> g_tweetMsgC = { "Tweet Message",  {255, 255}, {0,0}, {255, 255}}; //tweetMsgR
+	ofParameter<ofColor> g_tweetUsrC = { "Tweet User",  {255, 255}, {0,0}, {255, 255}}; //tweetMsgR
+	ofParameter<ofColor> g_twilioMsgC = { "Twilio Message",  {255, 255}, {0,0}, {255, 255}}; //tweetMsgR
+	ofParameter<ofColor> g_twilioUsrC = { "Twilio User",  {255, 255}, {0,0}, {255, 255}}; //tweetMsgR
+	ofParameter<ofColor> g_databaseMsgC = { "Archive Message",  {255, 255}, {0,0}, {255, 255}}; //tweetMsgR
+	ofParameter<ofColor> g_databaseUsrC = { "Archive User",  {255, 255}, {0,0}, {255, 255}}; //tweetMsgR
 	
 	///////////
 
@@ -190,7 +187,8 @@ public:
 	unsigned int g_globalCounter = 0;
 	unsigned int g_globalCounterSec = 0;
 	
-	ofApp* g_app = nullptr;
+	shared_ptr<ofApp> g_app = nullptr;
+	shared_ptr<ofAppBaseWindow> g_mainWindow = nullptr;
 	
 	bool g_useBackgroundImage = false;
 	
@@ -285,15 +283,32 @@ private:
 	
 	
 	
-
-	ofxPanel gui;
-	ofxPanel general_tree_structure_gui;
-	ofxPanel timing_gui;
-	ofxPanel messages_gui;
-	ofxPanel lines_gui;
-	ofxPanel audio_settings_gui;
-
-	void addSaveLoadListeners(ofxPanel& gui);
+	std::vector<unique_ptr<ofxPanel>> guis;
+	
+	enum GuiIndex{
+		GUI_GENERAL = 0,
+		GUI_TREES,
+		GUI_TIMING,
+		GUI_MESSAGES,
+		GUI_AUDIO,
+		GUI_TOTAL_NUM
+	};
+	
+	
+	string guiIndexToString(GuiIndex index)
+	{
+		if(index == GUI_GENERAL){ return "General";}
+		else if(index == GUI_TREES){ return "Trees";}
+		else if(index == GUI_TIMING){ return "Timing";}
+		else if(index == GUI_MESSAGES){ return "Messages";}
+		else if(index == GUI_AUDIO){ return "Audio";}
+		return "";
+	}
+	
+	
+	
+	
+	void addSaveLoadListeners(GuiIndex index);
 	
 	string currentFilename = "settings.json";
 	
@@ -303,7 +318,16 @@ private:
 	ofParameter<void> loadParam = {"Load"};
 	ofParameter<void> reloadParam = {"Reload"};
 	
+	ofParameter<void> guiPopOut = {"OpenGui in additional window"};
 	
+	shared_ptr<ofAppBaseWindow> guiWindow = nullptr;
+	ofEventListeners guiWindowListeners;
+	void drawGuiInWindow(ofEventArgs&);
+	
+	void guiWindowClosed(ofEventArgs&);
+
+	void loadPanelFromJson(ofJson& json, GuiIndex index);//, const string& name);
+	void savePanelToJson(ofJson& json, GuiIndex index);//, const string& name);
 };
 #endif //
 

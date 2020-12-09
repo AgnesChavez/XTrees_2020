@@ -69,7 +69,7 @@ m_active(false){
 	m_destinations[kEq15000] = "eq15000";
 	m_destinations[kEqGain] = "eqGain";
 
-	setupParams();	
+//	setupParams();
 }
 
 InteractiveAudio::~InteractiveAudio() {
@@ -185,7 +185,6 @@ void InteractiveAudio::audioReceived(float * input, int bufferSize, int nChannel
 
 void InteractiveAudio::audioRequested(float * output, int bufferSize, int nChannels) {
 	if (m_active) {
-		//std:cout << ",";
 		m_pd->audioOut(output, bufferSize, nChannels);
 	}
 }

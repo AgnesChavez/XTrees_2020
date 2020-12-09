@@ -22,10 +22,7 @@
 //#include "MSACore.h"
 //#include "MSAFluidSolver.h"
 
-#include "guiCustomColorPreview.h"
-#include "guiCustomGradientPreview.h"
-#include "guiTypeConfigFileList.h"
-
+#include "InteractiveAudio.h"
 
 
 using namespace MSA;
@@ -35,9 +32,9 @@ using namespace MSA;
 
 
 
-#ifndef XTREES_IOS
-	ofApp * g_app;
-#endif
+//#ifndef XTREES_IOS
+//	ofApp * g_app;
+//#endif
 
 
 globalSettings::globalSettings(){
@@ -148,59 +145,61 @@ globalSettings::globalSettings(){
 	
 	lines_parameters.add(g_tLineC);
 	lines_parameters.add(g_tLineWidth);
-	lines_parameters.add(g_crazyCircleWidth);
-	lines_parameters.add(g_crazyLineWidth);
-	lines_parameters.add(g_linesWidth);
 	lines_parameters.add(g_linesColor);
-	
+	lines_parameters.add(g_linesWidth);
 	
 
+	messages_parameters.add(lines_parameters);
+	
 	audio_settings_parameters.add(g_useInteractiveAudio);
 	audio_settings_parameters.add(g_soundVolume);
+	
+//	guis.resize(GUI_TOTAL_NUM);
+	for(int i = 0; i < GUI_TOTAL_NUM; i++)
+	{
+		guis.push_back(std::move(make_unique<ofxPanel>()));
+	}
 	
 	
 	
 //	setupGuis();
 }
 
-void globalSettings::addSaveLoadListeners(ofxPanel& gui)
+void globalSettings::addSaveLoadListeners(GuiIndex index)
 {
-	listeners.push(gui.loadPressedE.newListener(this, &globalSettings::load));
-	listeners.push(gui.savePressedE.newListener(this, &globalSettings::save));
+	listeners.push(guis[index]->loadPressedE.newListener(this, &globalSettings::load));
+	listeners.push(guis[index]->savePressedE.newListener(this, &globalSettings::save));
 }
 
 void globalSettings::setupGuis()
 {
 	
-	gui.setup("Settings");
-	gui.add(saveParam);
-	gui.add(saveAsParam);
-	gui.add(loadParam);
-	gui.add(reloadParam);
-	
-	gui.add(g_backgroundC);
-	gui.add(splash_screen_parameters);
-	gui.add(layers_control_parameters);
-	
-	
+	guis[GUI_GENERAL]->setup("Settings");
+	guis[GUI_GENERAL]->add(saveParam);
+	guis[GUI_GENERAL]->add(saveAsParam);
+	guis[GUI_GENERAL]->add(loadParam);
+	guis[GUI_GENERAL]->add(reloadParam);
+	guis[GUI_GENERAL]->add(guiPopOut);
+	guis[GUI_GENERAL]->add(g_backgroundC);
+	guis[GUI_GENERAL]->add(splash_screen_parameters);
+	guis[GUI_GENERAL]->add(layers_control_parameters);
 	
 	
-	general_tree_structure_gui.setup(general_tree_structure_parameters);
-	timing_gui.setup(timing_parameters);
-	messages_gui.setup(messages_parameters);
-	lines_gui.setup(lines_parameters);
-	audio_settings_gui.setup(audio_settings_parameters);
+	guis[GUI_TREES]->setup(general_tree_structure_parameters);
+	guis[GUI_TIMING]->setup(timing_parameters);
+	guis[GUI_MESSAGES]->setup(messages_parameters);
+	guis[GUI_AUDIO]->setup(audio_settings_parameters);
+	guis[GUI_AUDIO]->add(InteractiveAudio::instance()->parameters);
 	
 
-	general_tree_structure_gui.setPosition(gui.getShape().getTopRight() + glm::vec2(10,0));
-	timing_gui.setPosition(general_tree_structure_gui.getShape().getTopRight() + glm::vec2(10,0));
-	messages_gui.setPosition(timing_gui.getShape().getTopRight() + glm::vec2(10,0));
-	lines_gui.setPosition(messages_gui.getShape().getTopRight() + glm::vec2(10,0));
-	audio_settings_gui.setPosition(lines_gui.getShape().getBottomLeft() + glm::vec2(0,10));
-	
+	for(size_t i = 1; i < guis.size(); i++){
+		guis[i]->setPosition(guis[i-1]->getShape().getTopRight() + glm::vec2(10,0));
+	}
+
 	listeners.push(saveParam.newListener([&](){
 		save();
 	}));
+	
 	listeners.push(saveAsParam.newListener([&](){
 		auto res = ofSystemSaveDialog("settings_"+ofGetTimestampString() + ".json", "Save settings to json file...");
 		if(res.bSuccess)
@@ -209,6 +208,7 @@ void globalSettings::setupGuis()
 		}
 		
 	}));
+	
 	listeners.push(loadParam.newListener([&](){
 		auto res = ofSystemLoadDialog("Load settings from json file");
 		cout << ofFilePath::getFileExt(res.getName()) << endl;
@@ -221,29 +221,66 @@ void globalSettings::setupGuis()
 		load();
 	}));
 	
+	listeners.push(guiPopOut.newListener([&](){
+		if(guiWindow == nullptr)
+		{
+			ofGLFWWindowSettings settings;
+			
+			ofRectangle guisRect;
+			for(auto& g: guis)
+			{
+				if(guisRect.isEmpty())
+				{
+					guisRect = g->getShape();
+				}else
+				{
+					guisRect.growToInclude(g->getShape());
+				}
+			}
+			
+			settings.setSize(guisRect.getMaxX() + 20, guisRect.getMaxY() + 20);
+			settings.setPosition(glm::vec2(0,0));
+			settings.resizable = true;
+			settings.shareContextWith = g_mainWindow;
+			guiWindow = ofCreateWindow(settings);
+			guiWindow->setVerticalSync(false);
+
+			guiWindowListeners.push(guiWindow->events().draw.newListener(this ,&globalSettings::drawGuiInWindow));
+			guiWindowListeners.push(guiWindow->events().exit.newListener(this ,&globalSettings::guiWindowClosed));
+			
+		}
+	}));
 	
-	addSaveLoadListeners(gui);
-	addSaveLoadListeners(general_tree_structure_gui);
-	addSaveLoadListeners(timing_gui);
-	addSaveLoadListeners(messages_gui);
-	addSaveLoadListeners(lines_gui);
-	addSaveLoadListeners(audio_settings_gui);
 	
-	currentFilename  = ofToDataPath("settings.json");
+	addSaveLoadListeners(GUI_GENERAL);
+	addSaveLoadListeners(GUI_TREES);
+	addSaveLoadListeners(GUI_TIMING);
+	addSaveLoadListeners(GUI_MESSAGES);
+	addSaveLoadListeners(GUI_AUDIO);
+	
+	currentFilename  = ofToDataPath("settings/settings.json");
 	load();
 	
 }
-
+void globalSettings::guiWindowClosed(ofEventArgs&)
+{
+//	cout << "globalSettings::guiWindowClosed" << endl;
+	guiWindowListeners.unsubscribeAll();
+	guiWindow = nullptr;
+}
+void globalSettings::drawGuiInWindow(ofEventArgs&)
+{
+	for(auto& g: guis)
+	{
+		g->draw();
+	}
+}
 void globalSettings::drawGui()
 {
-	
-	gui.draw();
-	general_tree_structure_gui.draw();
-	
-	timing_gui.draw();
-	messages_gui.draw();
-	lines_gui.draw();
-	audio_settings_gui.draw();
+	if(!guiWindow){
+		ofEventArgs e;
+		drawGuiInWindow(e);
+	}
 }
 
 
@@ -447,32 +484,28 @@ void globalSettings::g_activateSoundtrack(){
 	//}
 }
 
-void savePanelToJson(ofJson& json, ofxPanel& panel, const string& name)
+void globalSettings::savePanelToJson(ofJson& json, GuiIndex index)//, const string& name)
 {
-		panel.saveTo(json[name]);
+		guis[index]->saveTo(json[guiIndexToString(index)]);
 }
 
 void globalSettings::save()
 {
 	ofJson json = ofLoadJson(currentFilename);
 	
-	savePanelToJson( json, gui, "others");
-	savePanelToJson( json, general_tree_structure_gui, "general_tree_structure");
-	savePanelToJson( json, timing_gui, "timing");
-	savePanelToJson( json, messages_gui, "messages");
-	savePanelToJson( json, lines_gui, "lines");
-	savePanelToJson( json, audio_settings_gui, "audio_settings");
-
+	for(int i = 0; i < GUI_TOTAL_NUM; i++)
+	{
+		savePanelToJson( json, GuiIndex(i));
+	}
 	ofSavePrettyJson(currentFilename, json);
-	
-	
 }
 
-void loadPanelFromJson(ofJson& json, ofxPanel& panel, const string& name)
+void globalSettings::loadPanelFromJson(ofJson& json, GuiIndex index)//, const string& name)
 {
+	auto name = guiIndexToString(index);
 	if(json.contains(name))
 	{
-		panel.loadFrom(json[name]);
+		guis[index]->loadFrom(json[name]);
 	}
 }
 
@@ -482,13 +515,10 @@ void globalSettings::load()
 	ofFile jsonFile(currentFilename);
 	ofJson json = ofLoadJson(currentFilename);
 	
-	loadPanelFromJson(json, gui, "others");
-	loadPanelFromJson(json, general_tree_structure_gui, "general_tree_structure");
-	loadPanelFromJson(json, timing_gui, "timing");
-	loadPanelFromJson(json, messages_gui, "messages");
-	loadPanelFromJson(json, lines_gui, "lines");
-	loadPanelFromJson(json, audio_settings_gui, "audio_settings");
-	
+	for(int i = 0; i < GUI_TOTAL_NUM; i++)
+	{
+		loadPanelFromJson( json, GuiIndex(i));
+	}
 }
 
 void globalSettings::saveTo(const string& filename)

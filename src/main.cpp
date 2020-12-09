@@ -45,11 +45,24 @@ int main(){
 	if(json.count("startOnFullscreen")){  startOnFullscreen = json["startOnFullscreen"].get<bool>();}
 	
 
+	ofGLFWWindowSettings settings;
+	settings.setSize(screenWidth, screenHeight);
+	settings.setPosition(glm::vec2(0,0));
+	settings.resizable = true;
+//	settings.multiMonitorFullScreen = true;
+	settings.windowMode = (startOnFullscreen?OF_FULLSCREEN:OF_WINDOW);
+	shared_ptr<ofAppBaseWindow> mainWindow = ofCreateWindow(settings);
 	
-    ofSetupOpenGL(screenWidth, screenHeight, (startOnFullscreen?OF_FULLSCREEN:OF_WINDOW));
+	
+//    ofSetupOpenGL(screenWidth, screenHeight, (startOnFullscreen?OF_FULLSCREEN:OF_WINDOW));
 		
-	ofRunApp(new ofApp());
+	shared_ptr<ofApp> mainApp(new ofApp);
 	
+	globalSettings::instance()->g_app = mainApp;
+	globalSettings::instance()->g_mainWindow = mainWindow;
+	
+	ofRunApp(mainWindow, mainApp);
+	ofRunMainLoop();
 	
 //	ofRunApp(std::make_shared<ofxRunnerApp>(new ofApp()));
 		  
