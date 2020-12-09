@@ -39,6 +39,18 @@ m_state(STATE_SETUP){
 
 
 void ofApp::setup(){
+	
+	ofTrueTypeFontSettings fontSettings = { ofToDataPath("fonts/verdana.ttf"), 10 };
+	
+	ofxGuiSetFont(fontSettings);
+	
+	globalSettings::instance()->setupGuis();
+	
+	
+	
+	
+	
+	
 	m_screenshot = false;
 	globalSettings::instance()->g_activeThreads = 0;
 	globalSettings::instance()->g_app = this;
@@ -647,6 +659,11 @@ void ofApp::draw(){
 									//								"\n" + ss.str() +
 									"\n\n press key 'i' to toggle this message", 200, 50);
 	}
+	
+	
+	m_goBtn->draw();
+	m_resetBtn->draw();
+	
 	if(bDrawGui)
 		globalSettings::instance()->drawGui();
 	

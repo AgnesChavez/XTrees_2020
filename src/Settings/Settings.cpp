@@ -160,30 +160,36 @@ globalSettings::globalSettings(){
 	
 	
 	
-	setupGuis();
+//	setupGuis();
+}
+
+void globalSettings::addSaveLoadListeners(ofxPanel& gui)
+{
+	listeners.push(gui.loadPressedE.newListener(this, &globalSettings::load));
+	listeners.push(gui.savePressedE.newListener(this, &globalSettings::save));
 }
 
 void globalSettings::setupGuis()
 {
-
 	
+	gui.setup("Settings");
+	gui.add(saveParam);
+	gui.add(saveAsParam);
+	gui.add(loadParam);
+	gui.add(reloadParam);
 	
-	
-	
-	
-	
-	
-	
-	gui.setup("settings", "settings/others.json");
 	gui.add(g_backgroundC);
 	gui.add(splash_screen_parameters);
 	gui.add(layers_control_parameters);
 	
-	general_tree_structure_gui.setup(general_tree_structure_parameters, "settings/general_tree_structure.json");
-	timing_gui.setup(timing_parameters, "settings/timing.json");
-	messages_gui.setup(messages_parameters, "settings/messages.json");
-	lines_gui.setup(lines_parameters, "settings/lines.json");
-	audio_settings_gui.setup(audio_settings_parameters, "settings/audio_settings.json");
+	
+	
+	
+	general_tree_structure_gui.setup(general_tree_structure_parameters);
+	timing_gui.setup(timing_parameters);
+	messages_gui.setup(messages_parameters);
+	lines_gui.setup(lines_parameters);
+	audio_settings_gui.setup(audio_settings_parameters);
 	
 
 	general_tree_structure_gui.setPosition(gui.getShape().getTopRight() + glm::vec2(10,0));
@@ -192,6 +198,38 @@ void globalSettings::setupGuis()
 	lines_gui.setPosition(messages_gui.getShape().getTopRight() + glm::vec2(10,0));
 	audio_settings_gui.setPosition(lines_gui.getShape().getBottomLeft() + glm::vec2(0,10));
 	
+	listeners.push(saveParam.newListener([&](){
+		save();
+	}));
+	listeners.push(saveAsParam.newListener([&](){
+		auto res = ofSystemSaveDialog("settings_"+ofGetTimestampString() + ".json", "Save settings to json file...");
+		if(res.bSuccess)
+		{
+			saveTo(res.getPath());
+		}
+		
+	}));
+	listeners.push(loadParam.newListener([&](){
+		auto res = ofSystemLoadDialog("Load settings from json file");
+		cout << ofFilePath::getFileExt(res.getName()) << endl;
+		if(res.bSuccess && ofFilePath::getFileExt(res.getName()) == "json")
+		{
+			loadFrom(res.getPath());
+		}
+	}));
+	listeners.push(reloadParam.newListener([&](){
+		load();
+	}));
+	
+	
+	addSaveLoadListeners(gui);
+	addSaveLoadListeners(general_tree_structure_gui);
+	addSaveLoadListeners(timing_gui);
+	addSaveLoadListeners(messages_gui);
+	addSaveLoadListeners(lines_gui);
+	addSaveLoadListeners(audio_settings_gui);
+	
+	currentFilename  = ofToDataPath("settings.json");
 	load();
 	
 }
@@ -409,31 +447,57 @@ void globalSettings::g_activateSoundtrack(){
 	//}
 }
 
+void savePanelToJson(ofJson& json, ofxPanel& panel, const string& name)
+{
+		panel.saveTo(json[name]);
+}
+
 void globalSettings::save()
 {
+	ofJson json = ofLoadJson(currentFilename);
 	
-	ofDirectory dir(ofToDataPath("settings"));
-	if(!dir.exists())dir.create();
+	savePanelToJson( json, gui, "others");
+	savePanelToJson( json, general_tree_structure_gui, "general_tree_structure");
+	savePanelToJson( json, timing_gui, "timing");
+	savePanelToJson( json, messages_gui, "messages");
+	savePanelToJson( json, lines_gui, "lines");
+	savePanelToJson( json, audio_settings_gui, "audio_settings");
+
+	ofSavePrettyJson(currentFilename, json);
 	
-	gui.saveToFile("settings/others.json");
-	general_tree_structure_gui.saveToFile("settings/general_tree_structure.json");
-	timing_gui.saveToFile("settings/timing.json");
-	messages_gui.saveToFile("settings/messages.json");
-	lines_gui.saveToFile("settings/lines.json");
-	audio_settings_gui.saveToFile("settings/audio_settings.json");
 	
-	
+}
+
+void loadPanelFromJson(ofJson& json, ofxPanel& panel, const string& name)
+{
+	if(json.contains(name))
+	{
+		panel.loadFrom(json[name]);
+	}
 }
 
 void globalSettings::load()
 {
 	
-	gui.loadFromFile("settings/others.json");
-	general_tree_structure_gui.loadFromFile("settings/general_tree_structure.json");
-	timing_gui.loadFromFile("settings/timing.json");
-	messages_gui.loadFromFile("settings/messages.json");
-	lines_gui.loadFromFile("settings/lines.json");
-	audio_settings_gui.loadFromFile("settings/audio_settings.json");
+	ofFile jsonFile(currentFilename);
+	ofJson json = ofLoadJson(currentFilename);
+	
+	loadPanelFromJson(json, gui, "others");
+	loadPanelFromJson(json, general_tree_structure_gui, "general_tree_structure");
+	loadPanelFromJson(json, timing_gui, "timing");
+	loadPanelFromJson(json, messages_gui, "messages");
+	loadPanelFromJson(json, lines_gui, "lines");
+	loadPanelFromJson(json, audio_settings_gui, "audio_settings");
 	
 }
 
+void globalSettings::saveTo(const string& filename)
+{
+	currentFilename = filename;
+	save();
+}
+void globalSettings::loadFrom(const string& filename)
+{
+	currentFilename = filename;
+	load();
+}

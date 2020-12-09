@@ -44,6 +44,7 @@ int main(){
 	if(json.count("screenHeight")){  screenHeight = json["screenHeight"].get<int>();}
 	if(json.count("startOnFullscreen")){  startOnFullscreen = json["startOnFullscreen"].get<bool>();}
 	
+
 	
     ofSetupOpenGL(screenWidth, screenHeight, (startOnFullscreen?OF_FULLSCREEN:OF_WINDOW));
 		

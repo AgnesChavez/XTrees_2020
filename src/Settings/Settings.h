@@ -107,13 +107,13 @@ public:
 	ofParameter<int> g_flowersMin = { "Flowers min (ms)",  50, 10, 10000}; //addSlider        flowersMin
 	ofParameter<float> g_flowersOpacity = { "Flowers opacity",  255, 0, 255}; //addSlider        flowersOpacity
 
-	ofParameter<ofColor> g_jointC = { "Joint R",  255, 0, 255}; //jointR
+	ofParameter<ofColor> g_jointC = { "Joint Color",  255, 0, 255}; //jointR
 	ofParameter<int> g_jointLength = { "Joint length",  20, 0, 80}; //jointLength
 	ofParameter<bool> g_jointsAreCircles = { "Joints are circles",  true};//addToggle        jointsAreCircles
 	ofParameter<int> g_jointThickness = { "Joint thickness",  1, 1, 10}; //jointThickness
 
 
-	ofParameter<ofColor> g_leavesEndColor = { "Leaf R",  0, 0, 255}; //tLeavesR
+	ofParameter<ofColor> g_leavesEndColor = { "Leaf Color",  0, 0, 255}; //tLeavesR
 	ofParameter<float> g_leavesFertility = { "Leaf fertility",  1, 1, 10}; //leafFertility
 	ofParameter<int> g_leavesLife = { "Leaves life",  100, 1, 200}; //leavesLife
 	ofParameter<int> g_leavesMinFreq = { "Leaves min (ms)",  5000, 100, 100000}; //addSlider        leavesMinFreq
@@ -140,17 +140,17 @@ public:
 
 	ofParameter<float> g_soundVolume = { "Global Volume",  0.3, 0, 1}; //addSlider        soundVolume
 
-	ofParameter<ofColor> g_splashC = { "Splash Screen R",  255, 0, 255}; //splashR
+	ofParameter<ofColor> g_splashC = { "Splash Screen Color",  255, 0, 255}; //splashR
 	ofParameter<int> g_splashDuration = { "Splash duration",  15, 5, 60}; //addSlider        splashDuration
 	ofParameter<int> g_splashFrequency = { "Splash frequency",  60, 30, 600}; //addSlider        splashFrequency
 	ofParameter<float> g_splashOpacity = { "Splash opacity",  255, 0, 255}; //addSlider        splashOpacity
 
 	ofParameter<bool> g_timedExhibit = { "Timed show",  true};//addToggle        timedExhibit
 
-	ofParameter<ofColor> g_tLineC = { "Line R",  0, 0, 255}; //tLineR
+	ofParameter<ofColor> g_tLineC = { "Line Color",  0, 0, 255}; //tLineR
 	ofParameter<int> g_tLineWidth = { "Line width",  1, 1, 10}; //tLineWidth
 
-	ofParameter<ofColor> g_treeC = { "Branch R",  255, 0, 255}; //treeR
+	ofParameter<ofColor> g_treeC = { "Branch Color",  255, 0, 255}; //treeR
 	ofParameter<int> g_treeGhostOpacity = { "Ghost Alpha",  255, 0, 255}; //ghostAlpha
 	ofParameter<int> g_treesFadeTime = { "Ghost img time",  30, 1, 60}; //addSlider        treesFadeTime
 	ofParameter<float> g_treesLayerOpacity = { "Trees opacity",  255, 0, 255}; //addSlider        treesOpacity
@@ -268,6 +268,10 @@ public:
 	void save();
 	void load();
 	
+	void saveTo(const string& filename);
+	void loadFrom(const string& filename);
+	
+	void setupGuis();
 	
 private:
 	
@@ -279,7 +283,7 @@ private:
 	ofEventListeners listeners;
 
 	
-	void setupGuis();
+	
 	
 
 	ofxPanel gui;
@@ -289,8 +293,15 @@ private:
 	ofxPanel lines_gui;
 	ofxPanel audio_settings_gui;
 
+	void addSaveLoadListeners(ofxPanel& gui);
+	
+	string currentFilename = "settings.json";
 	
 	
+	ofParameter<void> saveParam = {"Save"};
+	ofParameter<void> saveAsParam = {"Save as ..."};
+	ofParameter<void> loadParam = {"Load"};
+	ofParameter<void> reloadParam = {"Reload"};
 	
 	
 };

@@ -41,8 +41,11 @@ public:
   
   ofEvent<bool> clickedEvent;
   
+	void draw();
+	
+	
 private:
-  void draw(ofEventArgs& args);
+  
   
   void update(ofEventArgs& args);
   
