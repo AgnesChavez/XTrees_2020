@@ -121,7 +121,7 @@ void XTreeButton::draw(ofEventArgs& args) {
   }
   glScalef(1,-1,1);
   ofTranslate(-150, -4,0);
-  globalSettings::g_guiRenderer().Render(m_label.c_str());
+  globalSettings::instance()->g_guiRenderer().Render(m_label.c_str());
   ofSetColor(255);
   ofPopMatrix();
 }

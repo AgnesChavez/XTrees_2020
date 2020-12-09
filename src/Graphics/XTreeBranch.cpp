@@ -42,23 +42,23 @@ m_width(width_) {
 	m_startPosition.x = m_start.x + m_width/2 * sin(m_rotation);
 	m_startPosition.y = m_start.y - m_width/2 * cos(m_rotation);
 	this->m_level = (previous_ ? previous_->m_level + 1 : 0);
-	m_image = &globalSettings::g_originalImages[(size_t)ofRandom(globalSettings::g_originalImages.size())];
-	m_growthTime = ofRandom(globalSettings::g_growthMin, globalSettings::g_growthMax);
+	m_image = &globalSettings::instance()->g_originalImages[(size_t)ofRandom(globalSettings::instance()->g_originalImages.size())];
+	m_growthTime = ofRandom(globalSettings::instance()->g_growthMin, globalSettings::instance()->g_growthMax);
 	m_timer.set();
 	
 	std::vector<float> msg;
 	msg.push_back(m_growthTime);    // time
-	msg.push_back(-45.f + 90.F * (float)m_start.x / (float)globalSettings::g_scene.width); // panning
+	msg.push_back(-45.f + 90.F * (float)m_start.x / (float)globalSettings::instance()->g_scene.width); // panning
 	InteractiveAudio::instance()->sendFloatList(kNewBranch, msg);
 	
 	m_timer.setAlarm(m_growthTime);
-	m_numChildren = 2 + (m_level + ofRandom(globalSettings::g_fertility)) / 3;
+	m_numChildren = 2 + (m_level + ofRandom(globalSettings::instance()->g_fertility)) / 3;
 	m_positions.resize(m_numChildren);
 	for(int i = 0; i < m_numChildren; ++i){
 		m_positions[i] = i;
 	}
 	std::random_shuffle(m_positions.begin(), m_positions.end());
-	m_numLeaves = globalSettings::g_leavesFertility;
+	m_numLeaves = globalSettings::instance()->g_leavesFertility;
 	stemProportions.resize(m_numLeaves);
 	leaves.resize(m_numLeaves);
 	usedLeaves.resize(m_numLeaves);
@@ -79,7 +79,7 @@ XTreeBranch::~XTreeBranch() {
 	}
 	/*
 	 for (int i = 0; i < m_numLeaves; ++i) {
-	 globalSettings::g_leavesLayer->detachLeaf(leaves[i]);
+	 globalSettings::instance()->g_leavesLayer->detachLeaf(leaves[i]);
 	 }
 	 */
 }
@@ -117,7 +117,7 @@ void XTreeBranch::draw(bool bDrawGhost){
 	ofColor c = m_tree->getTreeColor();
 	
 	if(bDrawGhost) {
-		c.a = globalSettings::g_treeGhostOpacity;
+		c.a = globalSettings::instance()->g_treeGhostOpacity;
 	}
 	
 	ofSetColor(c);
@@ -130,16 +130,16 @@ void XTreeBranch::draw(bool bDrawGhost){
 		(*it++)->draw(bDrawGhost);
 	}
 	
-	ofSetColor(globalSettings::g_jointC);
+	ofSetColor(globalSettings::instance()->g_jointC);
 	
-	if (!globalSettings::g_jointsAreCircles) {
-		ofSetLineWidth(globalSettings::g_jointThickness);
-		ofDrawLine(m_cross.x - globalSettings::g_jointLength, m_cross.y - globalSettings::g_jointLength, m_cross.x + globalSettings::g_jointLength, m_cross.y + globalSettings::g_jointLength);
-		ofDrawLine(m_cross.x - globalSettings::g_jointLength, m_cross.y + globalSettings::g_jointLength, m_cross.x + globalSettings::g_jointLength, m_cross.y - globalSettings::g_jointLength);
+	if (!globalSettings::instance()->g_jointsAreCircles) {
+		ofSetLineWidth(globalSettings::instance()->g_jointThickness);
+		ofDrawLine(m_cross.x - globalSettings::instance()->g_jointLength, m_cross.y - globalSettings::instance()->g_jointLength, m_cross.x + globalSettings::instance()->g_jointLength, m_cross.y + globalSettings::instance()->g_jointLength);
+		ofDrawLine(m_cross.x - globalSettings::instance()->g_jointLength, m_cross.y + globalSettings::instance()->g_jointLength, m_cross.x + globalSettings::instance()->g_jointLength, m_cross.y - globalSettings::instance()->g_jointLength);
 	}
 	else{
 		ofFill();
-		ofDrawCircle(m_cross.x, m_cross.y, globalSettings::g_jointLength);
+		ofDrawCircle(m_cross.x, m_cross.y, globalSettings::instance()->g_jointLength);
 	}
 	
 	ofSetLineWidth(1);
@@ -153,26 +153,26 @@ void XTreeBranch::draw(bool bDrawGhost){
 XTreeBranch* XTreeBranch::returnInactiveBranch() {
 	XTreeBranch * toReturn;
 	ofPoint thisEnd(m_end.x, m_end.y, 0);
-	if (m_active && m_level < globalSettings::g_maxLevel && globalSettings::g_scene.inside(thisEnd)) {
+	if (m_active && m_level < globalSettings::instance()->g_maxLevel && globalSettings::instance()->g_scene.inside(thisEnd)) {
 		if (children.size() < m_numChildren) {
 			float direction = m_rotation;
 			
-			float increment_span = (globalSettings::g_maxAngle - globalSettings::g_minAngle) * 2 / m_numChildren;
+			float increment_span = (globalSettings::instance()->g_maxAngle - globalSettings::instance()->g_minAngle) * 2 / m_numChildren;
 			int currentPosition = m_positions[children.size()];
 			if (m_numChildren % 2 == 0) {
 				if ( currentPosition < m_numChildren / 2) {
-					direction += (-globalSettings::g_maxAngle + increment_span * currentPosition + increment_span * ofRandomuf()) * M_PI / 180.F;
+					direction += (-globalSettings::instance()->g_maxAngle + increment_span * currentPosition + increment_span * ofRandomuf()) * M_PI / 180.F;
 				}
 				else if(m_positions[children.size()] >= m_numChildren / 2){
-					direction += (globalSettings::g_minAngle + increment_span * (currentPosition - m_numChildren / 2) + increment_span * ofRandomuf()) * M_PI / 180.F;
+					direction += (globalSettings::instance()->g_minAngle + increment_span * (currentPosition - m_numChildren / 2) + increment_span * ofRandomuf()) * M_PI / 180.F;
 				}
 			}
 			else{
 				if ( currentPosition < m_numChildren / 2) {
-					direction += (-globalSettings::g_maxAngle + increment_span * currentPosition + increment_span * ofRandomuf()) * M_PI / 180.F;
+					direction += (-globalSettings::instance()->g_maxAngle + increment_span * currentPosition + increment_span * ofRandomuf()) * M_PI / 180.F;
 				}
 				else if(m_positions[children.size()] > m_numChildren / 2){
-					direction += (globalSettings::g_minAngle + increment_span / 2 + increment_span * (currentPosition - m_numChildren / 2 - 1) + increment_span * ofRandomuf()) * M_PI / 180.F;
+					direction += (globalSettings::instance()->g_minAngle + increment_span / 2 + increment_span * (currentPosition - m_numChildren / 2 - 1) + increment_span * ofRandomuf()) * M_PI / 180.F;
 				}
 				else{ //central
 					int mult;
@@ -182,7 +182,7 @@ XTreeBranch* XTreeBranch::returnInactiveBranch() {
 					else{
 						mult = -1;
 					}
-					direction += mult * (globalSettings::g_minAngle + (increment_span / 2) * ofRandomuf()) * M_PI / 180.F;
+					direction += mult * (globalSettings::instance()->g_minAngle + (increment_span / 2) * ofRandomuf()) * M_PI / 180.F;
 				}
 				//}
 			}
@@ -191,21 +191,21 @@ XTreeBranch* XTreeBranch::returnInactiveBranch() {
 			ofPoint thisStart(m_start.x, m_start.y, 0);
 			
 			// todo parametrize randomicity
-			float newLength =  m_length * globalSettings::g_lengthDecrease;
+			float newLength =  m_length * globalSettings::instance()->g_lengthDecrease;
 			newLength += ofRandomf() * (float)newLength / 10.F;
 			newLength = ofClamp(newLength, 6, 1000);
 			
 			/*
-			 float newWidth = m_width * globalSettings::g_widthDecrease;
+			 float newWidth = m_width * globalSettings::instance()->g_widthDecrease;
 			 newWidth += ofRandomf() * (float)newWidth / 10.F;
 			 newWidth = ofClamp(newWidth, 1, 1000);
 			 */
 			ofVec2f end = ofPointFromPivot(thisEnd, direction, newLength);
-			if (!globalSettings::g_scene.inside(end)) {
+			if (!globalSettings::instance()->g_scene.inside(end)) {
 				return NULL;
 			}
 			ofVec2f attach = ofPointFromPivot(m_start, atan2(m_currentEnd.y - m_start.y , m_currentEnd.x - m_start.x), m_length * 0.95F);
-			toReturn = new XTreeBranch(m_tree, this, std::max(m_width * globalSettings::g_widthDecrease, globalSettings::g_branchMinWidth), attach, end);
+			toReturn = new XTreeBranch(m_tree, this, std::max(m_width * globalSettings::instance()->g_widthDecrease.get(), globalSettings::instance()->g_branchMinWidth.get()), attach, end);
 			addChild(toReturn);
 			return toReturn;
 		}

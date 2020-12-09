@@ -55,22 +55,22 @@ m_isFadingImagesQuickly(false),
 m_treeIsStarvingOfRealtimeMessages(false),
 m_isStopped(false) {
 	
-	m_textbox.init(&globalSettings::g_guiRenderer());
+	m_textbox.init(&globalSettings::instance()->g_guiRenderer());
 	m_textbox.setText(key_);
 	m_textbox.enabled = false;
 	ofAddListener(m_textbox.evtEnter, this, &XTree::setKeyword);
 	
 	
-	if(globalSettings::g_useTwitter){
+	if(globalSettings::instance()->g_useTwitter){
 		m_twitterTrigger = std::make_unique<TwitterTrigger>(this, key_);
 		RealtimeFetcher::instance()->addTrigger(m_twitterTrigger.get());
 	}
 	
-	if (globalSettings::g_useTwilio) {
+	if (globalSettings::instance()->g_useTwilio) {
 		m_twilioTrigger = std::make_unique<TwilioTrigger>(this, key_);
 		RealtimeFetcher::instance()->addTrigger(m_twilioTrigger.get());
 	}
-	if (globalSettings::g_useArchive) {
+	if (globalSettings::instance()->g_useArchive) {
 		m_databaseTrigger = std::make_unique<DatabaseTrigger>(this, key_);
 		RealtimeFetcher::instance()->addTrigger(m_databaseTrigger.get());
 	}
@@ -79,7 +79,7 @@ m_isStopped(false) {
 	m_isReadyToChangeColor = false;
 	
 	
-	realtimeStarving(!globalSettings::g_useTwilio && !globalSettings::g_useTwitter);
+	realtimeStarving(!globalSettings::instance()->g_useTwilio && !globalSettings::instance()->g_useTwitter);
 	
 	
 }
@@ -104,16 +104,16 @@ void XTree::start() {
 	m_y = m_originalY;
 	deselect();
 	m_seed->hideHandle();
-	if(globalSettings::g_useTwitter && m_twitterTrigger){
+	if(globalSettings::instance()->g_useTwitter && m_twitterTrigger){
 		ofAddListener(m_twitterTrigger->newMessageEvent,this,&XTree::evolve);
 	}
-	if (globalSettings::g_useTwilio && m_twilioTrigger) {
+	if (globalSettings::instance()->g_useTwilio && m_twilioTrigger) {
 		ofAddListener(m_twilioTrigger->newMessageEvent,this,&XTree::evolve);
 	}
-	if (globalSettings::g_useArchive && m_databaseTrigger) {
+	if (globalSettings::instance()->g_useArchive && m_databaseTrigger) {
 		ofAddListener(m_databaseTrigger->newMessageEvent,this,&XTree::evolve);
 	}
-	m_timer.setAlarm(globalSettings::g_waitSeedTime * 1000 + ofRandom(globalSettings::g_waitSeedTime * 1000));
+	m_timer.setAlarm(globalSettings::instance()->g_waitSeedTime * 1000 + ofRandom(globalSettings::instance()->g_waitSeedTime * 1000));
 	m_isStarting = true;
 	m_isFadingImagesQuickly = false;
 	
@@ -132,13 +132,13 @@ void XTree::reset() {
 	m_x = m_originalX;
 	m_y = m_originalY;
 	m_seed->resetPosition();
-	if(globalSettings::g_useTwitter && m_twitterTrigger){
+	if(globalSettings::instance()->g_useTwitter && m_twitterTrigger){
 		ofRemoveListener(m_twitterTrigger->newMessageEvent,this,&XTree::evolve);
 	}
-	if (globalSettings::g_useTwilio && m_twilioTrigger) {
+	if (globalSettings::instance()->g_useTwilio && m_twilioTrigger) {
 		ofRemoveListener(m_twilioTrigger->newMessageEvent,this,&XTree::evolve);
 	}
-	if (globalSettings::g_useArchive && m_databaseTrigger) {
+	if (globalSettings::instance()->g_useArchive && m_databaseTrigger) {
 		ofRemoveListener(m_databaseTrigger->newMessageEvent,this,&XTree::evolve);
 	}
 	m_treeIsStarvingOfRealtimeMessages = false;
@@ -220,7 +220,7 @@ void XTree::update() {
 					do {
 						newHorOffset = ofRandomf() * ofRandom(50,120);
 						newPosition.x = m_originalX + newHorOffset;
-					} while (!globalSettings::g_sceneBounded.inside(newPosition));
+					} while (!globalSettings::instance()->g_sceneBounded.inside(newPosition));
 					
 					m_seed->move(newHorOffset, 0);
 					m_x = m_originalX + newHorOffset;
@@ -231,13 +231,13 @@ void XTree::update() {
 				}
 			}
 		}
-		else if(globalSettings::g_leavesLayer->m_running){
+		else if(globalSettings::instance()->g_leavesLayer->m_running){
 			if (m_flowerTimer.alarm()) {
 				Leaf* theleaf = addLeaf();
 				if (theleaf != NULL) {
-					globalSettings::g_leavesLayer->addLeaf(theleaf);
+					globalSettings::instance()->g_leavesLayer->addLeaf(theleaf);
 				}
-				m_flowerTimer.setAlarm(ofRandom(globalSettings::g_leavesMinFreq, globalSettings::g_leavesMaxFreq));
+				m_flowerTimer.setAlarm(ofRandom(globalSettings::instance()->g_leavesMinFreq, globalSettings::instance()->g_leavesMaxFreq));
 			}
 		}
 		
@@ -302,13 +302,13 @@ void XTree::deselect() {
 void XTree::setKeyword(std::string& keyword) {
 	m_keyword = keyword;
 	m_textbox.setText(keyword);
-	if(globalSettings::g_useTwitter && m_twitterTrigger){
+	if(globalSettings::instance()->g_useTwitter && m_twitterTrigger){
 		m_twitterTrigger->setKeyword(keyword);
 	}
-	if (globalSettings::g_useTwilio && m_twilioTrigger) {
+	if (globalSettings::instance()->g_useTwilio && m_twilioTrigger) {
 		m_twilioTrigger->setKeyword(keyword);
 	}
-	if (globalSettings::g_useArchive && m_databaseTrigger) {
+	if (globalSettings::instance()->g_useArchive && m_databaseTrigger) {
 		m_databaseTrigger->setKeyword(keyword);
 	}
 	m_isSelected = false;
@@ -321,10 +321,10 @@ void XTree::evolve(std::shared_ptr<MessageEvent>& args) {
 	if(args->consumed)return;
 	if (m_trunk == NULL) {
 		ofVec2f start(m_x, m_y);   //20% randomicity
-		ofVec2f end = ofPointFromPivot(start, m_direction, globalSettings::g_branchLength + ofRandomf() * (float)globalSettings::g_branchLength / 10.F);
+		ofVec2f end = ofPointFromPivot(start, m_direction, globalSettings::instance()->g_branchLength + ofRandomf() * (float)globalSettings::instance()->g_branchLength / 10.F);
 		m_trunk= new XTreeBranch(this,
 								 NULL,
-								 globalSettings::g_branchWidth,
+								 globalSettings::instance()->g_branchWidth,
 								 ofVec2f(m_x, m_y),
 								 end);
 		float fakeBaloonDirection = m_direction;
@@ -333,25 +333,25 @@ void XTree::evolve(std::shared_ptr<MessageEvent>& args) {
 		// now m_branchRotation it's the angle between the horizontal line passing thrugh the apex  real branch rotation
 		if (fakeBaloonDirection >=0.F && fakeBaloonDirection <= PI/2.F) {
 			endPlusBaloon.x += 357;
-			if (!globalSettings::g_scene.inside(endPlusBaloon)) {
+			if (!globalSettings::instance()->g_scene.inside(endPlusBaloon)) {
 				fakeBaloonDirection += M_PI/2.F;
 			}
 		}
 		else if(fakeBaloonDirection > PI / 2.F && fakeBaloonDirection <= M_PI){
 			endPlusBaloon.x -= 357;
-			if (!globalSettings::g_scene.inside(endPlusBaloon)) {
+			if (!globalSettings::instance()->g_scene.inside(endPlusBaloon)) {
 				fakeBaloonDirection -= M_PI/2.F;
 			}
 		}
 		else if(fakeBaloonDirection > M_PI && fakeBaloonDirection <= 3. * M_PI / 2.){
 			endPlusBaloon.x -= 357;
-			if (!globalSettings::g_scene.inside(endPlusBaloon)) {
+			if (!globalSettings::instance()->g_scene.inside(endPlusBaloon)) {
 				fakeBaloonDirection += M_PI/2.F;
 			}
 		}
 		else if(fakeBaloonDirection > 3. * M_PI / 2.){
 			endPlusBaloon.x += 357;
-			if (!globalSettings::g_scene.inside(endPlusBaloon)) {
+			if (!globalSettings::instance()->g_scene.inside(endPlusBaloon)) {
 				fakeBaloonDirection -= M_PI/2.F;
 			}
 		}
@@ -375,25 +375,25 @@ void XTree::evolve(std::shared_ptr<MessageEvent>& args) {
 			// now m_branchRotation it's the angle between the horizontal line passing thrugh the apex  real branch rotation
 			if (fakeBaloonDirection >=0.F && fakeBaloonDirection <= PI/2.F) {
 				endPlusBaloon.x += 357;
-				if (!globalSettings::g_scene.inside(endPlusBaloon)) {
+				if (!globalSettings::instance()->g_scene.inside(endPlusBaloon)) {
 					fakeBaloonDirection += M_PI/2.F;
 				}
 			}
 			else if(fakeBaloonDirection > PI / 2.F && fakeBaloonDirection <= M_PI){
 				endPlusBaloon.x -= 357;
-				if (!globalSettings::g_scene.inside(endPlusBaloon)) {
+				if (!globalSettings::instance()->g_scene.inside(endPlusBaloon)) {
 					fakeBaloonDirection -= M_PI/2.F;
 				}
 			}
 			else if(fakeBaloonDirection > M_PI && fakeBaloonDirection <= 3. * M_PI / 2.){
 				endPlusBaloon.x -= 357;
-				if (!globalSettings::g_scene.inside(endPlusBaloon)) {
+				if (!globalSettings::instance()->g_scene.inside(endPlusBaloon)) {
 					fakeBaloonDirection += M_PI/2.F;
 				}
 			}
 			else if(fakeBaloonDirection > 3. * M_PI / 2.){
 				endPlusBaloon.x += 357;
-				if (!globalSettings::g_scene.inside(endPlusBaloon)) {
+				if (!globalSettings::instance()->g_scene.inside(endPlusBaloon)) {
 					fakeBaloonDirection -= M_PI/2.F;
 				}
 			}

@@ -58,17 +58,6 @@ public:
   void setWindForce(float force_); // 0-3
   float g_leavesLife = 1.f;
 	
-	ofParameter<ofColor> g_leavesEndColor = {"Leaf Color", {0,0,0,0}, {0,0,0,0}, {255,255,255,255}};
-	ofParameter<float> g_leavesOpacity = {"Leaf Opacity",  255, 0, 255};
-	ofParameter<float> g_leavesFertility = {"Leaf fertility",1, 1, 10};
-	ofParameter<float> g_leavesMinWidth = {"Leaf min width",100, 5, 300};
-	ofParameter<float> g_leavesMaxWidth = {"Leaf max width",140, 5, 300};
-	ofParameter<float> g_leavesMinFreq = {"Leaves min (ms)", 5000, 100, 100000};
-	ofParameter<float> g_leavesMaxFreq = {"Leaves max (ms)", 15000, 100, 100000};
-	
-	
-	ofParameterGroup parameters = {"Leaves"};
-
 	
 	
 	unique_ptr<MSA::FluidSolver> s_solver = nullptr;

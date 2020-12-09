@@ -33,7 +33,7 @@ TreesManager::TreesManager(std::shared_ptr<TwitterLayer> twitterLayer_) :
 //  CopyPixels((PixelType *)image.getPixels(), (const PixelType *)ms_tempPixels.getPixels(), xmin, xmax + 1, ymin, ymax, TEXTURE_WIDTH, TEXTURE_HEIGHT);
 //  image.update();
 		
-	m_GhostLifespan = globalSettings::g_treesFadeTime * globalSettings::g_fps * 60;
+	m_GhostLifespan = globalSettings::instance()->g_treesFadeTime * globalSettings::instance()->g_fps * 60;
 	m_GhostTimeToLive = m_GhostLifespan;
 	m_GhostCurrentAlpha = 255.0f;
 	m_GhostCurrentFadingSpeed=-1;
@@ -80,9 +80,14 @@ void TreesManager::delTree(int id){
 
 
 }
+ofColor TreesManager::getRandomTreeColor()
+{
+	float t = abs(ofRandomf());
+	return lerpHSB(globalSettings::instance()->g_treeGradStart, globalSettings::instance()->g_treeGradEnd, t);
+}
 
 void TreesManager::shuffleTreesColor() {
-	ofColor newColor = XTree::getRandomTreeColor();
+	ofColor newColor = getRandomTreeColor();
 	currentTreesColor = newColor;
 	
 	/*
@@ -216,7 +221,7 @@ void TreesManager::mouseDragged(ofMouseEventArgs& args){
 
 //--------------------------------------------------------------
 void TreesManager::mousePressed(ofMouseEventArgs& args){
-  if (!globalSettings::g_sceneBounded.inside(args.x, args.y)) {
+  if (!globalSettings::instance()->g_sceneBounded.inside(args.x, args.y)) {
     return;
   }
   int sel = -1;
@@ -299,7 +304,7 @@ void TreesManager::loadSeeds() {
 
 bool TreesManager::areTreesInFullMaturation() {
   for (int i = 0; i < m_trees.size(); ++i) {
-    if (m_trees[i]->getColonizationLevel() < globalSettings::g_minColonization) {
+    if (m_trees[i]->getColonizationLevel() < globalSettings::instance()->g_minColonization) {
       return false;
     } 
   }
@@ -318,7 +323,7 @@ float TreesManager::averageMaturationLevel() {
 }
 
 	void TreesManager::showGhostFbo() {
-		m_GhostLifespan = globalSettings::g_treesFadeTime * globalSettings::g_fps * 60;
+		m_GhostLifespan = globalSettings::instance()->g_treesFadeTime * globalSettings::instance()->g_fps * 60;
 		m_GhostTimeToLive = m_GhostLifespan;
 		m_GhostCurrentAlpha = 255.0f;
 		
@@ -327,11 +332,11 @@ float TreesManager::averageMaturationLevel() {
 
 	void TreesManager::fadeGhostFbo(){
 		
-		m_GhostLifespan = globalSettings::g_treesFadeTime * globalSettings::g_fps * 60;
+		m_GhostLifespan = globalSettings::instance()->g_treesFadeTime * globalSettings::instance()->g_fps * 60;
 		m_GhostTimeToLive = m_GhostLifespan;
 		m_GhostCurrentAlpha = 255.0f;
 		
-		m_GhostCurrentFadingSpeed = (m_GhostTimeToLive / globalSettings::g_fps) / TIMETOFADE;
+		m_GhostCurrentFadingSpeed = (m_GhostTimeToLive / globalSettings::instance()->g_fps) / TIMETOFADE;
 }
 
 

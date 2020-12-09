@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2012-2013 Agnes Chavez and Alessandro Saccoia
  * Written by Alessandro Saccoia, <alessandro.saccoia@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -32,220 +32,222 @@ ofFbo TwitterBaloon::s_fbo;
 std::vector<ofImage> TwitterBaloon::s_images;
 std::vector<bool> TwitterBaloon::s_busy;
 
-  
+
 TwitterBaloon::TwitterBaloon(XTree* tree_, 
-    std::string& key_,
-    std::string& user_,
-    std::string& time_,
-    std::shared_ptr<ofPixels> image_,
-    ofVec2f* position_,
-    float branchRotation_,
-    MessageSource src_) :
-  m_tree(tree_),
-  m_positionRef(position_),
-  m_lastAttach(*m_positionRef),
-  m_currentLife(0),
-  m_x(0),
-  m_y(0),
-  m_vx(0),
-  m_vy(0),
-  m_image(NULL) {
-  
-		m_source = src_;
-		
-  switch (src_) {
-    case SRC_TWITTER:
-      m_layout = &globalSettings::g_twitterLayout();
-      m_font = &globalSettings::g_twitterFont();
-      m_msgColor =globalSettings::g_tweetMsgC;
-      m_userColor =globalSettings::g_tweetUsrC;
-      break;
-
-    case SRC_TWILIO:
-      m_layout = &globalSettings::g_twilioLayout();
-      m_font = &globalSettings::g_twilioFont();
-      m_msgColor =globalSettings::g_twilioMsgC;
-      m_userColor =globalSettings::g_twilioUsrC;
-      break;
-
-    case SRC_DATABASE:
-      m_layout = &globalSettings::g_databaseLayout();
-      m_font = &globalSettings::g_databaseFont();
-      m_msgColor =globalSettings::g_databaseMsgC;
-      m_userColor =globalSettings::g_databaseUsrC;
-      m_userColor.a = 0;
-      break;
-
-    default:
-      break;
-  }
-  m_pictureMargin = m_font->FaceSize() / 2;
-  m_topRowMargin = BALOON_MWG_LINESPACING * m_font->FaceSize() / 2;
-  
-  m_tree->currentBaloonsAlive++;
-  
-  // until now it's the real branch rotation
-  branchRotation_ = kplNormalizeAngle(branchRotation_);
-  
-  // now m_branchRotation it's the angle between the horizontal line passing thrugh the apex  real branch rotation  
-  if (branchRotation_ >=0.F && branchRotation_ <= PI/2.F) {
-    // towards BOTTOM-RIGHT, keep it in the left part
-    m_attachSide = kLeftSide;
-    m_rotation = 13.F / 8.F * M_PI + branchRotation_ / 2.F;
+							 std::string& key_,
+							 std::string& user_,
+							 std::string& time_,
+							 std::shared_ptr<ofPixels> image_,
+							 ofVec2f* position_,
+							 float branchRotation_,
+							 MessageSource src_) :
+m_tree(tree_),
+m_positionRef(position_),
+m_lastAttach(*m_positionRef),
+m_currentLife(0),
+m_x(0),
+m_y(0),
+m_vx(0),
+m_vy(0),
+m_image(NULL) {
+	
+	m_source = src_;
+	
+	switch (src_) {
+		case SRC_TWITTER:
+			m_layout = &globalSettings::instance()->g_twitterLayout();
+			m_font = &globalSettings::instance()->g_twitterFont();
+			m_msgColor =globalSettings::instance()->g_tweetMsgC;
+			m_userColor =globalSettings::instance()->g_tweetUsrC;
+			break;
+			
+		case SRC_TWILIO:
+			m_layout = &globalSettings::instance()->g_twilioLayout();
+			m_font = &globalSettings::instance()->g_twilioFont();
+			m_msgColor =globalSettings::instance()->g_twilioMsgC;
+			m_userColor =globalSettings::instance()->g_twilioUsrC;
+			break;
+			
+		case SRC_DATABASE:
+			m_layout = &globalSettings::instance()->g_databaseLayout();
+			m_font = &globalSettings::instance()->g_databaseFont();
+			m_msgColor =globalSettings::instance()->g_databaseMsgC;
+			m_userColor =globalSettings::instance()->g_databaseUsrC;
+			m_userColor.a = 0;
+			break;
+			
+		default:
+			break;
+	}
+	m_pictureMargin = m_font->FaceSize() / 2;
+	m_topRowMargin = BALOON_MWG_LINESPACING * m_font->FaceSize() / 2;
+	
+	m_tree->currentBaloonsAlive++;
+	
+	// until now it's the real branch rotation
+	branchRotation_ = kplNormalizeAngle(branchRotation_);
+	
+	// now m_branchRotation it's the angle between the horizontal line passing thrugh the apex  real branch rotation
+	if (branchRotation_ >=0.F && branchRotation_ <= PI/2.F) {
+		// towards BOTTOM-RIGHT, keep it in the left part
+		m_attachSide = kLeftSide;
+		m_rotation = 13.F / 8.F * M_PI + branchRotation_ / 2.F;
 	}
 	else if(branchRotation_ > PI / 2.F && branchRotation_ <= M_PI){
-    // towards BOTTOM-LEFT, keep it in the right part
-    m_attachSide = kRightSide;
-    m_rotation = 13.F / 8.F * M_PI  - ((branchRotation_ - M_PI/2.F) / 2.);
+		// towards BOTTOM-LEFT, keep it in the right part
+		m_attachSide = kRightSide;
+		m_rotation = 13.F / 8.F * M_PI  - ((branchRotation_ - M_PI/2.F) / 2.);
 	}
 	else if(branchRotation_ > M_PI && branchRotation_ <= 3. * M_PI / 2.){
-    // towards BOTTOM-LEFT, keep it in the right part
-    m_attachSide = kRightSide;
-    m_rotation = 9.F / 8.F * M_PI  + ((3. / 2. * M_PI - branchRotation_) / 2.);
+		// towards BOTTOM-LEFT, keep it in the right part
+		m_attachSide = kRightSide;
+		m_rotation = 9.F / 8.F * M_PI  + ((3. / 2. * M_PI - branchRotation_) / 2.);
 	}
 	else if(branchRotation_ > 3. * M_PI / 2.){
-    // towards BOTTOM-LEFT, keep it in the right part
-    m_attachSide = kLeftSide;
-    m_rotation = 15.F / 8.F * M_PI  - ((branchRotation_ - 3. / 2. * M_PI) / 2.);
-  }
-
-  m_dx = 80.F * cos(m_rotation);
-  m_dy = 80.F * sin(m_rotation);
-
-  if (image_.get() != NULL) {
-    if (image_->getWidth() > 48 || image_->getHeight() > 48) {
-      image_->resize(48, 48);
-    }
-    m_image = new ofImage(*image_.get());
-  }
-
-
-
-  // convert unicode to wstring
-  utf8toWStr(m_key, key_);
-  utf8toWStr(m_user, user_);
-  utf8toWStr(m_time, time_);
-  
-  m_life = ofRandom(globalSettings::g_tweetMinLife,globalSettings::g_tweetMaxLife);
-		
-  FTBBox boxMsg = m_layout->BBox(m_key.c_str());
-  FTBBox boxUser = m_layout->BBox(m_user.c_str());
-
-  m_userRowHeight = (int)abs(boxUser.Upper().Y() - boxUser.Lower().Y()) + m_topRowMargin;
-  //FTBBox boxTime = s_timeLayout->BBox(m_time.c_str());
-  
-  /*
-     [    ] user       |
-     [    ] msg        |
-                  time |
-  */
-  // NOTE time not used
-  
-  m_width = abs(boxMsg.Upper().X() - boxMsg.Lower().X()) + 2; 
-  if (m_image != NULL) {
-    m_width += m_pictureMargin + m_image->getWidth();
-  } 
-  m_height = std::max((int)abs(boxMsg.Upper().Y() - boxMsg.Lower().Y()) + 2 + m_userRowHeight,globalSettings::g_showThumbs ? (int)m_image->getWidth(): 0);
-    
-  if (m_attachSide == kRightSide) {
-    m_dx -= m_width;
-  }
-  
-  update();
-
-  initialY = m_y;
-  
-  m_slot = returnFreeSlot();
-  s_busy[m_slot] = true;
-  
-
-  s_fbo.begin();   // draw the line into the texture
-  
-  ofEnableBlendMode(OF_BLENDMODE_ADD);
-  ofClear(globalSettings::g_backgroundC.r,globalSettings::g_backgroundC.g,globalSettings::g_backgroundC.b,globalSettings::g_msgOpacity);
-  ofSetColor(255);
-  // DRAW
-  int currentX = 0;
-  if (m_image != NULL) {    
-    m_image->draw(currentX, 0);
-    currentX += m_pictureMargin + m_image->getWidth();
-  }
-  glPushMatrix();
-  glTranslatef(currentX,
-    BALOON_MWG_LINESPACING * m_font->FaceSize() - 2,
-    0);
-  
-  glScalef(1,-1,1);
-  
-  ofSetColor(m_userColor);
-
-  m_layout->Render(m_user.c_str());
-
-  glTranslatef(0, -m_userRowHeight, 0);
-  ofSetColor(m_msgColor);
-
-  m_layout->Render(m_key.c_str());
-  glPopMatrix();
-  
-  s_fbo.end();
-  s_fbo.readToPixels(s_images[m_slot].getPixels());
-  s_images[m_slot].update();
-
-
+		// towards BOTTOM-LEFT, keep it in the right part
+		m_attachSide = kLeftSide;
+		m_rotation = 15.F / 8.F * M_PI  - ((branchRotation_ - 3. / 2. * M_PI) / 2.);
+	}
+	
+	m_dx = 80.F * cos(m_rotation);
+	m_dy = 80.F * sin(m_rotation);
+	
+	if (image_.get() != NULL) {
+		if (image_->getWidth() > 48 || image_->getHeight() > 48) {
+			image_->resize(48, 48);
+		}
+		m_image = new ofImage(*image_.get());
+	}
+	
+	
+	
+	// convert unicode to wstring
+	utf8toWStr(m_key, key_);
+	utf8toWStr(m_user, user_);
+	utf8toWStr(m_time, time_);
+	
+	m_life = ofRandom(globalSettings::instance()->g_tweetMinLife,globalSettings::instance()->g_tweetMaxLife);
+	
+	FTBBox boxMsg = m_layout->BBox(m_key.c_str());
+	FTBBox boxUser = m_layout->BBox(m_user.c_str());
+	
+	m_userRowHeight = (int)abs(boxUser.Upper().Y() - boxUser.Lower().Y()) + m_topRowMargin;
+	//FTBBox boxTime = s_timeLayout->BBox(m_time.c_str());
+	
+	/*
+	 [    ] user       |
+	 [    ] msg        |
+	 time |
+	 */
+	// NOTE time not used
+	
+	m_width = abs(boxMsg.Upper().X() - boxMsg.Lower().X()) + 2;
+	m_height = (int)abs(boxMsg.Upper().Y() - boxMsg.Lower().Y()) + 2 + m_userRowHeight;
+	if (m_image != NULL) {
+		m_width += m_pictureMargin + m_image->getWidth();
+		m_height = std::max(m_height, globalSettings::instance()->g_showThumbs ? (int)m_image->getWidth(): 0);
+	}
+	
+	if (m_attachSide == kRightSide) {
+		m_dx -= m_width;
+	}
+	
+	update();
+	
+	initialY = m_y;
+	
+	m_slot = returnFreeSlot();
+	s_busy[m_slot] = true;
+	
+	
+	s_fbo.begin();   // draw the line into the texture
+	
+	ofEnableBlendMode(OF_BLENDMODE_ADD);
+	ofColor c = globalSettings::instance()->g_backgroundC.get();
+	ofClear(c.r, c.g, c.b, globalSettings::instance()->g_msgOpacity);
+	ofSetColor(255);
+	// DRAW
+	int currentX = 0;
+	if (m_image != NULL) {
+		m_image->draw(currentX, 0);
+		currentX += m_pictureMargin + m_image->getWidth();
+	}
+	glPushMatrix();
+	glTranslatef(currentX,
+				 BALOON_MWG_LINESPACING * m_font->FaceSize() - 2,
+				 0);
+	
+	glScalef(1,-1,1);
+	
+	ofSetColor(m_userColor);
+	
+	m_layout->Render(m_user.c_str());
+	
+	glTranslatef(0, -m_userRowHeight, 0);
+	ofSetColor(m_msgColor);
+	
+	m_layout->Render(m_key.c_str());
+	glPopMatrix();
+	
+	s_fbo.end();
+	s_fbo.readToPixels(s_images[m_slot].getPixels());
+	s_images[m_slot].update();
+	
+	
 }
 
 bool TwitterBaloon::isDead() {
-  return (m_y + m_height < 0) || (m_currentLife >= m_life);
+	return (m_y + m_height < 0) || (m_currentLife >= m_life);
 }
 
 void TwitterBaloon::update() {
-  if (*m_positionRef != m_lastAttach ) {
-    m_lastAttach = *m_positionRef;
-  }
-  ++m_currentLife;
-  
-  m_x = m_lastAttach.x + m_dx;
-  m_y = m_lastAttach.y + m_dy;
-  
-  
-  if (m_currentLife > 100) {
-    m_vy -=globalSettings::g_floatingSpeed;
-  }
-  
-  m_dy += m_vy;
+	if (*m_positionRef != m_lastAttach ) {
+		m_lastAttach = *m_positionRef;
+	}
+	++m_currentLife;
+	
+	m_x = m_lastAttach.x + m_dx;
+	m_y = m_lastAttach.y + m_dy;
+	
+	
+	if (m_currentLife > 100) {
+		m_vy -=globalSettings::instance()->g_floatingSpeed;
+	}
+	
+	m_dy += m_vy;
 }
 
 TwitterBaloon::~TwitterBaloon() {
-  s_busy[m_slot] = false;
-  --m_tree->currentBaloonsAlive;
-  if (globalSettings::g_showThumbs) {
-    delete m_image;
-  }
+	s_busy[m_slot] = false;
+	--m_tree->currentBaloonsAlive;
+	if (globalSettings::instance()->g_showThumbs) {
+		delete m_image;
+	}
 }
 
 void TwitterBaloon::draw() {
-
-  int alphaLevel =globalSettings::g_twitterLayerOpacity -globalSettings::g_twitterLayerOpacity * (float)m_currentLife / (float)m_life;
-
-  glPushMatrix();
-  
-  glTranslatef(m_x, m_y, 0);
-  
-  ofSetColor(255, alphaLevel);
-  
-  s_images[m_slot].draw(0,0);
-  glPopMatrix();
-
 	
-  ofSetLineWidth(globalSettings::g_tLineWidth);
-  ofSetColor(globalSettings::g_tLineC, std::min((float)alphaLevel, 255.f * (float)m_y/initialY));
+	int alphaLevel =globalSettings::instance()->g_twitterLayerOpacity -globalSettings::instance()->g_twitterLayerOpacity * (float)m_currentLife / (float)m_life;
 	
-  if (m_attachSide == kLeftSide) {
+	glPushMatrix();
+	
+	glTranslatef(m_x, m_y, 0);
+	
+	ofSetColor(255, alphaLevel);
+	
+	s_images[m_slot].draw(0,0);
+	glPopMatrix();
+	
+	
+	ofSetLineWidth(globalSettings::instance()->g_tLineWidth);
+	ofSetColor(globalSettings::instance()->g_tLineC, std::min((float)alphaLevel, 255.f * (float)m_y/initialY));
+	
+	if (m_attachSide == kLeftSide) {
 		ofDrawLine(m_x - LINE_MARGIN, m_y + m_height / 2, m_lastAttach.x, m_lastAttach.y);
 	}
 	else{
 		ofDrawLine(m_x + m_width + LINE_MARGIN, m_y + m_height / 2, m_lastAttach.x, m_lastAttach.y);
-  }
-  
+	}
+	
 }
 

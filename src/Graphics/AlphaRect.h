@@ -39,6 +39,11 @@ public:
 		mesh.addVertex({w,h,0});
 		mesh.addVertex({0,h,0});
 		
+		mesh.addColor(ofFloatColor::black);
+		mesh.addColor(ofFloatColor::black);
+		mesh.addColor(ofFloatColor::black);
+		mesh.addColor(ofFloatColor::black);
+		
 //        rectPoints[ 0 ]  = 0;
 //        rectPoints[ 1 ]  = 0;
 //        rectPoints[ 2 ]  = w;
@@ -74,9 +79,9 @@ public:
       setCornerColor(c, 3, 0);
     }
     
-    void setCornerColor( const ofColor& c, int cornerIndex, int alpha )
+    void setCornerColor( const ofColor& c, size_t cornerIndex, int alpha )
     {
-        int i = ofClamp( cornerIndex, 0, 3 );
+        int i = cornerIndex%4;
 
 		mesh.setColor(i, ofFloatColor(c.r/255.0, c.g/255.0, c.b/255.0, alpha / 255.0));
 //        rectColors[ i * 4 + 0 ] = c.r / 255.0;

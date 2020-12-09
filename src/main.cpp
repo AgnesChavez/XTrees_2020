@@ -18,15 +18,15 @@
 #include "ofApp.h"
 #include <mach-o/dyld.h>
 #include <limits.h>
-#include "ofxAppUtils.h"
+//#include "ofxAppUtils.h"
 #include "ofConstants.h"
 
 int main(){
 	
 	// Set the data path to the resources folder inside the app bundle
-	ofEnableDataPath();
-	ofSetDataPathRoot("../Resources");
-	
+//	ofEnableDataPath();
+//	ofSetDataPathRoot("../Resources");
+//	
 	
 	
 	int screenWidth = 1920;
@@ -47,7 +47,10 @@ int main(){
 	
     ofSetupOpenGL(screenWidth, screenHeight, (startOnFullscreen?OF_FULLSCREEN:OF_WINDOW));
 		
-	ofRunApp(std::make_shared<ofxRunnerApp>(new ofApp()));
+	ofRunApp(new ofApp());
+	
+	
+//	ofRunApp(std::make_shared<ofxRunnerApp>(new ofApp()));
 		  
 	
 	return 0;

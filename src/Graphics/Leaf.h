@@ -17,7 +17,7 @@
 #define __LEAF_H__
 
 #include "MSACore.h"
-//#include "MSAFluidSolver.h"
+#include "MSAFluidSolver.h"
 #include "Joint.h"
 #include "Spring.h"
 #include "ofxTimer.h"
@@ -27,13 +27,13 @@
 class Leaf {
 public:
   Leaf(ofVec3f attach, ofVec3f direction, ofVec3f normal);
-  void update();
+  void update(MSA::FluidSolver* s_solver);
   void init(ofVec3f attach, ofVec3f direction, ofVec3f normal);
   void move(ofVec3f attach, ofVec3f direction, ofVec3f normal);
   void draw();
   void detach();
   
-private:
+//private:
   float alpha;
   
   vector<Joint> joints;

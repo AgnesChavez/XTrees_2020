@@ -40,158 +40,173 @@ using namespace MSA;
 #endif
 
 
-//unsigned int globalSettings::g_globalCounter = 0; // number of frames, updated in update();
-//unsigned int globalSettings::g_globalCounterSec = 0; // number of seconds
-//unsigned int globalSettings::g_splashFrequency = 0;
-//unsigned int globalSettings::g_splashDuration = 0;
-//float globalSettings::g_splashOpacity = 0;
+globalSettings::globalSettings(){
+	listeners.push(g_fertility.newListener([&](int&){g_computeMaxBranches();}));
+	listeners.push(g_maxLevel.newListener([&](int&){g_computeMaxBranches();}));
+	listeners.push(g_useInteractiveAudio.newListener([&](bool&){g_activateSoundtrack();}));
+//	listeners.push(g_soundtrack.newListener([&](&){g_activateSoundtrack();}));
+	
+//	g_backgroundC;
 
-//ofApp* globalSettings::g_app = nullptr;
-
-//guiCustomColorPreview * globalSettings::g_treeGradStartPreview = nullptr;
-//guiCustomColorPreview * globalSettings::g_treeGradEndPreview = nullptr;
-//ofColor globalSettings::g_treeGradStart = ofColor();
-//ofColor globalSettings::g_treeGradEnd = ofColor();
-//guiCustomGradientPreview * globalSettings::g_treeGradPreview = nullptr;
-// guiTypeConfigFileList* m_configurationLister = nullptr;
-//float globalSettings::g_treeGhostOpacity = 0.0f;
+	
 
 
-//guiCustomColorPreview * globalSettings::g_treeColorPreview = nullptr;
-//ofColor globalSettings::g_backgroundC = ofColor();
-//ofColor globalSettings::g_treeC = ofColor();
-//bool globalSettings::g_jointsAreCircles = true;
-//ofColor globalSettings::g_jointC = ofColor();
-//float globalSettings::g_branchWidth = 0.0f;
-//float globalSettings::g_branchMinWidth = 0.0f;
-//float globalSettings::g_branchLength = 0.0f;
-//float globalSettings::g_lengthDecrease = 0.0f;
-//float globalSettings::g_widthDecrease = 0.0f;
-//int globalSettings::g_pastTweets = 0;
-//int globalSettings::g_jointThickness = 0;
-//int globalSettings::g_jointLength = 0;
-//ofColor globalSettings::g_tweetMsgC = ofColor();
-//ofColor globalSettings::g_tweetUsrC = ofColor();
-//ofColor globalSettings::g_twilioMsgC = ofColor();
-//ofColor globalSettings::g_twilioUsrC = ofColor();
-//ofColor globalSettings::g_databaseMsgC = ofColor();
-//ofColor globalSettings::g_databaseUsrC = ofColor();
-//ofColor globalSettings::g_tLineC = ofColor();
-//int globalSettings::g_tLineWidth = 0;
-//int globalSettings::g_growthMin = 0;
-//int globalSettings::g_growthMax = 0;
-//bool globalSettings::g_timedExhibit = false;
-//float globalSettings::g_showDuration = 10;
-//int globalSettings::g_minFrequency = 0;
-//int globalSettings::g_maxFrequency = 100;
-//int globalSettings::g_minAngle = 0;
-//int globalSettings::g_maxAngle = 360;
-//bool globalSettings::g_showThumbs = false;
-//int globalSettings::g_fertility = 5;
-//int globalSettings::g_maxLevel = 5;
-//int globalSettings::g_maxBranches = 5;
-//float globalSettings::g_floatingSpeed = 1;
-//ofColor globalSettings::g_splashC = ofColor();
-//int globalSettings::g_flowersMin = 0;
-//int globalSettings::g_flowersMax = 10;
-//int globalSettings::g_crazyLineWidth = 1;
-//int globalSettings::g_crazyCircleWidth = 10;
-//bool globalSettings::g_useBackground = false;
-//int globalSettings::g_tweetMinLife = 1000;
-//int globalSettings::g_tweetMaxLife = 10000;
+	splash_screen_parameters.add(g_splashC);
+	splash_screen_parameters.add(g_splashDuration);
+	splash_screen_parameters.add(g_splashFrequency);
+	splash_screen_parameters.add(g_splashOpacity);
 
-//std::map <string, int> globalSettings::g_textAnchorX =  std::map <string, int>();
-//std::map <string, int> globalSettings::g_textAnchorY =  std::map <string, int>();
+	loop_settings_parameters.add(g_firstIterations);
+	loop_settings_parameters.add(g_waitLinesTime);
+	loop_settings_parameters.add(g_waitRegenerateTime);
+	loop_settings_parameters.add(g_waitSeedTime);
+	loop_settings_parameters.add(g_showDuration);
+
+	layers_control_parameters.add(g_useTwilio);
+	layers_control_parameters.add(g_showFlowers);
+	layers_control_parameters.add(g_showThumbs);
+	layers_control_parameters.add(g_leavesActive);
+	layers_control_parameters.add(g_msgOpacity);
+	layers_control_parameters.add(g_treeGhostOpacity);
+	layers_control_parameters.add(g_treesLayerOpacity);
+	layers_control_parameters.add(g_twitterLayerOpacity);
+	layers_control_parameters.add(g_leavesOpacity);
+
+	
+	branches_parameters.add(g_branchWidth);
+	branches_parameters.add(g_branchMinWidth);
+	branches_parameters.add(g_widthDecrease);
+	branches_parameters.add(g_branchLength);
+	branches_parameters.add(g_lengthDecrease);
+	branches_parameters.add(g_minAngle);
+	branches_parameters.add(g_maxAngle);
+
+	
+	branch_joints_parameters.add(g_jointC);
+	branch_joints_parameters.add(g_jointLength);
+	branch_joints_parameters.add(g_jointsAreCircles);
+	branch_joints_parameters.add(g_jointThickness);
 
 
+	leaves_parameters.add(g_leavesEndColor);
+	leaves_parameters.add(g_leavesFertility);
+	leaves_parameters.add(g_leavesLife);
+	leaves_parameters.add(g_leavesMinFreq);
+	leaves_parameters.add(g_leavesMaxFreq);
+	leaves_parameters.add(g_leavesMinWidth);
+	leaves_parameters.add(g_leavesMaxWidth);
+	leaves_parameters.add(g_leavesColumns);
+	leaves_parameters.add(g_leavesRows);
+	
+	flowers_parameters.add(g_flowersMax);
+	flowers_parameters.add(g_flowersMin);
+	flowers_parameters.add(g_flowersOpacity);
 
-//std::vector <ofImage > globalSettings::g_originalImages = std::vector <ofImage >();
-//std::vector <ofImage > globalSettings::g_leafImages = std::vector <ofImage >();
-//std::vector <ofImage > globalSettings::g_backgroundImages = std::vector <ofImage >();
+	
+	
+	
+	general_tree_structure_parameters.add(g_fertility);
+	general_tree_structure_parameters.add(g_minColonization);
+	general_tree_structure_parameters.add(g_minColonizationForLeaves);
+	general_tree_structure_parameters.add(g_maxLevel);
+	general_tree_structure_parameters.add(g_treeC);
+	
+	
+	general_tree_structure_parameters.add(branches_parameters);
+	general_tree_structure_parameters.add(branch_joints_parameters);
+	general_tree_structure_parameters.add(leaves_parameters);
+	general_tree_structure_parameters.add(flowers_parameters);
+	general_tree_structure_parameters.add(g_treeGradStart);
+	general_tree_structure_parameters.add(g_treeGradEnd);
 
-//ofRectangle globalSettings::g_scene = ofRectangle();
-//ofRectangle globalSettings::g_sceneBounded = ofRectangle();
+	timing_parameters.add(g_growthMin);
+	timing_parameters.add(g_growthMax);
+	timing_parameters.add(g_minFrequency);
+	timing_parameters.add(g_maxFrequency);
+	timing_parameters.add(g_linesMin);
+	timing_parameters.add(g_linesMax);
+	timing_parameters.add(g_treesFadeTime);
+	timing_parameters.add(g_startDetachingLeavesTime);
+	timing_parameters.add(g_backgroundTransitionTime);
+	timing_parameters.add(g_timedExhibit);
+	timing_parameters.add(loop_settings_parameters);
 
-//float globalSettings::g_soundVolume = 1.0f;
+	messagesColors.add(g_tweetMsgC);
+	messagesColors.add(g_tweetUsrC);
+	messagesColors.add(g_twilioMsgC);
+	messagesColors.add(g_twilioUsrC);
+	messagesColors.add(g_databaseMsgC);
+	messagesColors.add(g_databaseUsrC);
+	
+	
+	messages_parameters.add(g_floatingSpeed);
+	messages_parameters.add(g_pastTweets);
+	messages_parameters.add(g_tweetMaxLife);
+	messages_parameters.add(g_tweetMinLife);
+	messages_parameters.add(messagesColors);
+	
+	
+	lines_parameters.add(g_tLineC);
+	lines_parameters.add(g_tLineWidth);
+	lines_parameters.add(g_crazyCircleWidth);
+	lines_parameters.add(g_crazyLineWidth);
+	lines_parameters.add(g_linesWidth);
+	lines_parameters.add(g_linesColor);
+	
+	
 
-//bool globalSettings::g_useInteractiveAudio = true;
+	audio_settings_parameters.add(g_useInteractiveAudio);
+	audio_settings_parameters.add(g_soundVolume);
+	
+	
+	
+	setupGuis();
+}
 
-//bool globalSettings::g_useBackgroundImage = false;
-//bool globalSettings::g_changeBranchImages = true;
+void globalSettings::setupGuis()
+{
 
-//std::string globalSettings::g_backgroundImage =  std::string();
-//std::string globalSettings::g_soundtrack = std::string();
+	
+	
+	
+	
+	
+	
+	
+	
+	gui.setup("settings", "settings/others.json");
+	gui.add(g_backgroundC);
+	gui.add(splash_screen_parameters);
+	gui.add(layers_control_parameters);
+	
+	general_tree_structure_gui.setup(general_tree_structure_parameters, "settings/general_tree_structure.json");
+	timing_gui.setup(timing_parameters, "settings/timing.json");
+	messages_gui.setup(messages_parameters, "settings/messages.json");
+	lines_gui.setup(lines_parameters, "settings/lines.json");
+	audio_settings_gui.setup(audio_settings_parameters, "settings/audio_settings.json");
+	
 
-//float globalSettings::g_minColonization = 1.f;
-//float globalSettings::g_minColonizationForLeaves = 1.f;
-//bool globalSettings::g_treesCanFade = true;
-//float globalSettings::g_fps = 0.f;
-//float globalSettings::g_currentFps = 0.f;
+	general_tree_structure_gui.setPosition(gui.getShape().getTopRight() + glm::vec2(10,0));
+	timing_gui.setPosition(general_tree_structure_gui.getShape().getTopRight() + glm::vec2(10,0));
+	messages_gui.setPosition(timing_gui.getShape().getTopRight() + glm::vec2(10,0));
+	lines_gui.setPosition(messages_gui.getShape().getTopRight() + glm::vec2(10,0));
+	audio_settings_gui.setPosition(lines_gui.getShape().getBottomLeft() + glm::vec2(0,10));
+	
+	load();
+	
+}
 
-//int globalSettings::g_numberOfseeds = 1;
-
-
-//float globalSettings::g_treesLayerOpacity = 1.f;
-//float globalSettings::g_twitterLayerOpacity = 1.f;
-//float globalSettings::g_flowersOpacity = 1.f;
-
-//ofImage globalSettings::g_flowerImage = ofImage();
-//bool globalSettings::g_showFlowers = false;
-
-//FluidSolver * globalSettings::s_solver = nullptr;
-//Vec2f globalSettings::s_windowSize = Vec2f();
-//Vec2f globalSettings::s_invWindowSize= Vec2f();
-
-//LeavesLayer * globalSettings::g_leavesLayer = nullptr;
-
-//float globalSettings::g_leavesFertility = 1.f;
-//ofColor globalSettings::g_leavesEndColor = ofColor();
-//float globalSettings::g_leavesOpacity = 1.f;
-//float globalSettings::g_leavesLife = 1.f;
-//float globalSettings::g_leavesMinWidth = 1.f;
-//float globalSettings::g_leavesMaxWidth = 1.f;
-//ofColor globalSettings::g_flowersColor = ofColor();
-//ofColor globalSettings::g_flowersLineColor = ofColor();
-
-//bool globalSettings::g_useTwilio = false;
-
-//bool globalSettings::g_useTwitter = true;
-
-//int globalSettings::g_leavesRows = 10;
-//int globalSettings::g_leavesColumns = 10;
-
-//bool globalSettings::g_leavesActive = false;
-
-//float globalSettings::g_leavesMinFreq = 0;
-//float globalSettings::g_leavesMaxFreq = 100;
-
-//int globalSettings::g_treesFadeTime = 1000;
-
-//int globalSettings::g_backgroundTransitionTime = 1000;
-//bool globalSettings::g_useArchive = false;
-
-//std::atomic<int> globalSettings::g_activeThreads(0);
-////ofMutex globalSettings::g_activeThreadsMutex;
-
-
-//float globalSettings::g_waitSeedTime = 1.f; // wait in seed mode
-//float globalSettings::g_waitLinesTime = 1.f; // tree full, wait to start lines
-////float globalSettings::g_waitLeavesTime; // how long wait for leaves
-//float globalSettings::g_waitRegenerateTime = 1.f; // after leaves fell how long does it take to regenerate
-//float globalSettings::g_startDetachingLeavesTime = 1.f;
-
-//int globalSettings::g_msgOpacity = 255;
-
-//float globalSettings::g_linesMin = 0.f;
-//float globalSettings::g_linesMax = 1.f;
-//float globalSettings::g_linesMinNorm = 0.f;
-//float globalSettings::g_linesMaxNorm = 1.f;
-//float globalSettings::g_linesMinAcc = 0.f;
-//float globalSettings::g_linesMaxAcc = 1.f;
-
-
-//int globalSettings::g_firstIterations = 0;
-
+void globalSettings::drawGui()
+{
+	
+	gui.draw();
+	general_tree_structure_gui.draw();
+	
+	timing_gui.draw();
+	messages_gui.draw();
+	lines_gui.draw();
+	audio_settings_gui.draw();
+}
 
 
 
@@ -202,13 +217,6 @@ void globalSettings::g_deallocateFonts()
 	if(_twilioFont){ delete _twilioFont; _twilioFont = nullptr;}
 	if(_databaseFont){ delete _databaseFont; _databaseFont = nullptr;}
 }
-	
-//FTTextureFont* globalSettings::_guiFont = nullptr;
-//FTTextureFont* globalSettings::_twitterFont = nullptr;
-//FTTextureFont* globalSettings::_twilioFont = nullptr;
-//FTTextureFont* globalSettings::_databaseFont = nullptr;
-
-
 
 FTTextureFont* makeFTFont(const std::string & filepath, int fontsize)
 {
@@ -399,5 +407,33 @@ void globalSettings::g_activateSoundtrack(){
 	//g_app->soundtrack.unloadSound();
 	//g_app->soundtrack.loadSound("soundtracks/" + g_soundtrack, true);
 	//}
+}
+
+void globalSettings::save()
+{
+	
+	ofDirectory dir(ofToDataPath("settings"));
+	if(!dir.exists())dir.create();
+	
+	gui.saveToFile("settings/others.json");
+	general_tree_structure_gui.saveToFile("settings/general_tree_structure.json");
+	timing_gui.saveToFile("settings/timing.json");
+	messages_gui.saveToFile("settings/messages.json");
+	lines_gui.saveToFile("settings/lines.json");
+	audio_settings_gui.saveToFile("settings/audio_settings.json");
+	
+	
+}
+
+void globalSettings::load()
+{
+	
+	gui.loadFromFile("settings/others.json");
+	general_tree_structure_gui.loadFromFile("settings/general_tree_structure.json");
+	timing_gui.loadFromFile("settings/timing.json");
+	messages_gui.loadFromFile("settings/messages.json");
+	lines_gui.loadFromFile("settings/lines.json");
+	audio_settings_gui.loadFromFile("settings/audio_settings.json");
+	
 }
 

@@ -134,7 +134,7 @@ void BaseTrigger::update() {
 		//      }
 		
 		m_timer.set();
-		m_timer.setAlarm(ofRandom(globalSettings::g_minFrequency, globalSettings::g_maxFrequency));
+		m_timer.setAlarm(ofRandom(globalSettings::instance()->g_minFrequency, globalSettings::instance()->g_maxFrequency));
 	}
 }
 
@@ -188,7 +188,7 @@ void MessageTrigger::stop() {
 void MessageTrigger::threadedFunction() {
 	
 	
-	++globalSettings::g_activeThreads;
+	++globalSettings::instance()->g_activeThreads;
 	
 	//  std::cout << this << " threadedFunction has entered" << std::endl;
 	while(isThreadRunning()){
@@ -212,7 +212,7 @@ void MessageTrigger::threadedFunction() {
 	m_current = m_msgBuffer.begin();
 	
 	
-	--globalSettings::g_activeThreads;
+	--globalSettings::instance()->g_activeThreads;
 	
 	//  std::cout << this << " threadedFunction has exited" << std::endl;
 }

@@ -22,7 +22,7 @@ RealtimeFetcher::RealtimeFetcher() :
   m_paused(false) {
 
 
-	  	if(globalSettings::g_useTwitter)
+	  	if(globalSettings::instance()->g_useTwitter)
 	  	{
 	  		twitterStream = make_unique<ofxTwitterStream>();
 			twitterStream->setup();
