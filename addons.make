@@ -13,6 +13,5 @@ ofxPoco
 ./local_addons/MSACore
 ./local_addons/MSAFluid
 ./local_addons/ofxAppUtils
-./local_addons/ofxControlPanel
 ./local_addons/ofxFTGL
 ./local_addons/ofxNetwork

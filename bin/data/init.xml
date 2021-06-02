@@ -1,12 +1,13 @@
 <?xml version="1.0" ?>
 <trees>
-	<tree name="PASEO" 				x="288"  y="1032" dir="-1.570796" />
-	<tree name="nature rights" 		x="480"  y="1032" dir="-1.570796" />
-	<tree name="trees" 				x="672"  y="1032" dir="-1.570796" />
-	<tree name="biodiversity" 		x="864"  y="1032" dir="-1.570796" />
-	<tree name="Outer space treaty" x="1056" y="1032" dir="-1.570796" />
-	<tree name="trees" 				x="1248" y="1032" dir="-1.570796" />
-	<tree name="nature rights" 		x="1440" y="1032" dir="-1.570796" />
-	<tree name="PASEO" 				x="1632" y="1032" dir="-1.570796" />
-
+    <tree name="PASEO" x="316" y="1032" dir="-1.570796" />
+    <tree name="nature rights" x="409" y="1032" dir="-1.570796" />
+    <tree name="trees" x="725" y="1032" dir="-1.570796" />
+    <tree name="biodiversity" x="994" y="1032" dir="-1.570796" />
+    <tree name="Outer space treaty" x="1205" y="1032" dir="-1.570796" />
+    <tree name="trees" x="1174" y="1032" dir="-1.570796" />
+    <tree name="nature rights" x="1678" y="1032" dir="-1.570796" />
+    <tree name="PASEO" x="1476" y="1032" dir="-1.570796" />
+    <tree name="trees" x="884" y="585" dir="3.141593" />
+    <tree name="trees" x="678" y="825" dir="0.000000" />
 </trees>

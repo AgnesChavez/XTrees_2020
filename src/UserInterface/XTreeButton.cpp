@@ -114,12 +114,14 @@ void XTreeButton::draw() {
 		}
 		ofTranslate(m_x, m_y, 0);
 		ofDrawCircle(0,0, m_radius);
+		
 		if (m_hover) {
 			ofSetColor(m_textHoverColor);
 		} else {
+			ofFill();
 			ofSetColor(m_textColor, 255.F * m_alphaLevel);
 		}
-		glScalef(1,-1,1);
+		ofScale(1,-1,1);
 		ofTranslate(-150, -4,0);
 		globalSettings::instance()->g_guiRenderer().Render(m_label.c_str());
 		ofSetColor(255);

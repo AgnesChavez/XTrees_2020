@@ -37,11 +37,8 @@ public:
 	void audioRequested(float * output, int bufferSize, int nChannels);
 #endif
 	
-	
-	ofImage m_splash;
-	ofVec2f m_splashPosition;
-	
-	AlphaRect m_fadeRectangle;
+	vector<ofNode> nodes;
+//	AlphaRect m_fadeRectangle;
 	
 	ofSoundPlayer soundtrack;
 	//  FlowersLayer* m_flowersLayer;
@@ -62,8 +59,7 @@ private:
 	void resetClicked(bool& do_);
 	//  void controlChanged(guiCallbackData & data);
 	
-	void setupControlPanel();
-	void setupControlPanelVariables();
+	
 	
 	void updateSimulationState();
 	
@@ -118,9 +114,7 @@ private:
 	
 	unsigned int m_numberOfIterations;
 	
-	bool m_splashActive;
-	float m_splashOpacity;
-	unsigned int m_splashEnd;
+	
 	bool m_clearFBO;
 	
 	

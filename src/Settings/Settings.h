@@ -56,6 +56,7 @@ public Singleton<globalSettings>
 public:
 	
 	globalSettings();
+	~globalSettings();
 	
 	ofParameterGroup background_parameters =  {"Background"};
 	ofParameterGroup layers_control_parameters =  {"Layers control"};
@@ -66,7 +67,7 @@ public:
 	ofParameterGroup timing_parameters =  {"Timing"};
 	
 	
-	ofParameterGroup splash_screen_parameters =  {"Splash screen"};
+	
 	ofParameterGroup branches_parameters =  {"Branches"};
 	ofParameterGroup branch_joints_parameters =  {"Branch joints"};
 	ofParameterGroup flowers_parameters =  {"Flowers"};
@@ -74,94 +75,90 @@ public:
 	ofParameterGroup messages_parameters = {"Messages"};
 	ofParameterGroup lines_parameters = {"Lines"};
 	
-	ofParameter<ofColor> g_treeGradStart = {"Tree Gradient Start", {0,0,0,0}, {0,0,0,0}, {255,255,255,255}};
-	ofParameter<ofColor> g_treeGradEnd = {"Tree Gradient End", {0,0,0,0}, {0,0,0,0}, {255,255,255,255}};
+	ofParameter<ofColor> g_treeGradStart = {"Tree Gradient Start", {120,255,120,255}, {0,0,0,0}, {255,255,255,255}};
+	ofParameter<ofColor> g_treeGradEnd = {"Tree Gradient End", {0,255,0,255}, {0,0,0,0}, {255,255,255,255}};
 
 		
-	ofParameter<ofColor> g_backgroundC = { "Background Color",  0, 0, 255}; //backgroundR
-	ofParameter<int> g_backgroundTransitionTime = { "Background trans. time",  10, 1, 120}; //addSlider        backgroundTransitionTime
+	ofParameter<ofColor> g_backgroundC = { "Background Color",  0, 0, 255}; 
+	ofParameter<int> g_backgroundTransitionTime = { "Background trans. time",  10, 1, 120}; 
 
-	ofParameter<int> g_showDuration = { "Show duration (min)",  10, 1, 60}; //showDuration
+	ofParameter<int> g_showDuration = { "Show duration (min)",  10, 1, 60}; 
 
-	ofParameter<bool> g_leavesActive = { "Activate leaves",  false};//addToggle        showLeaves
-	ofParameter<bool> g_useInteractiveAudio = { "Use interactive audio",  true};//addToggle
-	ofParameter<bool> g_useTwilio = { "Use twilio",  true};//addToggle
-	ofParameter<bool> g_showFlowers = { "Activate flowers",  false};//addToggle        showFlowers
-	ofParameter<bool> g_showThumbs = { "Show twitter thumbnails",  true};//addToggle        showThumbs
-
-
-	ofParameter<int> g_growthMax = { "Branch max (ms)",  3000, 1000, 10000}; //growthMax
-	ofParameter<int> g_growthMin = { "Branch min (ms)",  1500, 1000, 10000}; //growthMin
-	ofParameter<float> g_branchLength = { "Branch length (px)",  100, 50, 500}; //branchLength
-	ofParameter<float> g_branchMinWidth = { "Branch min width (px)",  1, 1, 200}; //branchMinWidth
-	ofParameter<float> g_branchWidth = { "Branch width (px)",  1, 1, 200}; //branchWidth
-
-	ofParameter<int> g_fertility = { "Fertility",  0, 0, 5}; //fertility
-	ofParameter<int> g_firstIterations = { "First iterations",  3, 0, 10}; //firstIterations
-	ofParameter<float> g_floatingSpeed = { "Floating speed",  0.06, 0, 0.3}; //floatingSpeed
-
-	ofParameter<int> g_flowersMax = { "Flowers max (ms)",  300, 10, 10000}; //addSlider        flowersMax
-	ofParameter<int> g_flowersMin = { "Flowers min (ms)",  50, 10, 10000}; //addSlider        flowersMin
-	ofParameter<float> g_flowersOpacity = { "Flowers opacity",  255, 0, 255}; //addSlider        flowersOpacity
-
-	ofParameter<ofColor> g_jointC = { "Joint Color",  {255, 255}, {0,0}, {255, 255}}; //jointR
-	ofParameter<int> g_jointLength = { "Joint length",  20, 0, 80}; //jointLength
-	ofParameter<bool> g_jointsAreCircles = { "Joints are circles",  true};//addToggle        jointsAreCircles
-	ofParameter<int> g_jointThickness = { "Joint thickness",  1, 1, 10}; //jointThickness
+	ofParameter<bool> g_leavesActive = { "Activate leaves",  false};
+	ofParameter<bool> g_useInteractiveAudio = { "Use interactive audio",  true};
+	ofParameter<bool> g_useTwilio = { "Use twilio",  true};
+	ofParameter<bool> g_showFlowers = { "Activate flowers",  false};
+	ofParameter<bool> g_showThumbs = { "Show twitter thumbnails",  true};
 
 
-	ofParameter<ofColor> g_leavesEndColor = { "Leaf Color",  0, 0, 255}; //tLeavesR
-	ofParameter<float> g_leavesFertility = { "Leaf fertility",  1, 1, 10}; //leafFertility
-	ofParameter<int> g_leavesLife = { "Leaves life",  100, 1, 200}; //leavesLife
-	ofParameter<int> g_leavesMinFreq = { "Leaves min (ms)",  5000, 100, 100000}; //addSlider        leavesMinFreq
-	ofParameter<int> g_leavesMaxFreq = { "Leaves max (ms)",  15000, 100, 100000}; //addSlider        leavesMaxFreq
-	ofParameter<float> g_leavesMinWidth = { "Leaf min width",  100, 5, 300}; //leafMinWidth
-	ofParameter<float> g_leavesMaxWidth = { "Leaf max width",  140, 5, 300}; //leafMaxWidth
-	ofParameter<float> g_leavesOpacity = { "Leaf Opacity",  255, 0, 255}; //tLeavesA
-	ofParameter<int> g_leavesColumns = { "Leaves columns",  6, 1, 20}; //leavesColumns
-	ofParameter<int> g_leavesRows = { "Leaves rows",  8, 1, 20}; //leavesRows
-	ofParameter<int> g_startDetachingLeavesTime = { "Detach leaves after time",  5, 0, 60}; //addSlider        startDetachingLeavesTime
+	ofParameter<int> g_growthMax = { "Branch max (ms)",  3000, 1000, 10000}; 
+	ofParameter<int> g_growthMin = { "Branch min (ms)",  1500, 1000, 10000}; 
+	ofParameter<float> g_branchLength = { "Branch length (px)",  100, 50, 500}; 
+	ofParameter<float> g_branchMinWidth = { "Branch min width (px)",  10, 1, 200}; 
+	ofParameter<float> g_branchWidth = { "Branch width (px)",  10, 1, 200}; 
 
-	ofParameter<float> g_lengthDecrease = { "Length decrease (%)",  0, 0, 1}; //lengthDecrease
-	ofParameter<int> g_linesMax = { "Lines max (ms)",  300, 10, 10000}; //addSlider        LinesMax
-	ofParameter<int> g_linesMin = { "Lines min (ms)",  50, 10, 10000}; //addSlider        LinesMin
-	ofParameter<int> g_maxAngle = { "Max angle (deg)",  90, 1, 90}; //addSlider        maxAngle
-	ofParameter<int> g_maxFrequency = { "Twitter max (ms)",  7000, 100, 20000}; //maxFrequency
-	ofParameter<int> g_maxLevel = { "Max levels",  10, 3, 20}; //maxLevel
-	ofParameter<int> g_minAngle = { "Min angle (deg.)",  1, 1, 90}; //addSlider        minAngle
-	ofParameter<float> g_minColonization = { "Min colonization to regenerate",  30, 1, 100}; //minColonization
-	ofParameter<float> g_minColonizationForLeaves = { "Min colonization to create leaves",  20, 1, 100}; //minColonizationForLeaves
-	ofParameter<int> g_minFrequency = { "Twitter min (ms)",  3000, 100, 20000}; //minFrequency
-	ofParameter<int> g_msgOpacity = { "Message opacity",  150, 0, 255}; //addSlider        msgOpacity
-	ofParameter<int> g_pastTweets = { "Nr. past tweets",  5, 0, 100}; //pastTweets
+	ofParameter<int> g_fertility = { "Fertility",  0, 0, 5}; 
+	ofParameter<int> g_firstIterations = { "First iterations",  3, 0, 10}; 
+	ofParameter<float> g_floatingSpeed = { "Floating speed",  0.06, 0, 0.3}; 
 
-	ofParameter<float> g_soundVolume = { "Global Volume",  0.3, 0, 1}; //addSlider        soundVolume
+	ofParameter<int> g_flowersMax = { "Flowers max (ms)",  300, 10, 10000}; 
+	ofParameter<int> g_flowersMin = { "Flowers min (ms)",  50, 10, 10000}; 
+	ofParameter<float> g_flowersOpacity = { "Flowers opacity",  255, 0, 255}; 
 
-	ofParameter<ofColor> g_splashC = { "Splash Screen Color", {255, 255}, {0,0}, {255, 255}}; //splashR
-	ofParameter<int> g_splashDuration = { "Splash duration",  15, 5, 60}; //addSlider        splashDuration
-	ofParameter<int> g_splashFrequency = { "Splash frequency",  60, 30, 600}; //addSlider        splashFrequency
-	ofParameter<float> g_splashOpacity = { "Splash opacity",  255, 0, 255}; //addSlider        splashOpacity
-
-	ofParameter<bool> g_timedExhibit = { "Timed show",  true};//addToggle        timedExhibit
-
-	ofParameter<ofColor> g_tLineC = { "Msg2Tree Line Color",  {0,0}, {0,0}, {255, 255}}; //tLineR
-	ofParameter<int> g_tLineWidth = { "Msg2Tree Line width",  1, 1, 10}; //tLineWidth
-
-	ofParameter<ofColor> g_treeC = { "Branch Color",  {255, 255}, {0,0}, {255, 255}}; //treeR
-	ofParameter<int> g_treeGhostOpacity = { "Ghost Alpha",  255, 0, 255}; //ghostAlpha
-	ofParameter<int> g_treesFadeTime = { "Ghost img time",  30, 1, 60}; //addSlider        treesFadeTime
-	ofParameter<float> g_treesLayerOpacity = { "Trees opacity",  255, 0, 255}; //addSlider        treesOpacity
-
-	ofParameter<float> g_tweetMaxLife = { "Max life (ms)",  10000, 1000, 20000}; //addSlider        tweetMax
-	ofParameter<float> g_tweetMinLife = { "Min life (ms)",  5000, 1000, 20000}; //addSlider        tweetMin
-	ofParameter<float> g_twitterLayerOpacity = {  "Twitter opacity",  255, 0, 255}; //addSlider
+	ofParameter<ofColor> g_jointC = { "Joint Color",  {255, 255}, {0,0}, {255, 255}}; 
+	ofParameter<int> g_jointLength = { "Joint length",  20, 0, 80}; 
+	ofParameter<bool> g_jointsAreCircles = { "Joints are circles",  true};
+	ofParameter<int> g_jointThickness = { "Joint thickness",  1, 1, 10}; 
 
 
-	//	ofParameter<int> g_waitLinesTime = { "Wait for lines time",  5, 0, 60}; //addSlider
-	ofParameter<int> g_waitLinesTime = { "Wait in seed mode",  5, 0, 60}; //addSlider     waitSeedTime
-	ofParameter<int> g_waitRegenerateTime = { "Wait after regenerate time",  5, 0, 60}; //addSlider     waitRegenerateTime
-	ofParameter<int> g_waitSeedTime = { "Seed time",  5, 1, 60}; //addSlider     waitSeedTime
-	ofParameter<float> g_widthDecrease = { "Width decrease (%)",  0, 0, 1}; //widthDecrease
+	ofParameter<ofColor> g_leavesEndColor = { "Leaf Color", {0,255,0,255}, {0,0,0,0}, {255,255,255,255}}; 
+	ofParameter<float> g_leavesFertility = { "Leaf fertility",  1, 1, 10}; 
+	ofParameter<int> g_leavesLife = { "Leaves life",  100, 1, 200}; 
+	ofParameter<int> g_leavesMinFreq = { "Leaves min (ms)",  5000, 100, 100000}; 
+	ofParameter<int> g_leavesMaxFreq = { "Leaves max (ms)",  15000, 100, 100000}; 
+	ofParameter<float> g_leavesMinWidth = { "Leaf min width",  100, 5, 300}; 
+	ofParameter<float> g_leavesMaxWidth = { "Leaf max width",  140, 5, 300}; 
+	ofParameter<float> g_leavesOpacity = { "Leaf Opacity",  255, 0, 255}; 
+	ofParameter<int> g_leavesColumns = { "Leaves columns",  6, 1, 20}; 
+	ofParameter<int> g_leavesRows = { "Leaves rows",  8, 1, 20}; 
+	ofParameter<int> g_startDetachingLeavesTime = { "Detach leaves after time",  5, 0, 60}; 
+
+	ofParameter<float> g_lengthDecrease = { "Length decrease (%)",  0.8, 0, 1}; 
+	ofParameter<int> g_linesMax = { "Lines max (ms)",  300, 10, 10000}; 
+	ofParameter<int> g_linesMin = { "Lines min (ms)",  50, 10, 10000}; 
+	ofParameter<int> g_maxAngle = { "Max angle (deg)",  30, 1, 90}; 
+	ofParameter<int> g_maxFrequency = { "Twitter max (ms)",  7000, 100, 20000}; 
+	ofParameter<int> g_maxLevel = { "Max levels",  10, 3, 20}; 
+	ofParameter<int> g_minAngle = { "Min angle (deg.)",  1, 1, 90}; 
+	ofParameter<float> g_minColonization = { "Min colonization to regenerate",  30, 1, 100}; 
+	ofParameter<float> g_minColonizationForLeaves = { "Min colonization to create leaves",  20, 1, 100}; 
+	ofParameter<int> g_minFrequency = { "Twitter min (ms)",  3000, 100, 20000}; 
+	ofParameter<int> g_msgOpacity = { "Message opacity",  150, 0, 255}; 
+	ofParameter<int> g_pastTweets = { "Nr. past tweets",  5, 0, 100}; 
+
+	ofParameter<float> g_soundVolume = { "Global Volume",  0.3, 0, 1}; 
+
+
+	ofParameter<bool> g_timedExhibit = { "Timed show",  true};
+
+	ofParameter<ofColor> g_tLineC = { "Msg2Tree Line Color",  {255, 255}, {0,0}, {255, 255}}; 
+	ofParameter<int> g_tLineWidth = { "Msg2Tree Line width",  1, 1, 10}; 
+
+	ofParameter<ofColor> g_treeC = { "Branch Color",  {255, 255}, {0,0}, {255, 255}}; 
+	ofParameter<int> g_treeGhostOpacity = { "Ghost Alpha",  255, 0, 255}; 
+	ofParameter<int> g_treesFadeTime = { "Ghost img time",  30, 1, 60}; 
+	ofParameter<float> g_treesLayerOpacity = { "Trees opacity",  255, 0, 255}; 
+
+	ofParameter<float> g_tweetMaxLife = { "Max life (ms)",  10000, 1000, 20000}; 
+	ofParameter<float> g_tweetMinLife = { "Min life (ms)",  5000, 1000, 20000}; 
+	ofParameter<float> g_twitterLayerOpacity = {  "Twitter opacity",  255, 0, 255}; 
+
+
+	
+	ofParameter<int> g_waitLinesTime = { "Wait in seed mode",  5, 0, 60}; 
+	ofParameter<int> g_waitRegenerateTime = { "Wait after regenerate time",  5, 0, 60}; 
+	ofParameter<int> g_waitSeedTime = { "Seed time",  5, 1, 60}; 
+	ofParameter<float> g_widthDecrease = { "Width decrease (%)",  0.8, 0, 1}; 
 
 	
 	ofParameter<float> g_linesWidth= {"Final Line Width", 2, 1, 10};
@@ -170,12 +167,17 @@ public:
 	
 	ofParameterGroup messagesColors = {"Messages colors"};
 	
-	ofParameter<ofColor> g_tweetMsgC = { "Tweet Message",  {255, 255}, {0,0}, {255, 255}}; //tweetMsgR
-	ofParameter<ofColor> g_tweetUsrC = { "Tweet User",  {255, 255}, {0,0}, {255, 255}}; //tweetMsgR
-	ofParameter<ofColor> g_twilioMsgC = { "Twilio Message",  {255, 255}, {0,0}, {255, 255}}; //tweetMsgR
-	ofParameter<ofColor> g_twilioUsrC = { "Twilio User",  {255, 255}, {0,0}, {255, 255}}; //tweetMsgR
-	ofParameter<ofColor> g_databaseMsgC = { "Archive Message",  {255, 255}, {0,0}, {255, 255}}; //tweetMsgR
-	ofParameter<ofColor> g_databaseUsrC = { "Archive User",  {255, 255}, {0,0}, {255, 255}}; //tweetMsgR
+	ofParameter<ofColor> g_tweetMsgC = { "Tweet Message",  {255, 255}, {0,0}, {255, 255}}; 
+	ofParameter<ofColor> g_tweetUsrC = { "Tweet User",  {255, 255}, {0,0}, {255, 255}}; 
+	ofParameter<ofColor> g_twilioMsgC = { "Twilio Message",  {255, 255}, {0,0}, {255, 255}}; 
+	ofParameter<ofColor> g_twilioUsrC = { "Twilio User",  {255, 255}, {0,0}, {255, 255}}; 
+	ofParameter<ofColor> g_databaseMsgC = { "Archive Message",  {255, 255}, {0,0}, {255, 255}}; 
+	ofParameter<ofColor> g_databaseUsrC = { "Archive User",  {255, 255}, {0,0}, {255, 255}}; 
+	
+	ofParameter<float> g_twitterMsgFontSize = {"twitter Font Size", 14, 1, 120};
+	ofParameter<float> g_twilioMsgFontSize = {"twilio Font Size", 14, 1, 120};
+	ofParameter<float> g_databaseMsgFontSize = {"database Font Size", 14, 1, 120};
+	
 	
 	///////////
 
@@ -253,7 +255,7 @@ public:
 	void g_setTwilioMsgFontSize(int fontsize);
 	void g_setDatabaseMsgFontSize(int fontsize);
 	
-	void g_colorizeSplashImages();
+	
 	void g_computeMaxBranches();
 	void g_updateBackground();
 	void g_activateSoundtrack();

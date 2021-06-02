@@ -41,17 +41,18 @@ globalSettings::globalSettings(){
 	listeners.push(g_fertility.newListener([&](int&){g_computeMaxBranches();}));
 	listeners.push(g_maxLevel.newListener([&](int&){g_computeMaxBranches();}));
 	listeners.push(g_useInteractiveAudio.newListener([&](bool&){g_activateSoundtrack();}));
+	listeners.push(g_backgroundC.newListener([&](ofColor&){g_updateBackground();}));
+
+	listeners.push(g_twitterMsgFontSize.newListener([&](float& fs){g_setTwitterMsgFontSize(fs);}));
+	listeners.push(g_twilioMsgFontSize.newListener([&](float& fs){g_setTwilioMsgFontSize(fs);}));
+	listeners.push(g_databaseMsgFontSize.newListener([&](float& fs){g_setDatabaseMsgFontSize(fs);}));
+	
+	
+	
+	
 //	listeners.push(g_soundtrack.newListener([&](&){g_activateSoundtrack();}));
 	
-//	g_backgroundC;
 
-	
-
-
-	splash_screen_parameters.add(g_splashC);
-	splash_screen_parameters.add(g_splashDuration);
-	splash_screen_parameters.add(g_splashFrequency);
-	splash_screen_parameters.add(g_splashOpacity);
 
 	loop_settings_parameters.add(g_firstIterations);
 	loop_settings_parameters.add(g_waitLinesTime);
@@ -141,7 +142,9 @@ globalSettings::globalSettings(){
 	messages_parameters.add(g_tweetMaxLife);
 	messages_parameters.add(g_tweetMinLife);
 	messages_parameters.add(messagesColors);
-	
+	messages_parameters.add(g_twitterMsgFontSize);
+	messages_parameters.add(g_twilioMsgFontSize);
+	messages_parameters.add(g_databaseMsgFontSize);
 	
 	lines_parameters.add(g_tLineC);
 	lines_parameters.add(g_tLineWidth);
@@ -159,11 +162,13 @@ globalSettings::globalSettings(){
 	{
 		guis.push_back(std::move(make_unique<ofxPanel>()));
 	}
-	
-	
-	
-//	setupGuis();
 }
+
+globalSettings::~globalSettings()
+{
+	g_deallocateFonts();
+}
+
 
 void globalSettings::addSaveLoadListeners(GuiIndex index)
 {
@@ -181,7 +186,6 @@ void globalSettings::setupGuis()
 	guis[GUI_GENERAL]->add(reloadParam);
 	guis[GUI_GENERAL]->add(guiPopOut);
 	guis[GUI_GENERAL]->add(g_backgroundC);
-	guis[GUI_GENERAL]->add(splash_screen_parameters);
 	guis[GUI_GENERAL]->add(layers_control_parameters);
 	
 	
@@ -319,20 +323,17 @@ FTTextureFont & globalSettings::g_twitterFont()
 {
 	if(_twitterFont == nullptr)
 	{
-		_twitterFont = makeFTFont("fonts/ArialUnicode.ttf", 12);
+		_twitterFont = makeFTFont("fonts/ArialUnicode.ttf", g_twitterMsgFontSize.get());
 	}
 	return *_twitterFont;
 	
 }
 
-
-
-
 FTTextureFont & globalSettings::g_twilioFont()
 {
 	if(_twilioFont == nullptr)
 	{
-		_twilioFont = makeFTFont("fonts/ArialUnicode.ttf", 12);
+		_twilioFont = makeFTFont("fonts/ArialUnicode.ttf", g_twilioMsgFontSize.get());
 	}
 	return *_twilioFont;
 }
@@ -341,11 +342,10 @@ FTTextureFont & globalSettings::g_databaseFont()
 {
 	if(_databaseFont == nullptr)
 	{
-		_databaseFont = makeFTFont("fonts/ArialUnicode.ttf", 12);
+		_databaseFont = makeFTFont("fonts/ArialUnicode.ttf", g_databaseMsgFontSize.get());
 	}
 	return *_databaseFont;
 }
-
 
 
 
@@ -473,7 +473,7 @@ void globalSettings::g_computeMaxBranches(){
 
 void globalSettings::g_updateBackground(){
 	ofBackground(g_backgroundC);
-	g_app->m_fadeRectangle.SetColor(g_backgroundC);
+//	g_app->m_fadeRectangle.SetColor(g_backgroundC);
 	XTree::clearFbo();
 }
 

@@ -22,7 +22,6 @@
 #include "Spring.h"
 #include "ofxTimer.h"
 
-//using namespace MSA;
 
 class Leaf {
 public:

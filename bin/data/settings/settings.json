@@ -1,0 +1,241 @@
+{
+    "Audio": {
+        "Audio_settings": {
+            "Global_Volume": "0.3",
+            "Parametric_Equalizer": {
+                "100_Hz": "0.3",
+                "15000_Hz": "0.5",
+                "1500_Hz": "0.5",
+                "250_Hz": "0.44",
+                "3000_Hz": "0.5",
+                "7000_Hz": "0.5",
+                "700_Hz": "0.5",
+                "Gain": "0.5"
+            },
+            "Use_interactive_audio": "1"
+        }
+    },
+    "General": {
+        "Settings": {
+            "Background_Color": "0, 0, 0, 255",
+            "Layers_control": {
+                "Activate_flowers": "0",
+                "Activate_leaves": "1",
+                "Ghost_Alpha": "255",
+                "Leaf_Opacity": "255",
+                "Message_opacity": "150",
+                "Show_twitter_thumbnails": "1",
+                "Trees_opacity": "255",
+                "Twitter_opacity": "255",
+                "Use_twilio": "0"
+            },
+            "Splash_screen": {
+                "Splash_Screen_Color": "255, 255, 255, 255",
+                "Splash_duration": "15",
+                "Splash_frequency": "60",
+                "Splash_opacity": "255"
+            }
+        }
+    },
+    "Messages": {
+        "Messages": {
+            "Floating_speed": "0.06",
+            "Lines": {
+                "Final_Line_Width": "4.07653",
+                "Final_Lines_Color": "0, 200, 114, 255",
+                "Msg2Tree_Line_Color": "213, 216, 126, 255",
+                "Msg2Tree_Line_width": "2"
+            },
+            "Max_life__ms_": "10000",
+            "Messages_colors": {
+                "Archive_Message": "0, 255, 238, 255",
+                "Archive_User": "0, 255, 63, 255",
+                "Tweet_Message": "255, 235, 0, 255",
+                "Tweet_User": "255, 0, 19, 255",
+                "Twilio_Message": "255, 0, 122, 255",
+                "Twilio_User": "255, 0, 239, 255"
+            },
+            "Min_life__ms_": "5000",
+            "Nr__past_tweets": "5"
+        }
+    },
+    "Timing": {
+        "Timing": {
+            "Background_trans__time": "10",
+            "Branch_max__ms_": "3000",
+            "Branch_min__ms_": "1500",
+            "Detach_leaves_after_time": "5",
+            "Ghost_img_time": "30",
+            "Lines_max__ms_": "300",
+            "Lines_min__ms_": "50",
+            "Loop_settings": {
+                "First_iterations": "3",
+                "Seed_time": "5",
+                "Show_duration__min_": "10",
+                "Wait_after_regenerate_time": "5",
+                "Wait_in_seed_mode": "5"
+            },
+            "Timed_show": "1",
+            "Twitter_max__ms_": "7000",
+            "Twitter_min__ms_": "3000"
+        }
+    },
+    "Trees": {
+        "Tree_structure": {
+            "Branch_Color": "53, 130, 49, 255",
+            "Branch_joints": {
+                "Joint_Color": "255, 242, 0, 255",
+                "Joint_length": "8",
+                "Joint_thickness": "1",
+                "Joints_are_circles": "1"
+            },
+            "Branches": {
+                "Branch_length__px_": "185.459",
+                "Branch_min_width__px_": "38.5663",
+                "Branch_width__px_": "42.6276",
+                "Length_decrease__%_": "0.831633",
+                "Max_angle__deg_": "23",
+                "Min_angle__deg__": "1",
+                "Width_decrease__%_": "0.826531"
+            },
+            "Fertility": "3",
+            "Flowers": {
+                "Flowers_max__ms_": "300",
+                "Flowers_min__ms_": "50",
+                "Flowers_opacity": "255"
+            },
+            "Leaves": {
+                "Leaf_Color": "106, 69, 240, 255",
+                "Leaf_fertility": "1",
+                "Leaf_max_width": "140",
+                "Leaf_min_width": "100",
+                "Leaves_columns": "6",
+                "Leaves_life": "100",
+                "Leaves_max__ms_": "15000",
+                "Leaves_min__ms_": "5000",
+                "Leaves_rows": "8"
+            },
+            "Max_levels": "10",
+            "Min_colonization_to_create_leaves": "20",
+            "Min_colonization_to_regenerate": "30",
+            "Tree_Gradient_End": "209, 206, 192, 183",
+            "Tree_Gradient_Start": "0, 219, 76, 255"
+        }
+    },
+    "audio_settings": {
+        "Audio_settings": {
+            "Global_Volume": "0.3",
+            "Use_interactive_audio": "1"
+        }
+    },
+    "general_tree_structure": {
+        "Tree_structure": {
+            "Branch_Color": "255, 255, 255, 255",
+            "Branch_joints": {
+                "Joint_Color": "255, 255, 255, 255",
+                "Joint_length": "7",
+                "Joint_thickness": "1",
+                "Joints_are_circles": "1"
+            },
+            "Branches": {
+                "Branch_length__px_": "314.031",
+                "Branch_min_width__px_": "19.2755",
+                "Branch_width__px_": "27.398",
+                "Length_decrease__%_": "0.678571",
+                "Max_angle__deg_": "36",
+                "Min_angle__deg__": "1",
+                "Width_decrease__%_": "0.846939"
+            },
+            "Fertility": "4",
+            "Flowers": {
+                "Flowers_max__ms_": "300",
+                "Flowers_min__ms_": "50",
+                "Flowers_opacity": "255"
+            },
+            "Leaves": {
+                "Leaf_Color": "0, 0, 0, 255",
+                "Leaf_fertility": "6.32653",
+                "Leaf_max_width": "140",
+                "Leaf_min_width": "100",
+                "Leaves_columns": "6",
+                "Leaves_life": "100",
+                "Leaves_max__ms_": "15000",
+                "Leaves_min__ms_": "5000",
+                "Leaves_rows": "8"
+            },
+            "Max_levels": "16",
+            "Min_colonization_to_create_leaves": "27.235",
+            "Min_colonization_to_regenerate": "46.54",
+            "Tree_Gradient_End": "0, 247, 0, 255",
+            "Tree_Gradient_Start": "0, 255, 148, 255"
+        }
+    },
+    "lines": {
+        "Lines": {
+            "Circle_Width": "15",
+            "Line_Color": "0, 0, 0, 255",
+            "Line_Width": "2",
+            "Line_width": "3",
+            "Lines_Color": "255, 0, 16, 255"
+        }
+    },
+    "messages": {
+        "Messages": {
+            "Floating_speed": "0.06",
+            "Max_life__ms_": "10000",
+            "Messages_colors": {
+                "Archive_Message": "0, 237, 255, 255",
+                "Archive_User": "255, 251, 41, 255",
+                "Tweet_Message": "255, 69, 255, 255",
+                "Tweet_User": "255, 104, 255, 255",
+                "Twilio_Message": "255, 255, 255, 255",
+                "Twilio_User": "255, 218, 0, 255"
+            },
+            "Min_life__ms_": "5000",
+            "Nr__past_tweets": "5"
+        }
+    },
+    "others": {
+        "Settings": {
+            "Background_Color": "0, 0, 0, 255",
+            "Layers_control": {
+                "Activate_flowers": "0",
+                "Activate_leaves": "1",
+                "Ghost_Alpha": "255",
+                "Leaf_Opacity": "255",
+                "Message_opacity": "150",
+                "Show_twitter_thumbnails": "1",
+                "Trees_opacity": "255",
+                "Twitter_opacity": "255",
+                "Use_twilio": "0"
+            },
+            "Splash_screen": {
+                "Splash_Screen_Color": "255, 255, 255, 255",
+                "Splash_duration": "15",
+                "Splash_frequency": "60",
+                "Splash_opacity": "255"
+            }
+        }
+    },
+    "timing": {
+        "Timing": {
+            "Background_trans__time": "10",
+            "Branch_max__ms_": "3000",
+            "Branch_min__ms_": "1500",
+            "Detach_leaves_after_time": "5",
+            "Ghost_img_time": "30",
+            "Lines_max__ms_": "300",
+            "Lines_min__ms_": "50",
+            "Loop_settings": {
+                "First_iterations": "3",
+                "Seed_time": "5",
+                "Show_duration__min_": "10",
+                "Wait_after_regenerate_time": "5",
+                "Wait_in_seed_mode": "5"
+            },
+            "Timed_show": "0",
+            "Twitter_max__ms_": "7000",
+            "Twitter_min__ms_": "3000"
+        }
+    }
+}

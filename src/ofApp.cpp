@@ -48,7 +48,7 @@ void ofApp::setup(){
 	
 	InteractiveAudio::instance()->setupParams();
 	
-	
+	nodes.resize(10);
 	
 	
 	m_screenshot = false;
@@ -65,16 +65,14 @@ void ofApp::setup(){
 	ofSetFrameRate(globalSettings::instance()->g_fps);
 	ofSetRectMode(OF_RECTMODE_CORNER);
 	ofSetCircleResolution(100);
-	glEnable(GL_LINE_SMOOTH);
-	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	ofEnableAlphaBlending();
+	
 	ofBackground(0);
 	ofSetVerticalSync(false);
 	
-	
 	m_internetOk = true;
-	m_splashActive = false;
+	
 	
 	if(!CheckInternetConnection()){
 		m_internetOk = false;
@@ -87,11 +85,12 @@ void ofApp::setup(){
 	globalSettings::instance()->g_initializeBranchImages();
 	globalSettings::instance()->g_initializeLeafImages();
 	globalSettings::instance()->g_initializeBackgroundImages();
+	
 	TwitterBaloon::initFbo();
 	
 	m_backgroundFadeTime = 1;
 	
-	// Twilio is enabled by default, disable it for now
+	
 	globalSettings::instance()->g_useTwilio = false;
 	
 	//disable twitter
@@ -108,10 +107,6 @@ void ofApp::setup(){
 	globalSettings::instance()->g_useArchive =  ofFile::doesFileExist(ofToDataPath("archive.txt"));
 	
 	
-	//	cout << "globalSettings::instance()->g_useArchive "<< boolalpha << globalSettings::instance()->g_useArchive<< endl;
-	
-	//	msg = ss.str();
-	
 	m_leavesLayer = make_shared<LeavesLayer>();
 	globalSettings::instance()->g_leavesLayer = m_leavesLayer.get();
 	m_twitterLayer = make_shared<TwitterLayer>();
@@ -121,7 +116,6 @@ void ofApp::setup(){
 	
 	m_goBtn = make_unique<XTreeButton>("Go", 80, 50, 30);
 	m_resetBtn= make_unique<XTreeButton>("Reset", 80, 150, 30);
-	
 	
 	
 	globalSettings::instance()->g_useInteractiveAudio = true;
@@ -178,10 +172,6 @@ void ofApp::setup(){
 	//	globalSettings::instance()->g_sceneBounded = ofRectangle(20, 0, ofGetWidth() - 20, ofGetHeight());
 	m_layerObfuscationColor = ofColor(0);
 	
-	m_splash.loadImage(ofToDataPath("splash/splash.png"));
-	
-	//	m_splashPosition.x = std::max(ofGetWidth() / 2 - m_splash.getWidth() / 2, m_splash.getWidth() / 2);
-	//	m_splashPosition.y = ofGetHeight() / 2 - m_splash.getHeight() / 2;
 	
 	setFromWindowSize();
 	
@@ -191,21 +181,20 @@ void ofApp::setup(){
 	
 	// save seeds
 	m_treesLayer->loadSeeds();
+	
 }
 //--------------------------------------------------------------
 void ofApp::setFromWindowSize()
 {
 	XTree::initGhostFbo();
 	
-	m_fadeRectangle.init(ofGetWidth(), ofGetHeight() / 7);
+	//	m_fadeRectangle.init(ofGetWidth(), ofGetHeight() / 7);
 	// to set the color of the fading rectangle
 	globalSettings::instance()->g_updateBackground();
 	
 	globalSettings::instance()->g_scene = ofRectangle(0, 0, ofGetWidth(), ofGetHeight());
 	globalSettings::instance()->g_sceneBounded = ofRectangle(20, 0, ofGetWidth() - 20, ofGetHeight());
 	
-	m_splashPosition.x = std::max(ofGetWidth() / 2 - m_splash.getWidth() / 2, m_splash.getWidth() / 2);
-	m_splashPosition.y = ofGetHeight() / 2 - m_splash.getHeight() / 2;
 	
 	
 	globalSettings::instance()->s_windowSize = MSA::Vec2f(ofGetWidth(),ofGetHeight());
@@ -252,7 +241,7 @@ void ofApp::start(){
 		ofHideCursor();
 	
 	m_simulationState = TIME_GROWING;
-	m_splashActive = false;
+	
 	m_numberOfIterations = 0;
 	
 	RealtimeFetcher::instance()->start();
@@ -305,7 +294,7 @@ void ofApp::stop(){
 	if(!globalSettings::instance()->g_useInteractiveAudio){
 		soundtrack.stop();
 	}
-	m_splashActive = false;
+	
 }
 
 void ofApp::keyReleased(int key)
@@ -319,7 +308,7 @@ void ofApp::keyReleased(int key)
 void ofApp::keyPressed(ofKeyEventArgs & args){
 	
 	
-	 if(args.key == '/'){
+	if(args.key == '/'){
 		ofToggleFullscreen();
 	}
 	else
@@ -631,13 +620,7 @@ void ofApp::draw(){
 	m_twitterLayer->draw();
 	//m_fadeRectangle.draw();
 	
-	if(m_splashActive){
-		ofSetColor(globalSettings::instance()->g_backgroundC, m_splashOpacity * globalSettings::instance()->g_splashOpacity);
-		ofRect(0, 0, globalSettings::instance()->g_scene.width, globalSettings::instance()->g_scene.height);
-		ofSetColor(255);
-		ofSetColor(255, 255.0F * m_splashOpacity);
-		m_splash.draw(m_splashPosition.x, m_splashPosition.y);
-	}
+	
 	
 	//	popTransforms();
 	
@@ -701,15 +684,6 @@ void ofApp::resetClicked(bool & do_){
 
 #pragma mark - Control Panel
 
-void ofApp::setupControlPanel(){
-	
-	
-	
-}
-
-void ofApp::setupControlPanelVariables(){
-	
-}
 
 void ofApp::windowResized(int w, int h){
 	
@@ -725,11 +699,14 @@ void ofApp::audioReceived(float * input, int bufferSize, int nChannels){
 
 //--------------------------------------------------------------
 void ofApp::audioRequested(float * output, int bufferSize, int nChannels){
-	InteractiveAudio::instance()->audioRequested(output, bufferSize, nChannels);
-	float * thisOut = output;
-	int numberOfSamples = bufferSize * nChannels;
-	for(int i = 0; i < numberOfSamples; ++i, ++thisOut){
-		*thisOut *= globalSettings::instance()->g_soundVolume;
+	if(InteractiveAudio::instance()){
+		InteractiveAudio::instance()->audioRequested(output, bufferSize, nChannels);
+		
+		float * thisOut = output;
+		int numberOfSamples = bufferSize * nChannels;
+		for(int i = 0; i < numberOfSamples; ++i, ++thisOut){
+			*thisOut *= globalSettings::instance()->g_soundVolume;
+		}
 	}
 }
 #endif
@@ -739,5 +716,6 @@ void ofApp::audioRequested(float * output, int bufferSize, int nChannels){
 void ofApp::exit()
 {
 	//	cout << "ofApp::exit\n";
-	globalSettings::instance()->g_deallocateFonts();
+	
+//	globalSettings::instance()->g_deallocateFonts();
 }

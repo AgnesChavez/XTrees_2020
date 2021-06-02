@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2012-2013 Agnes Chavez and Alessandro Saccoia
  * Written by Alessandro Saccoia, <alessandro.saccoia@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -22,30 +22,31 @@
 #include "MessageTrigger.h"
 #include "TwitterStream.h"
 class RealtimeFetcher :
-  public ofThread,
-  public Singleton<RealtimeFetcher> {
+public ofThread,
+public Singleton<RealtimeFetcher> {
 public:  
-  RealtimeFetcher();
-  void start();  
-  void stop();  
-  void pause();
-  void restart();
-  void update();
-  void reset();
-  void removeTrigger(BaseTrigger *trigger);
-  void addTrigger(BaseTrigger *trigger);
-  private:
-
-	  void threadedFunction();
-  
-  volatile bool m_running;
-  bool m_paused;
-
-  std::vector<BaseTrigger*> triggers;
-	  
-	  std::unique_ptr<ofxTwitterStream> twitterStream = nullptr;
-	  
-	  
+	RealtimeFetcher();
+	~RealtimeFetcher();
+	void start();
+	void stop();
+	void pause();
+	void restart();
+	void update();
+	void reset();
+	void removeTrigger(BaseTrigger *trigger);
+	void addTrigger(BaseTrigger *trigger);
+private:
+	
+	void threadedFunction();
+	
+	volatile bool m_running;
+	bool m_paused;
+	
+	std::vector<BaseTrigger*> triggers;
+	
+	std::unique_ptr<ofxTwitterStream> twitterStream = nullptr;
+	
+	
 };
 
 #endif
